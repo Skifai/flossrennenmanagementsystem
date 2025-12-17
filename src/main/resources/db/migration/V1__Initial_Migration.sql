@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS helfer (
+    id BIGSERIAL PRIMARY KEY,
+    vorname VARCHAR(100) NOT NULL,
+    nachname VARCHAR(100) NOT NULL,
+    email VARCHAR(254) UNIQUE,
+    telefon VARCHAR(15)
+);
+
+CREATE TABLE IF NOT EXISTS benutzer (
+    id BIGSERIAL PRIMARY KEY,
+    email VARCHAR(254) UNIQUE NOT NULL,
+    passwordhash VARCHAR(100) NOT NULL,
+    rolle VARCHAR(50) NOT NULL
+);
