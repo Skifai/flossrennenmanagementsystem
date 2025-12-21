@@ -14,9 +14,11 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
-            configurer.loginView(LoginView.class);
-        });
+        http.authorizeHttpRequests(auth ->
+                auth.requestMatchers("/images/public/**").permitAll()
+        );
+        http.with(VaadinSecurityConfigurer.vaadin(), configurer ->
+                configurer.loginView(LoginView.class));
         return http.build();
     }
 

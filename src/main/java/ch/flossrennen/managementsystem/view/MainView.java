@@ -7,6 +7,7 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.PermitAll;
 
 @PermitAll
@@ -16,6 +17,7 @@ public class MainView extends VerticalLayout {
     public MainView() {
 
         H1 titel = new H1("Flossrennen Management System");
+        titel.addClassName(LumoUtility.TextColor.PRIMARY);
 
         Paragraph subtitle = new Paragraph("Von Handarbeit zu Klickarbeit - smarte Planung für das Mammut Flossrennen Sitter-Thur");
 
