@@ -1,6 +1,7 @@
 package ch.flossrennen.managementsystem.service;
 
-import ch.flossrennen.managementsystem.repository.BenutzerRepository;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
+import ch.flossrennen.managementsystem.dataaccess.persistence.repository.BenutzerRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,7 +19,7 @@ public class BenutzerService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        ch.flossrennen.managementsystem.model.Benutzer benutzer = benutzerRepository.findByEmail(email)
+        Benutzer benutzer = benutzerRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Benutzer nicht gefunden: " + email));
 
         return User.withUsername(benutzer.getEmail())

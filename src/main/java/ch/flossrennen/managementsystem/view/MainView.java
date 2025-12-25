@@ -1,34 +1,59 @@
 package ch.flossrennen.managementsystem.view;
 
-import com.vaadin.flow.component.html.Anchor;
+import ch.flossrennen.managementsystem.util.TranslationConstants;
+import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.sidenav.SideNav;
+import com.vaadin.flow.component.sidenav.SideNavItem;
+import com.vaadin.flow.router.Layout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility;
-import jakarta.annotation.security.PermitAll;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
+import org.jspecify.annotations.NonNull;
 
-@PermitAll
-@Route("")
-public class MainView extends VerticalLayout {
+//@PermitAll
+@AnonymousAllowed
+@Layout
+public class MainView extends AppLayout {
 
     public MainView() {
 
-        H1 titel = new H1("Flossrennen Management System");
-        titel.addClassName(LumoUtility.TextColor.PRIMARY);
+        HorizontalLayout navbarLayout = createNavbarLayout();
 
-        Paragraph subtitle = new Paragraph("Von Handarbeit zu Klickarbeit - smarte Planung für das Mammut Flossrennen Sitter-Thur");
+        SideNav sideNav = createSideNav();
 
-        H2 modulTitel = new H2("Modulübersicht");
+        Scroller scroller = new Scroller(sideNav);
 
-        HorizontalLayout modulLayout = new HorizontalLayout();
+        addToDrawer(scroller);
+        addToNavbar(navbarLayout);
 
-        Anchor helferModul = new Anchor("helfer", "Helferverwaltung");
+    }
 
-        modulLayout.add(helferModul);
+    private static @NonNull SideNav createSideNav() {
+        SideNav sideNav = new SideNav();
+        sideNav.addClassName("MainViewSideNav");
+        SideNavItem home = new SideNavItem("Startseite", "");
+        sideNav.addItem(home);
+        SideNavItem helferModul = new SideNavItem("Helferverwaltung", "helfer");
+        sideNav.addItem(helferModul);
+        return sideNav;
+    }
 
-        add(titel, subtitle, modulTitel, modulLayout);
+    private @NonNull HorizontalLayout createNavbarLayout() {
+        HorizontalLayout navbarLayout = new HorizontalLayout();
+        navbarLayout.addClassName("AppNavbarLayout");
+        navbarLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+        DrawerToggle toggle = new DrawerToggle();
+        toggle.addClassName("AppDrawerToggle");
+        navbarLayout.add(toggle);
+
+        H1 titel = new H1(getTranslation(TranslationConstants.TITEL));
+        titel.addClassName("AppTitel");
+        navbarLayout.add(titel);
+        return navbarLayout;
     }
 }

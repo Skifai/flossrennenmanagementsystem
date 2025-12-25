@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS helfer (
     vorname VARCHAR(100) NOT NULL,
     nachname VARCHAR(100) NOT NULL,
     email VARCHAR(254) UNIQUE,
-    telefon VARCHAR(15)
+    telefonnummer VARCHAR(15)
 );
 
 CREATE TABLE IF NOT EXISTS benutzer (

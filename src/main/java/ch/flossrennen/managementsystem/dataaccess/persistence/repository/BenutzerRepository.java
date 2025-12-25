@@ -1,6 +1,6 @@
-package ch.flossrennen.managementsystem.repository;
+package ch.flossrennen.managementsystem.dataaccess.persistence.repository;
 
-import ch.flossrennen.managementsystem.model.Benutzer;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

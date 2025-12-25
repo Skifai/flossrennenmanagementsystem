@@ -1,7 +1,7 @@
 package ch.flossrennen.managementsystem.security;
 
-import ch.flossrennen.managementsystem.model.Benutzer;
-import ch.flossrennen.managementsystem.repository.BenutzerRepository;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
+import ch.flossrennen.managementsystem.dataaccess.persistence.repository.BenutzerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

@@ -1,83 +1,115 @@
 package ch.flossrennen.managementsystem.view;
 
-import ch.flossrennen.managementsystem.model.Helfer;
-import ch.flossrennen.managementsystem.repository.HelferRepository;
-import com.vaadin.flow.component.Key;
+import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
+import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTOProperties;
+import ch.flossrennen.managementsystem.service.HelferDTOService;
+import ch.flossrennen.managementsystem.view.editor.HelferEditor;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
-import jakarta.annotation.security.PermitAll;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
+import org.jspecify.annotations.NonNull;
 
-@PermitAll
-@Route("helfer")
+import java.util.Set;
+
+//@PermitAll
+@Route(value = "helfer", layout = MainView.class)
+@AnonymousAllowed
 public class HelferView extends VerticalLayout {
-    private final HelferRepository helferRepository;
 
-    private final TextField filter;
-    private final Grid<Helfer> grid;
+    private final HelferDTOService helferDTOService;
 
+    private final Grid<HelferDTO> helferGrid;
+    private final TextField fieldFilter;
+    private final HelferEditor editorView;
 
-    public interface SaveListener {
-        void onSave(Helfer helfer);
+    public HelferView(HelferDTOService helferDTOService) {
+        this.helferDTOService = helferDTOService;
+
+        H1 titel = new H1("Helferverwaltung");
+        titel.addClassName("AppTitel");
+        add(titel);
+
+        fieldFilter = new TextField();
+        editorView = createHelferEditor(helferDTOService);
+        Button neuerHelferButton = new Button("Neuer Helfer", VaadinIcon.PLUS.create());
+        neuerHelferButton.addClickListener(e -> editorView.setHelferDTO(HelferDTO.createEmptyDTO()));
+
+        HorizontalLayout actionBar = new HorizontalLayout(neuerHelferButton, fieldFilter);
+        add(actionBar, editorView);
+
+        helferGrid = createHelferGrid();
+
+        updateHelferGrid();
+        add(helferGrid);
     }
 
-    public interface DeleteListener {
-        void onDelete(Helfer helfer);
+    private @NonNull HelferEditor createHelferEditor(HelferDTOService helferDTOService) {
+        final HelferEditor editorView = new HelferEditor(helferDTOService);
+        editorView.setVisible(false);
+
+        editorView.setSaveListener(this::saveHelferDTO);
+        editorView.setCancelListener(() -> editHelferDTO(null));
+        editorView.setDeleteListener(this::deleteHelferDTO);
+
+        return editorView;
     }
 
-    public interface CloseListener {
-        void onClose();
+    private @NonNull Grid<HelferDTO> createHelferGrid() {
+        Grid<HelferDTO> helferGrid = new Grid<>(HelferDTO.class, false);
+
+        for (HelferDTOProperties property : HelferDTOProperties.values()) {
+            helferGrid.addColumn(property.getGetter()::apply)
+                    .setHeader(getTranslation(property.getTranslationKey()))
+                    .setKey(property.getSchemaKey());
+        }
+        helferGrid.asSingleSelect().addValueChangeListener(event -> editHelferDTO(event.getValue()));
+
+        HelferDTOProperties[] allProperties = HelferDTOProperties.values();
+        CheckboxGroup<HelferDTOProperties> checkboxGroup = new CheckboxGroup<>();
+        checkboxGroup.setItems(allProperties);
+        checkboxGroup.setItemLabelGenerator(property ->
+                getTranslation(property.getTranslationKey()));
+        checkboxGroup.addValueChangeListener(event -> {
+            Set<HelferDTOProperties> selectedProperties = event.getValue();
+            for (HelferDTOProperties property : allProperties) {
+                boolean visible = selectedProperties.contains(property);
+                helferGrid.getColumnByKey(property.getSchemaKey()).setVisible(visible);
+            }
+        });
+
+        return helferGrid;
+
     }
 
-    private Helfer helfer;
-
-    private SaveListener saveListener;
-    private DeleteListener deleteListener;
-    private CloseListener closeListener;
-
-    private final Binder<Helfer> binder = new BeanValidationBinder<>(Helfer.class);
-
-    public void setHelfer(Helfer helfer) {
-        this.helfer = helfer;
-        binder.readBean(helfer);
+    // TODO: Implement Filtering for HelferDTOs
+    private void updateHelferGrid() {
+        helferGrid.setItems(helferDTOService.findAll());
     }
 
-    public HelferView(HelferRepository helferRepository) {
-        this.helferRepository = helferRepository;
+    private void editHelferDTO(HelferDTO helferDTO) {
+        if (helferDTO == null) {
+            editorView.setVisible(false);
+            return;
+        }
 
-        Button neu = new Button("Neu", VaadinIcon.PLUS.create());
-        filter = new TextField("Filter");
-        grid = new Grid<>(Helfer.class);
+        editorView.setVisible(true);
+        editorView.setHelferDTO(helferDTO);
+    }
 
-        TextField vorname = new TextField("Vorname");
-        TextField nachname = new TextField("Nachname");
-        TextField email = new TextField("Email");
-        TextField telefonnummer = new TextField("Telefonnummer");
+    private void saveHelferDTO(HelferDTO helferDTO) {
+        helferDTOService.save(helferDTO);
+        updateHelferGrid();
+    }
 
-        Button speichern = new Button("Speichern", VaadinIcon.CHECK.create());
-        Button abbrechen = new Button("Abbrechen");
-        Button loeschen = new Button("Löschen", VaadinIcon.TRASH.create());
-
-        binder.forField(vorname).bind("vorname");
-        binder.forField(nachname).bind("nachname");
-        binder.forField(email).bind("email");
-        binder.forField(telefonnummer).bind("telefonnummer");
-
-        speichern.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        speichern.addClickListener(e -> saveListener.onSave(helfer));
-        speichern.addClickShortcut(Key.ENTER);
-
-        loeschen.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        loeschen.addClickListener(e -> deleteListener.onDelete(helfer));
-
-        abbrechen.addClickListener(e -> closeListener.onClose());
-
-//        getContent().add(vorname, nachname, email, telefonnummer, speichern, loeschen, abbrechen);
+    private void deleteHelferDTO(HelferDTO helferDTO) {
+        helferDTOService.delete(helferDTO);
+        updateHelferGrid();
     }
 }

@@ -11,4 +11,11 @@ public interface TranslationConstants {
     String LOGIN_BUTTON = "loginbutton";
     String LOGIN_ERROR_TITLE = "loginerrortitel";
     String LOGIN_ERROR_MESSAGE = "loginerrormessage";
+
+    // Entity Helfer
+    String ID = "helfer.id";
+    String VORNAME = "helfer.vorname";
+    String NACHNAME = "helfer.nachname";
+    String EMAIL = "helfer.email";
+    String TELEFONNUMMER = "helfer.telefonnummer";
 }

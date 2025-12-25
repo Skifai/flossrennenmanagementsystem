@@ -2,6 +2,15 @@
  * This file has been created by the Vaadin Theme Editor. Please note that
  * manual changes to individual CSS properties may be overwritten by the theme editor.
  */
+.AppTitel,
+.AppDrawerToggle {
+  background-color:rgb(255,255,255,1);
+  border-color:rgba(0,0,0,0);
+  border-radius:100vh;
+  border-style:solid;
+  padding:var(--lumo-space-s);
+}
+
 div.LoginHeaderBar {
   background-color:rgb(255,255,255,1);
   border-color:rgba(0,0,0,0);
@@ -12,9 +21,11 @@ div.LoginHeaderBar {
 
 html {
   --lumo-base-color:rgba(0,133,201);
-  --lumo-body-text-color:rgba(10,10,10,0.94);
+  --lumo-body-text-color:rgba(10,10,10,1);
   --lumo-header-text-color:rgba(0,133,201);
 }
+
+.AppNavbarLayout { padding:var(--lumo-space-s); }
 
 vaadin-login-form vaadin-login-form-wrapper {
   background-color:rgba(242,244,245,1);
@@ -22,3 +33,13 @@ vaadin-login-form vaadin-login-form-wrapper {
 }
 
 vaadin-login-form vaadin-login-form-wrapper::part(form-title) { font-size:var(--lumo-font-size-xl); }
+
+vaadin-side-nav-item::part(content) {
+  background-color:rgb(255,255,255,1);
+  border-color:rgba(0,133,201,1);
+  border-radius:100vh;
+  border-style:solid;
+  padding:var(--lumo-space-xs);
+}
+
+vaadin-side-nav.MainViewSideNav { padding:var(--lumo-space-s); }

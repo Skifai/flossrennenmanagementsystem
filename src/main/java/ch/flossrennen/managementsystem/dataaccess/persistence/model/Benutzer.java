@@ -1,4 +1,4 @@
-package ch.flossrennen.managementsystem.model;
+package ch.flossrennen.managementsystem.dataaccess.persistence.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
