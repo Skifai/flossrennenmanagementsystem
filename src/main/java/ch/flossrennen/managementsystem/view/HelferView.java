@@ -39,7 +39,7 @@ public class HelferView extends VerticalLayout {
         fieldFilter = new TextField();
         editorView = createHelferEditor(helferDTOService);
         Button neuerHelferButton = new Button("Neuer Helfer", VaadinIcon.PLUS.create());
-        neuerHelferButton.addClickListener(e -> editorView.setHelferDTO(HelferDTO.createEmptyDTO()));
+        neuerHelferButton.addClickListener(e -> editHelferDTO(HelferDTO.createEmptyDTO()));
 
         HorizontalLayout actionBar = new HorizontalLayout(neuerHelferButton, fieldFilter);
         add(actionBar, editorView);
@@ -50,13 +50,13 @@ public class HelferView extends VerticalLayout {
         add(helferGrid);
     }
 
-    private @NonNull HelferEditor createHelferEditor(HelferDTOService helferDTOService) {
+    private @NonNull HelferEditor createHelferEditor(@NonNull HelferDTOService helferDTOService) {
         final HelferEditor editorView = new HelferEditor(helferDTOService);
         editorView.setVisible(false);
 
-        editorView.setSaveListener(this::saveHelferDTO);
+        editorView.setSaveListener(helferDTO -> saveHelferDTO(editorView.getHelferDTO()));
         editorView.setCancelListener(() -> editHelferDTO(null));
-        editorView.setDeleteListener(this::deleteHelferDTO);
+        editorView.setDeleteListener(helferDTO -> deleteHelferDTO(editorView.getHelferDTO()));
 
         return editorView;
     }
@@ -67,7 +67,10 @@ public class HelferView extends VerticalLayout {
         for (HelferDTOProperties property : HelferDTOProperties.values()) {
             helferGrid.addColumn(property.getGetter()::apply)
                     .setHeader(getTranslation(property.getTranslationKey()))
-                    .setKey(property.getSchemaKey());
+                    .setKey(property.getSchemaKey())
+                    .setSortable(true)
+                    .setAutoWidth(true)
+                    .setResizable(true);
         }
         helferGrid.asSingleSelect().addValueChangeListener(event -> editHelferDTO(event.getValue()));
 

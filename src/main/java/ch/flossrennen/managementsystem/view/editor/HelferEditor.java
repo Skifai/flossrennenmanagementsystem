@@ -9,27 +9,15 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.converter.StringToLongConverter;
+import lombok.Setter;
 import org.jspecify.annotations.NonNull;
 
 public class HelferEditor extends Composite<VerticalLayout> {
-
-    public void setCancelListener(CancelListener cancelListener) {
-        this.cancelListener = cancelListener;
-    }
-
-    public void setSaveListener(SaveListener saveListener) {
-        this.saveListener = saveListener;
-    }
-
-    public void setDeleteListener(DeleteListener deleteListener) {
-        this.deleteListener = deleteListener;
-    }
 
     public HelferDTO getHelferDTO() {
         try {
@@ -54,8 +42,11 @@ public class HelferEditor extends Composite<VerticalLayout> {
     private HelferDTO helferDTO;
     private final HelferDTOService helferDTOService;
 
+    @Setter
     private SaveListener saveListener;
+    @Setter
     private CancelListener cancelListener;
+    @Setter
     private DeleteListener deleteListener;
 
     private final Binder<HelferDTO> binder = new BeanValidationBinder<>(HelferDTO.class);
