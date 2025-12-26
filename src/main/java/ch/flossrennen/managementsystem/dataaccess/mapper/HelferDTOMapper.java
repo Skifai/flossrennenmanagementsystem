@@ -15,7 +15,8 @@ public class HelferDTOMapper {
                 helfer.getVorname(),
                 helfer.getNachname(),
                 helfer.getEmail(),
-                helfer.getTelefonnummer());
+                helfer.getTelefonnummer(),
+                helfer.getRessort());
     }
 
     @NonNull
@@ -25,7 +26,8 @@ public class HelferDTOMapper {
                 helferDTO.vorname(),
                 helferDTO.nachname(),
                 helferDTO.email(),
-                helferDTO.telefonnummer()
+                helferDTO.telefonnummer(),
+                helferDTO.ressort()
         );
     }
 }

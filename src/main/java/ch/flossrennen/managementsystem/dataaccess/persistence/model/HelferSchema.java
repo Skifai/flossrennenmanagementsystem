@@ -8,4 +8,5 @@ public interface HelferSchema {
     String NACHNAME = "nachname";
     String EMAIL = "email";
     String TELEFONNUMMER = "telefonnummer";
+    String RESSORT = "ressort";
 }

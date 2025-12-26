@@ -28,8 +28,11 @@ public class Helfer implements Persistable<Long>, HelferSchema {
     @Column(name = EMAIL, nullable = false, unique = true, length = 254)
     private String email;
 
-    @Column(name = TELEFONNUMMER, nullable = false, length = 15)
+    @Column(name = TELEFONNUMMER, nullable = false, unique = true, length = 15)
     private String telefonnummer;
+
+    @Column(name = RESSORT, nullable = false)
+    private Long ressort;
 
     @Override
     public boolean isNew() {
