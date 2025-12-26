@@ -30,6 +30,10 @@ public class HelferView extends VerticalLayout {
     private final HelferEditor editorView;
 
     public HelferView(HelferDTOService helferDTOService) {
+
+        setClassName("MainViewContent");
+        setSizeFull();
+
         this.helferDTOService = helferDTOService;
 
         H1 titel = new H1("Helferverwaltung");

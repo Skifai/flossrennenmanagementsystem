@@ -1,12 +1,10 @@
 package ch.flossrennen.managementsystem.view.editor;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
-import ch.flossrennen.managementsystem.service.HelferDTOService;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -19,13 +17,16 @@ import org.jspecify.annotations.NonNull;
 
 public class HelferEditor extends Composite<VerticalLayout> {
 
-    public HelferDTO getHelferDTO() {
-        try {
-            return binder.writeRecord();
-        } catch (ValidationException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private HelferDTO helferDTO;
+
+    @Setter
+    private SaveListener saveListener;
+    @Setter
+    private CancelListener cancelListener;
+    @Setter
+    private DeleteListener deleteListener;
+
+    private final Binder<HelferDTO> binder = new BeanValidationBinder<>(HelferDTO.class);
 
     public interface SaveListener {
         void onSave(HelferDTO helferDTO);
@@ -39,31 +40,31 @@ public class HelferEditor extends Composite<VerticalLayout> {
         void onDelete(HelferDTO helferDTO);
     }
 
-    private HelferDTO helferDTO;
+    public HelferEditor() {
 
-    @Setter
-    private SaveListener saveListener;
-    @Setter
-    private CancelListener cancelListener;
-    @Setter
-    private DeleteListener deleteListener;
+        VerticalLayout layout = getContent();
 
-    private final Binder<HelferDTO> binder = new BeanValidationBinder<>(HelferDTO.class);
+        FormLayout helferFormFields = createHelferFormFields();
+        layout.add(helferFormFields);
+
+        HorizontalLayout buttonLayout = createButtonLayout();
+        layout.add(buttonLayout);
+    }
+
+    public HelferDTO getHelferDTO() {
+        try {
+            return binder.writeRecord();
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void setHelferDTO(HelferDTO helferDTO) {
         this.helferDTO = helferDTO;
         binder.readRecord(helferDTO);
     }
 
-    public HelferEditor() {
-
-        VerticalLayout layout = getContent();
-
-        FormLayout helferFormFields = createHelferFormFields();
-
-        layout.add(helferFormFields);
-
-
+    private @NonNull HorizontalLayout createButtonLayout() {
         Button saveButton = new Button("Speichern");
         saveButton.addClickListener(e -> saveListener.onSave(helferDTO));
 
@@ -74,8 +75,7 @@ public class HelferEditor extends Composite<VerticalLayout> {
         deleteButton.addClickListener(e -> deleteListener.onDelete(helferDTO));
 
         HorizontalLayout buttonLayout = new HorizontalLayout(saveButton, cancelButton, deleteButton);
-
-        layout.add(buttonLayout);
+        return buttonLayout;
     }
 
     private @NonNull FormLayout createHelferFormFields() {

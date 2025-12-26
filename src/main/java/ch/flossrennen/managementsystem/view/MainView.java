@@ -35,9 +35,9 @@ public class MainView extends AppLayout {
     private static @NonNull SideNav createSideNav() {
         SideNav sideNav = new SideNav();
         sideNav.addClassName("MainViewSideNav");
-        SideNavItem home = new SideNavItem("Startseite", "");
+        SideNavItem home = new SideNavItem("Startseite", ViewRoutes.HOME);
         sideNav.addItem(home);
-        SideNavItem helferModul = new SideNavItem("Helferverwaltung", "helfer");
+        SideNavItem helferModul = new SideNavItem("Helferverwaltung", ViewRoutes.HELFER);
         sideNav.addItem(helferModul);
         return sideNav;
     }
