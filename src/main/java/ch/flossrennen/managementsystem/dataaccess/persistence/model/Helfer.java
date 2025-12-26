@@ -12,7 +12,7 @@ import org.springframework.data.domain.Persistable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "helfer")
+@Table(name = HelferSchema.TABLE_NAME)
 public class Helfer implements Persistable<Long>, HelferSchema {
 
     @Id

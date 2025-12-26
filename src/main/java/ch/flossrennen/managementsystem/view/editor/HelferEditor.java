@@ -40,7 +40,6 @@ public class HelferEditor extends Composite<VerticalLayout> {
     }
 
     private HelferDTO helferDTO;
-    private final HelferDTOService helferDTOService;
 
     @Setter
     private SaveListener saveListener;
@@ -56,8 +55,7 @@ public class HelferEditor extends Composite<VerticalLayout> {
         binder.readRecord(helferDTO);
     }
 
-    public HelferEditor(HelferDTOService helferDTOService) {
-        this.helferDTOService = helferDTOService;
+    public HelferEditor() {
 
         VerticalLayout layout = getContent();
 
@@ -78,15 +76,6 @@ public class HelferEditor extends Composite<VerticalLayout> {
         HorizontalLayout buttonLayout = new HorizontalLayout(saveButton, cancelButton, deleteButton);
 
         layout.add(buttonLayout);
-    }
-
-    private void saveHelferDTO() {
-        try {
-            helferDTO = binder.writeRecord();
-            helferDTOService.save(helferDTO);
-        } catch (ValidationException e) {
-            Notification.show("Fehler beim Speichern: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
-        }
     }
 
     private @NonNull FormLayout createHelferFormFields() {

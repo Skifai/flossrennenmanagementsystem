@@ -19,7 +19,7 @@ import org.jspecify.annotations.NonNull;
 import java.util.Set;
 
 //@PermitAll
-@Route(value = "helfer", layout = MainView.class)
+@Route(value = ViewRoutes.HELFER, layout = MainView.class)
 @AnonymousAllowed
 public class HelferView extends VerticalLayout {
 
@@ -37,7 +37,7 @@ public class HelferView extends VerticalLayout {
         add(titel);
 
         fieldFilter = new TextField();
-        editorView = createHelferEditor(helferDTOService);
+        editorView = createHelferEditor();
         Button neuerHelferButton = new Button("Neuer Helfer", VaadinIcon.PLUS.create());
         neuerHelferButton.addClickListener(e -> editHelferDTO(HelferDTO.createEmptyDTO()));
 
@@ -50,8 +50,8 @@ public class HelferView extends VerticalLayout {
         add(helferGrid);
     }
 
-    private @NonNull HelferEditor createHelferEditor(@NonNull HelferDTOService helferDTOService) {
-        final HelferEditor editorView = new HelferEditor(helferDTOService);
+    private @NonNull HelferEditor createHelferEditor() {
+        final HelferEditor editorView = new HelferEditor();
         editorView.setVisible(false);
 
         editorView.setSaveListener(helferDTO -> saveHelferDTO(editorView.getHelferDTO()));
