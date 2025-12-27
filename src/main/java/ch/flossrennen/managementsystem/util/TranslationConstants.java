@@ -35,5 +35,5 @@ public interface TranslationConstants {
     String RESSORT_NAME = "ressort.name";
     String RESSORT_BESCHREIBUNG = "ressort.beschreibung";
     String RESSORT_ZUSTAENDIGKEIT = "ressort.zustaendigkeit";
-    String RESSORT_VERANTWORTLICH = "ressort.verantwortlich";
+    String RESSORT_RESSORTLEITUNG = "ressort.ressortleitung";
 }

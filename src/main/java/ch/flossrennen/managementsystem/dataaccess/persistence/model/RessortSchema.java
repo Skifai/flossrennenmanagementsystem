@@ -6,5 +6,5 @@ public interface RessortSchema {
     String NAME = "name";
     String BESCHREIBUNG = "beschreibung";
     String ZUSTAENDIGKEIT = "zustaendigkeit";
-    String VERANTWORTLICH = "verantwortlich";
+    String RESSORTLEITUNG = "ressortleitung";
 }

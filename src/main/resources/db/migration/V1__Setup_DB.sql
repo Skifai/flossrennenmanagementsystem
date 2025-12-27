@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS ressort
     name           VARCHAR(100) UNIQUE NOT NULL,
     beschreibung   VARCHAR(300),
     zustaendigkeit VARCHAR(300),
-    verantwortlich BIGINT REFERENCES benutzer (id)
+    ressortleitung BIGINT REFERENCES benutzer (id)
 );
 
 CREATE TABLE IF NOT EXISTS helfer
