@@ -28,6 +28,10 @@ public class InitialBenutzer implements CommandLineRunner {
 
         benutzerRepository.findByEmail(adminEmail).orElseGet(() ->
                 benutzerRepository.save(new Benutzer(
+                        null,
+                        "Admin",
+                        "Admin",
+                        "0000000000",
                         adminEmail,
                         passwordEncoder.encode(adminPassword),
                         "ROLLE_ADMIN"
