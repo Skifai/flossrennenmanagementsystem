@@ -31,8 +31,9 @@ public class Helfer implements Persistable<Long>, HelferSchema {
     @Column(name = TELEFONNUMMER, nullable = false, unique = true, length = 15)
     private String telefonnummer;
 
-    @Column(name = RESSORT, nullable = false)
-    private Long ressort;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = RESSORT, nullable = false)
+    private Ressort ressort;
 
     @Override
     public boolean isNew() {

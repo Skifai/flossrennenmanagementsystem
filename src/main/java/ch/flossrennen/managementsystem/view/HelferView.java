@@ -2,8 +2,8 @@ package ch.flossrennen.managementsystem.view;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTOProperties;
-import ch.flossrennen.managementsystem.service.HelferDTOService;
-import ch.flossrennen.managementsystem.service.RessortDTOService;
+import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
+import ch.flossrennen.managementsystem.service.DTOService;
 import ch.flossrennen.managementsystem.view.editor.HelferEditor;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
@@ -24,14 +24,14 @@ import java.util.Set;
 @AnonymousAllowed
 public class HelferView extends VerticalLayout {
 
-    private final HelferDTOService helferDTOService;
-    private final RessortDTOService ressortDTOService;
+    private final DTOService<HelferDTO> helferDTOService;
+    private final DTOService<RessortDTO> ressortDTOService;
 
     private final Grid<HelferDTO> helferGrid;
     private final TextField fieldFilter;
     private final HelferEditor editorView;
 
-    public HelferView(HelferDTOService helferDTOService, RessortDTOService ressortDTOService) {
+    public HelferView(DTOService<HelferDTO> helferDTOService, DTOService<RessortDTO> ressortDTOService) {
 
         setClassName("MainViewContent");
         setSizeFull();

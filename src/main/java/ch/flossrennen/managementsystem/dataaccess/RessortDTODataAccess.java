@@ -1,7 +1,8 @@
 package ch.flossrennen.managementsystem.dataaccess;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
-import ch.flossrennen.managementsystem.dataaccess.mapper.RessortDTOMapper;
+import ch.flossrennen.managementsystem.dataaccess.mapper.DTOMapper;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.Ressort;
 import ch.flossrennen.managementsystem.dataaccess.persistence.repository.RessortRepository;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
@@ -10,11 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class RessortDTODataAccess {
+public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
     private final RessortRepository ressortRepository;
-    private final RessortDTOMapper ressortDTOMapper;
+    private final DTOMapper<Ressort, RessortDTO> ressortDTOMapper;
 
-    public RessortDTODataAccess(RessortRepository ressortRepository, RessortDTOMapper ressortDTOMapper) {
+    public RessortDTODataAccess(RessortRepository ressortRepository, DTOMapper<Ressort, RessortDTO> ressortDTOMapper) {
         this.ressortRepository = ressortRepository;
         this.ressortDTOMapper = ressortDTOMapper;
     }

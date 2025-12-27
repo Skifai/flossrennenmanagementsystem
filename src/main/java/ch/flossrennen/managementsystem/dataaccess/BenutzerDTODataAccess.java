@@ -1,7 +1,8 @@
 package ch.flossrennen.managementsystem.dataaccess;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
-import ch.flossrennen.managementsystem.dataaccess.mapper.BenutzerDTOMapper;
+import ch.flossrennen.managementsystem.dataaccess.mapper.DTOMapper;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
 import ch.flossrennen.managementsystem.dataaccess.persistence.repository.BenutzerRepository;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
@@ -10,11 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class BenutzerDTODataAccess {
+public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
     private final BenutzerRepository benutzerRepository;
-    private final BenutzerDTOMapper benutzerDTOMapper;
+    private final DTOMapper<Benutzer, BenutzerDTO> benutzerDTOMapper;
 
-    public BenutzerDTODataAccess(BenutzerRepository benutzerRepository, BenutzerDTOMapper benutzerDTOMapper) {
+    public BenutzerDTODataAccess(BenutzerRepository benutzerRepository, DTOMapper<Benutzer, BenutzerDTO> benutzerDTOMapper) {
         this.benutzerRepository = benutzerRepository;
         this.benutzerDTOMapper = benutzerDTOMapper;
     }

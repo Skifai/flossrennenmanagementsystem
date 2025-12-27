@@ -5,7 +5,7 @@ import ch.flossrennen.managementsystem.util.TranslationConstants;
 
 import java.util.function.Function;
 
-public enum HelferDTOProperties {
+public enum HelferDTOProperties implements DTOProperty<HelferDTO> {
     ID(HelferDTO::id, HelferSchema.ID, TranslationConstants.HELFER_ID),
     VORNAME(HelferDTO::vorname, HelferSchema.VORNAME, TranslationConstants.HELFER_VORNAME),
     NACHNAME(HelferDTO::nachname, HelferSchema.NACHNAME, TranslationConstants.HELFER_NACHNAME),

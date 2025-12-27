@@ -5,7 +5,7 @@ import ch.flossrennen.managementsystem.util.TranslationConstants;
 
 import java.util.function.Function;
 
-public enum BenutzerDTOProperties {
+public enum BenutzerDTOProperties implements DTOProperty<BenutzerDTO> {
     ID(BenutzerDTO::id, BenutzerSchema.ID, TranslationConstants.HELFER_ID),
     VORNAME(BenutzerDTO::vorname, BenutzerSchema.VORNAME, TranslationConstants.BENUTZER_VORNAME),
     NACHNAME(BenutzerDTO::nachname, BenutzerSchema.NACHNAME, TranslationConstants.BENUTZER_NACHNAME),

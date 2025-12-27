@@ -6,7 +6,7 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BenutzerDTOMapper {
+public class BenutzerDTOMapper implements DTOMapper<Benutzer, BenutzerDTO> {
 
     @NonNull
     public BenutzerDTO toDTO(@NonNull Benutzer benutzer) {

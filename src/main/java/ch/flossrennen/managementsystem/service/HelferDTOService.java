@@ -1,18 +1,17 @@
 package ch.flossrennen.managementsystem.service;
 
-import ch.flossrennen.managementsystem.dataaccess.HelferDTODataAccess;
+import ch.flossrennen.managementsystem.dataaccess.DTODataAccess;
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
-import ch.flossrennen.managementsystem.util.CheckResult;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class HelferDTOService {
-    private final HelferDTODataAccess helferDTODataAccess;
+public class HelferDTOService implements DTOService<HelferDTO> {
+    private final DTODataAccess<HelferDTO> helferDTODataAccess;
 
-    public HelferDTOService(HelferDTODataAccess helferDTODataAccess) {
+    public HelferDTOService(DTODataAccess<HelferDTO> helferDTODataAccess) {
         this.helferDTODataAccess = helferDTODataAccess;
     }
 

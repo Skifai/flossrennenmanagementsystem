@@ -5,7 +5,7 @@ import ch.flossrennen.managementsystem.util.TranslationConstants;
 
 import java.util.function.Function;
 
-public enum RessortDTOProperties {
+public enum RessortDTOProperties implements DTOProperty<RessortDTO> {
     ID(RessortDTO::id, RessortSchema.ID, TranslationConstants.HELFER_ID),
     NAME(RessortDTO::name, RessortSchema.NAME, TranslationConstants.RESSORT_NAME),
     BESCHREIBUNG(RessortDTO::beschreibung, RessortSchema.BESCHREIBUNG, TranslationConstants.RESSORT_BESCHREIBUNG),

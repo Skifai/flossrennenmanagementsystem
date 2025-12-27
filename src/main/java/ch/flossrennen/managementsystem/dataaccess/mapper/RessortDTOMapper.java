@@ -6,7 +6,7 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RessortDTOMapper {
+public class RessortDTOMapper implements DTOMapper<Ressort, RessortDTO> {
 
     @NonNull
     public RessortDTO toDTO(@NonNull Ressort ressort) {
