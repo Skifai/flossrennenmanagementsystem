@@ -34,7 +34,7 @@ public class InitialBenutzer implements CommandLineRunner {
                         "0000000000",
                         adminEmail,
                         passwordEncoder.encode(adminPassword),
-                        "ROLLE_ADMIN"
+                        "ADMIN"
                 ))
         );
     }
