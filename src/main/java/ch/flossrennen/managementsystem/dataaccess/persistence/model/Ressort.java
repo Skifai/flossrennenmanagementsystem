@@ -27,6 +27,6 @@ public class Ressort implements RessortSchema {
     @Column(name = ZUSTAENDIGKEIT, length = 300)
     private String zustaendigkeit;
 
-    @Column(name = VERANTWORTLICH)
-    private Long verantwortlich;
+    @Column(name = RESSORTLEITUNG)
+    private Long ressortleitung;
 }

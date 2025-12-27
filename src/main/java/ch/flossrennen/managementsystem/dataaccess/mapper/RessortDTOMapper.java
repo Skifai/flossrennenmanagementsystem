@@ -15,7 +15,7 @@ public class RessortDTOMapper {
                 ressort.getName(),
                 ressort.getBeschreibung(),
                 ressort.getZustaendigkeit(),
-                ressort.getVerantwortlich());
+                ressort.getRessortleitung());
     }
 
     @NonNull
@@ -25,7 +25,7 @@ public class RessortDTOMapper {
                 ressortDTO.name(),
                 ressortDTO.beschreibung(),
                 ressortDTO.zustaendigkeit(),
-                ressortDTO.verantwortlich()
+                ressortDTO.ressortleitung()
         );
     }
 }
