@@ -10,7 +10,7 @@ public enum RessortDTOProperties {
     NAME(RessortDTO::name, RessortSchema.NAME, TranslationConstants.RESSORT_NAME),
     BESCHREIBUNG(RessortDTO::beschreibung, RessortSchema.BESCHREIBUNG, TranslationConstants.RESSORT_BESCHREIBUNG),
     ZUSTAENDIGKEIT(RessortDTO::zustaendigkeit, RessortSchema.ZUSTAENDIGKEIT, TranslationConstants.RESSORT_ZUSTAENDIGKEIT),
-    VERANTWORTLICH(RessortDTO::verantwortlich, RessortSchema.VERANTWORTLICH, TranslationConstants.RESSORT_VERANTWORTLICH);
+    RESSORTLEITUNG(RessortDTO::ressortleitung, RessortSchema.RESSORTLEITUNG, TranslationConstants.RESSORT_RESSORTLEITUNG);
 
     private final Function<RessortDTO, ?> getter;
     private final String schemaKey;
