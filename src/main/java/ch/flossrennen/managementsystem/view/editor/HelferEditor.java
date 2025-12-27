@@ -1,8 +1,10 @@
 package ch.flossrennen.managementsystem.view.editor;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
+import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -15,9 +17,12 @@ import com.vaadin.flow.data.converter.StringToLongConverter;
 import lombok.Setter;
 import org.jspecify.annotations.NonNull;
 
+import java.util.List;
+
 public class HelferEditor extends Composite<VerticalLayout> {
 
     private HelferDTO helferDTO;
+    private final ComboBox<RessortDTO> fieldRessort = new ComboBox<>("Ressort");
 
     @Setter
     private SaveListener saveListener;
@@ -78,6 +83,11 @@ public class HelferEditor extends Composite<VerticalLayout> {
         return buttonLayout;
     }
 
+    public void setAvailableRessorts(List<RessortDTO> ressorts) {
+        fieldRessort.setItems(ressorts);
+        fieldRessort.setItemLabelGenerator(RessortDTO::name);
+    }
+
     private @NonNull FormLayout createHelferFormFields() {
         FormLayout helferFormFields = new FormLayout();
         helferFormFields.setAutoResponsive(true);
@@ -110,9 +120,13 @@ public class HelferEditor extends Composite<VerticalLayout> {
         fieldTelefon.setMinLength(10);
         fieldTelefon.setPrefixComponent(VaadinIcon.PHONE.create());
 
+        fieldRessort.setRequired(true);
+        fieldRessort.setPrefixComponent(VaadinIcon.GROUP.create());
+
         helferFormFields.addFormRow(fieldID);
         helferFormFields.addFormRow(fieldVorname, fieldNachname);
         helferFormFields.addFormRow(fieldEmail, fieldTelefon);
+        helferFormFields.addFormRow(fieldRessort);
 
         binder.forField(fieldID)
                 .withConverter(new StringToLongConverter("ID muss eine Zahl sein."))
@@ -130,6 +144,9 @@ public class HelferEditor extends Composite<VerticalLayout> {
         binder.forField(fieldTelefon)
                 .asRequired("Die Telefonnummer ist erforderlich.")
                 .bind("telefonnummer");
+        binder.forField(fieldRessort)
+                .asRequired("Das Ressort ist erforderlich.")
+                .bind("ressort");
 
         return helferFormFields;
     }
