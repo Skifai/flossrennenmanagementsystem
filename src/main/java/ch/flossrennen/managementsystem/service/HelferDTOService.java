@@ -15,6 +15,7 @@ public class HelferDTOService implements DTOService<HelferDTO> {
         this.helferDTODataAccess = helferDTODataAccess;
     }
 
+    @Override
     @NonNull
     public HelferDTO save(@NonNull HelferDTO helferDTO) {
             HelferDTO savedHelferDTO = helferDTODataAccess.save(helferDTO);
@@ -22,12 +23,16 @@ public class HelferDTOService implements DTOService<HelferDTO> {
     }
 
     // TODO: Implement Filtering for HelferDTOs
+    @Override
     @NonNull
     public List<HelferDTO> findAll() {
         return helferDTODataAccess.findAll();
     }
 
+    @Override
     public void delete(@NonNull HelferDTO helferDTO) {
-        helferDTODataAccess.deleteById(helferDTO.id());
+        if (helferDTO.id() != null) {
+            helferDTODataAccess.deleteById(helferDTO.id());
+        }
     }
 }

@@ -2,95 +2,37 @@ package ch.flossrennen.managementsystem.view.editor;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
-import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.converter.StringToLongConverter;
-import lombok.Setter;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
-public class HelferEditor extends Composite<VerticalLayout> {
+public class HelferEditor extends AbstractEditorView<HelferDTO> {
 
-    private HelferDTO helferDTO;
-    private final ComboBox<RessortDTO> fieldRessort = new ComboBox<>("Ressort");
-
-    @Setter
-    private SaveListener saveListener;
-    @Setter
-    private CancelListener cancelListener;
-    @Setter
-    private DeleteListener deleteListener;
-
-    private final Binder<HelferDTO> binder = new BeanValidationBinder<>(HelferDTO.class);
-
-    public interface SaveListener {
-        void onSave(HelferDTO helferDTO);
-    }
-
-    public interface CancelListener {
-        void onCancel();
-    }
-
-    public interface DeleteListener {
-        void onDelete(HelferDTO helferDTO);
-    }
+    private ComboBox<RessortDTO> fieldRessort;
 
     public HelferEditor() {
-
-        VerticalLayout layout = getContent();
-
-        FormLayout helferFormFields = createHelferFormFields();
-        layout.add(helferFormFields);
-
-        HorizontalLayout buttonLayout = createButtonLayout();
-        layout.add(buttonLayout);
-    }
-
-    public HelferDTO getHelferDTO() {
-        try {
-            return binder.writeRecord();
-        } catch (ValidationException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void setHelferDTO(HelferDTO helferDTO) {
-        this.helferDTO = helferDTO;
-        binder.readRecord(helferDTO);
-    }
-
-    private @NonNull HorizontalLayout createButtonLayout() {
-        Button saveButton = new Button("Speichern");
-        saveButton.addClickListener(e -> saveListener.onSave(helferDTO));
-
-        Button cancelButton = new Button("Abbrechen");
-        cancelButton.addClickListener(e -> cancelListener.onCancel());
-
-        Button deleteButton = new Button("Löschen");
-        deleteButton.addClickListener(e -> deleteListener.onDelete(helferDTO));
-
-        HorizontalLayout buttonLayout = new HorizontalLayout(saveButton, cancelButton, deleteButton);
-        return buttonLayout;
+        super(HelferDTO.class);
     }
 
     public void setAvailableRessorts(List<RessortDTO> ressorts) {
-        fieldRessort.setItems(ressorts);
-        fieldRessort.setItemLabelGenerator(RessortDTO::name);
+        if (fieldRessort != null) {
+            fieldRessort.setItems(ressorts);
+            fieldRessort.setItemLabelGenerator(RessortDTO::name);
+        }
     }
 
-    private @NonNull FormLayout createHelferFormFields() {
+    @Override
+    @NonNull
+    protected FormLayout createFormFields() {
         FormLayout helferFormFields = new FormLayout();
         helferFormFields.setAutoResponsive(true);
+
+        fieldRessort = new ComboBox<>("Ressort");
 
         TextField fieldID = new TextField("ID");
         fieldID.setReadOnly(true);
@@ -129,8 +71,8 @@ public class HelferEditor extends Composite<VerticalLayout> {
         helferFormFields.addFormRow(fieldRessort);
 
         binder.forField(fieldID)
+                .withNullRepresentation("")
                 .withConverter(new StringToLongConverter("ID muss eine Zahl sein."))
-                .withNullRepresentation(0L)
                 .bind("id");
         binder.forField(fieldVorname)
                 .asRequired("Der Vorname ist erforderlich.")
