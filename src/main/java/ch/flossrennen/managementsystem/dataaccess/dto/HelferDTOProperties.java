@@ -11,7 +11,7 @@ public enum HelferDTOProperties {
     NACHNAME(HelferDTO::nachname, HelferSchema.NACHNAME, TranslationConstants.HELFER_NACHNAME),
     EMAIL(HelferDTO::email, HelferSchema.EMAIL, TranslationConstants.HELFER_EMAIL),
     TELEFONNUMMER(HelferDTO::telefonnummer, HelferSchema.TELEFONNUMMER, TranslationConstants.HELFER_TELEFONNUMMER),
-    RESSORT(HelferDTO::ressort, HelferSchema.RESSORT, TranslationConstants.HELFER_RESSORT);
+    RESSORT(helferDTO -> helferDTO.ressort().name(), HelferSchema.RESSORT, TranslationConstants.HELFER_RESSORT);
 
     private final Function<HelferDTO, ?> getter;
     private final String schemaKey;

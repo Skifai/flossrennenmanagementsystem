@@ -5,9 +5,9 @@ public record HelferDTO(Long id,
                         String nachname,
                         String email,
                         String telefonnummer,
-                        String ressort) {
+                        RessortDTO ressort) {
 
 public static HelferDTO createEmptyDTO() {
-    return new HelferDTO(null, "", "", "", "", "");
+    return new HelferDTO(null, "", "", "", "", null);
 }
 }

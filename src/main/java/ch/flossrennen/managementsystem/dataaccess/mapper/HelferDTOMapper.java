@@ -4,11 +4,16 @@ import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Helfer;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Ressort;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
 public class HelferDTOMapper {
+
+    private final RessortDTOMapper ressortDTOMapper;
+
+    public HelferDTOMapper(RessortDTOMapper ressortDTOMapper) {
+        this.ressortDTOMapper = ressortDTOMapper;
+    }
 
     @NonNull
     public HelferDTO toDTO(@NonNull Helfer helfer, @NonNull Ressort ressort) {
@@ -18,7 +23,7 @@ public class HelferDTOMapper {
                 helfer.getNachname(),
                 helfer.getEmail(),
                 helfer.getTelefonnummer(),
-                ressort.getName());
+                ressortDTOMapper.toDTO(ressort));
     }
 
     @NonNull

@@ -42,8 +42,11 @@ public class HelferDTODataAccess {
 
     @NonNull
     public HelferDTO save(@NonNull HelferDTO helferDTO) {
-        Ressort ressort = ressortRepository.findByName(helferDTO.ressort())
-                .orElse(null);
+        if (helferDTO.ressort() == null) {
+            throw new IllegalArgumentException("Helfer must have a ressort");
+        }
+        Ressort ressort = ressortRepository.findById(helferDTO.ressort().id())
+                .orElseThrow(() -> new IllegalArgumentException("Ressort not found with id: " + helferDTO.ressort().id()));
         Helfer helfer = helferDTOMapper.toEntity(helferDTO, ressort);
         Helfer savedHelfer = helferRepository.save(helfer);
         return toDTO(savedHelfer);
@@ -51,7 +54,7 @@ public class HelferDTODataAccess {
 
     private HelferDTO toDTO(Helfer helfer) {
         Ressort ressort = ressortRepository.findById(helfer.getRessort())
-                .orElse(null);
+                .orElseThrow(() -> new IllegalStateException("Ressort not found with id: " + helfer.getRessort() + " for Helfer: " + helfer.getId()));
         return helferDTOMapper.toDTO(helfer, ressort);
     }
 }
