@@ -10,7 +10,6 @@ import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.Layout;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import org.jspecify.annotations.NonNull;
 
@@ -39,6 +38,10 @@ public class MainView extends AppLayout {
         sideNav.addItem(home);
         SideNavItem helferModul = new SideNavItem("Helferverwaltung", ViewRoutes.HELFER);
         sideNav.addItem(helferModul);
+        SideNavItem ressortModul = new SideNavItem("Ressortverwaltung", ViewRoutes.RESSORT);
+        sideNav.addItem(ressortModul);
+        SideNavItem benutzerModul = new SideNavItem("Benutzerverwaltung", ViewRoutes.BENUTZER);
+        sideNav.addItem(benutzerModul);
         return sideNav;
     }
 
