@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Component
@@ -45,10 +44,10 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
     public CheckResult<Void> deleteById(@NonNull Long id) {
         try {
             benutzerRepository.deleteById(id);
-            return CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE, Locale.GERMAN));
+            return CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
         } catch (Exception e) {
             log.error("Error deleting Benutzer with id {}: {}", id, e.getMessage(), e);
-            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE, Locale.GERMAN));
+            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
         }
     }
 
@@ -57,10 +56,10 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
         try {
             Benutzer entity = benutzerDTOMapper.toEntity(benutzerDTO);
             Benutzer savedEntity = benutzerRepository.save(entity);
-            return CheckResult.success(benutzerDTOMapper.toDTO(savedEntity), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE, Locale.GERMAN));
+            return CheckResult.success(benutzerDTOMapper.toDTO(savedEntity), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
         } catch (Exception e) {
             log.error("Error saving Benutzer {}: {}", benutzerDTO, e.getMessage(), e);
-            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE, Locale.GERMAN));
+            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
         }
     }
 }

@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Component
@@ -45,20 +44,20 @@ public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
     public CheckResult<Void> deleteById(@NonNull Long id) {
         try {
             ressortRepository.deleteById(id);
-            return CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE, Locale.GERMAN));
+            return CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
         } catch (Exception e) {
             log.error("Error deleting Ressort with id {}: {}", id, e.getMessage(), e);
-            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE, Locale.GERMAN));
+            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
         }
     }
 
     @NonNull
     public CheckResult<RessortDTO> save(@NonNull RessortDTO ressortDTO) {
         try {
-            return CheckResult.success(ressortDTOMapper.toDTO(ressortRepository.save(ressortDTOMapper.toEntity(ressortDTO))), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE, Locale.GERMAN));
+            return CheckResult.success(ressortDTOMapper.toDTO(ressortRepository.save(ressortDTOMapper.toEntity(ressortDTO))), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
         } catch (Exception e) {
             log.error("Error saving Ressort {}: {}", ressortDTO, e.getMessage(), e);
-            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE, Locale.GERMAN));
+            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
         }
     }
 }

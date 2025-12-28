@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Component
@@ -45,10 +44,10 @@ public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
     public CheckResult<Void> deleteById(@NonNull Long id) {
         try {
             helferRepository.deleteById(id);
-            return CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE, Locale.GERMAN));
+            return CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
         } catch (Exception e) {
             log.error("Error deleting Helfer with id {}: {}", id, e.getMessage(), e);
-            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE, Locale.GERMAN));
+            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
         }
     }
 
@@ -57,14 +56,14 @@ public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
         try {
             if (helferDTO.ressort() == null) {
                 log.error("Error saving Helfer {}: Missing Ressort", helferDTO);
-                return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_MISSING_RESSORT, Locale.GERMAN));
+                return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_MISSING_RESSORT));
             }
             Helfer helfer = helferDTOMapper.toEntity(helferDTO);
             Helfer savedHelfer = helferRepository.save(helfer);
-            return CheckResult.success(helferDTOMapper.toDTO(savedHelfer), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE, Locale.GERMAN));
+            return CheckResult.success(helferDTOMapper.toDTO(savedHelfer), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
         } catch (Exception e) {
             log.error("Error saving Helfer {}: {}", helferDTO, e.getMessage(), e);
-            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE, Locale.GERMAN));
+            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
         }
     }
 }

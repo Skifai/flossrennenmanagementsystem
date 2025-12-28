@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class RessortDTOService implements DTOService<RessortDTO> {
@@ -41,6 +40,6 @@ public class RessortDTOService implements DTOService<RessortDTO> {
             return ressortDTODataAccess.deleteById(ressortDTO.id());
         }
         log.error("Error deleting Ressort: Missing ID for DTO {}", ressortDTO);
-        return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_MISSING_ID, Locale.GERMAN));
+        return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_MISSING_ID));
     }
 }

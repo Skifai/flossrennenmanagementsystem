@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class HelferDTOService implements DTOService<HelferDTO> {
@@ -44,6 +43,6 @@ public class HelferDTOService implements DTOService<HelferDTO> {
             return helferDTODataAccess.deleteById(helferDTO.id());
         }
         log.error("Error deleting Helfer: Missing ID for DTO {}", helferDTO);
-        return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_MISSING_ID, Locale.GERMAN));
+        return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_MISSING_ID));
     }
 }
