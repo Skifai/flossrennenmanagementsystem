@@ -1,6 +1,7 @@
 package ch.flossrennen.managementsystem.security;
 
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
 import ch.flossrennen.managementsystem.dataaccess.persistence.repository.BenutzerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,7 +35,7 @@ public class InitialBenutzer implements CommandLineRunner {
                         "0000000000",
                         adminEmail,
                         passwordEncoder.encode(adminPassword),
-                        "ADMIN"
+                        BenutzerRolle.ADMINISTRATOR
                 ))
         );
     }

@@ -1,6 +1,8 @@
 package ch.flossrennen.managementsystem.view.editor;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -41,7 +43,8 @@ public class BenutzerEditor extends AbstractEditorView<BenutzerDTO> {
         PasswordField fieldPassword = new PasswordField("Passwort");
         fieldPassword.setPrefixComponent(VaadinIcon.KEY.create());
 
-        TextField fieldRolle = new TextField("Rolle");
+        ComboBox<BenutzerRolle> fieldRolle = new ComboBox<>("Rolle");
+        fieldRolle.setItems(BenutzerRolle.values());
         fieldRolle.setRequired(true);
         fieldRolle.setPrefixComponent(VaadinIcon.USER_CHECK.create());
 

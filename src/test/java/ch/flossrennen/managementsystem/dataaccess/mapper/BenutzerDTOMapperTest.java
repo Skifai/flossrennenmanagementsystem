@@ -2,6 +2,7 @@ package ch.flossrennen.managementsystem.dataaccess.mapper;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,7 +13,7 @@ class BenutzerDTOMapperTest {
 
     @Test
     void toDTO() {
-        Benutzer benutzer = new Benutzer(1L, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", "ADMIN");
+        Benutzer benutzer = new Benutzer(1L, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.ADMINISTRATOR);
         BenutzerDTO dto = mapper.toDTO(benutzer);
 
         assertEquals(benutzer.getId(), dto.id());
@@ -26,7 +27,7 @@ class BenutzerDTOMapperTest {
 
     @Test
     void toEntity() {
-        BenutzerDTO dto = new BenutzerDTO(1L, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", "ADMIN");
+        BenutzerDTO dto = new BenutzerDTO(1L, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.ADMINISTRATOR);
         Benutzer benutzer = mapper.toEntity(dto);
 
         assertEquals(dto.id(), benutzer.getId());

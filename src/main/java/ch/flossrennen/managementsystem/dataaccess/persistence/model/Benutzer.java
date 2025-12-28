@@ -30,11 +30,13 @@ public class Benutzer implements BenutzerSchema {
     private String passwordhash;
 
     @Column(name = ROLLE, nullable = false, length = 50)
-    private String rolle;
+    @Enumerated(EnumType.STRING)
+    private BenutzerRolle rolle;
 
-    protected Benutzer() {}
+    protected Benutzer() {
+    }
 
-    public Benutzer(Long id, String vorname, String nachname, String telefonnummer, String email, String passwordhash, String rolle) {
+    public Benutzer(Long id, String vorname, String nachname, String telefonnummer, String email, String passwordhash, BenutzerRolle rolle) {
         this.id = id;
         this.vorname = vorname;
         this.nachname = nachname;
