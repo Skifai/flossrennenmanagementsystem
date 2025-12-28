@@ -28,9 +28,9 @@ public class HelferView extends AbstractContentBaseView<HelferDTO, HelferDTOProp
 
     @Override
     protected void editDTO(HelferDTO helferDTO) {
-        super.editDTO(helferDTO);
         if (helferDTO != null) {
             ((HelferEditor) editor).setAvailableRessorts(ressortDTOService.findAll());
         }
+        super.editDTO(helferDTO);
     }
 }

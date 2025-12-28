@@ -2,12 +2,15 @@ package ch.flossrennen.managementsystem.view;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.DTOProperty;
 import ch.flossrennen.managementsystem.service.DTOService;
+import ch.flossrennen.managementsystem.util.CheckResult;
 import ch.flossrennen.managementsystem.view.editor.AbstractEditorView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -98,8 +101,22 @@ public abstract class AbstractContentBaseView<DTO, PROPERTY extends DTOProperty<
         grid.setItems(dtoService.findAll());
     }
 
+    protected void saveDTO(DTO dto) {
+        CheckResult<DTO> result = dtoService.save(dto);
+        if (result.isSuccess()) {
+            Notification.show(result.getMessage())
+                    .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+            updateGrid();
+            editDTO(null);
+        } else {
+            Notification.show(result.getMessage())
+                    .addThemeVariants(NotificationVariant.LUMO_ERROR);
+        }
+    }
+
     protected void editDTO(DTO dto) {
         if (dto == null) {
+            editor.setDTO(null);
             editor.setVisible(false);
             return;
         }
@@ -108,13 +125,16 @@ public abstract class AbstractContentBaseView<DTO, PROPERTY extends DTOProperty<
         editor.setDTO(dto);
     }
 
-    protected void saveDTO(DTO dto) {
-        dtoService.save(dto);
-        updateGrid();
-    }
-
     protected void deleteDTO(DTO dto) {
-        dtoService.delete(dto);
-        updateGrid();
+        CheckResult<Void> result = dtoService.delete(dto);
+        if (result.isSuccess()) {
+            Notification.show(result.getMessage())
+                    .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+            updateGrid();
+            editDTO(null);
+        } else {
+            Notification.show(result.getMessage())
+                    .addThemeVariants(NotificationVariant.LUMO_ERROR);
+        }
     }
 }

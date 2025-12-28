@@ -44,9 +44,7 @@ public abstract class AbstractEditorView<DTO> extends Composite<VerticalLayout> 
 
     public void setDTO(DTO dto) {
         this.dto = dto;
-        if (dto != null) {
-            binder.readRecord(dto);
-        }
+        binder.readBean(dto);
     }
 
     private @NonNull HorizontalLayout createButtonLayout() {

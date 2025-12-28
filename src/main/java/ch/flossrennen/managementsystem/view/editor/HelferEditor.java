@@ -13,6 +13,11 @@ import java.util.List;
 
 public class HelferEditor extends AbstractEditorView<HelferDTO> {
 
+    private TextField fieldID;
+    private TextField fieldVorname;
+    private TextField fieldNachname;
+    private TextField fieldEmail;
+    private TextField fieldTelefon;
     private ComboBox<RessortDTO> fieldRessort;
 
     public HelferEditor() {
@@ -34,29 +39,29 @@ public class HelferEditor extends AbstractEditorView<HelferDTO> {
 
         fieldRessort = new ComboBox<>("Ressort");
 
-        TextField fieldID = new TextField("ID");
+        fieldID = new TextField("ID");
         fieldID.setReadOnly(true);
         fieldID.setPrefixComponent(VaadinIcon.HASH.create());
 
-        TextField fieldVorname = new TextField("Vorname");
+        fieldVorname = new TextField("Vorname");
         fieldVorname.setRequired(true);
         fieldVorname.setMaxLength(100);
         fieldVorname.setMinLength(2);
         fieldVorname.setPrefixComponent(VaadinIcon.USER.create());
 
-        TextField fieldNachname = new TextField("Nachname");
+        fieldNachname = new TextField("Nachname");
         fieldNachname.setRequired(true);
         fieldNachname.setMaxLength(100);
         fieldNachname.setMinLength(2);
         fieldNachname.setPrefixComponent(VaadinIcon.USER.create());
 
-        TextField fieldEmail = new TextField("Email");
+        fieldEmail = new TextField("Email");
         fieldEmail.setRequired(true);
         fieldEmail.setMaxLength(254);
         fieldEmail.setMinLength(3);
         fieldEmail.setPrefixComponent(VaadinIcon.ENVELOPE.create());
 
-        TextField fieldTelefon = new TextField("Telefonnummer");
+        fieldTelefon = new TextField("Telefonnummer");
         fieldTelefon.setRequired(true);
         fieldTelefon.setMaxLength(15);
         fieldTelefon.setMinLength(10);

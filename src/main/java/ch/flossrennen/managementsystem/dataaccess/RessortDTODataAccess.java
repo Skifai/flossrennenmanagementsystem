@@ -4,20 +4,29 @@ import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
 import ch.flossrennen.managementsystem.dataaccess.mapper.DTOMapper;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Ressort;
 import ch.flossrennen.managementsystem.dataaccess.persistence.repository.RessortRepository;
+import ch.flossrennen.managementsystem.textprovider.TextProvider;
+import ch.flossrennen.managementsystem.util.CheckResult;
+import ch.flossrennen.managementsystem.util.TranslationConstants;
 import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Component
 public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
+    private static final Logger log = LoggerFactory.getLogger(RessortDTODataAccess.class);
     private final RessortRepository ressortRepository;
     private final DTOMapper<Ressort, RessortDTO> ressortDTOMapper;
+    private final TextProvider textProvider;
 
-    public RessortDTODataAccess(RessortRepository ressortRepository, DTOMapper<Ressort, RessortDTO> ressortDTOMapper) {
+    public RessortDTODataAccess(RessortRepository ressortRepository, DTOMapper<Ressort, RessortDTO> ressortDTOMapper, TextProvider textProvider) {
         this.ressortRepository = ressortRepository;
         this.ressortDTOMapper = ressortDTOMapper;
+        this.textProvider = textProvider;
     }
 
     @NonNull
@@ -32,12 +41,24 @@ public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
         return ressortRepository.findById(id).map(ressortDTOMapper::toDTO);
     }
 
-    public void deleteById(@NonNull Long id) {
-        ressortRepository.deleteById(id);
+    @NonNull
+    public CheckResult<Void> deleteById(@NonNull Long id) {
+        try {
+            ressortRepository.deleteById(id);
+            return CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE, Locale.GERMAN));
+        } catch (Exception e) {
+            log.error("Error deleting Ressort with id {}: {}", id, e.getMessage(), e);
+            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE, Locale.GERMAN));
+        }
     }
 
     @NonNull
-    public RessortDTO save(@NonNull RessortDTO ressortDTO) {
-        return ressortDTOMapper.toDTO(ressortRepository.save(ressortDTOMapper.toEntity(ressortDTO)));
+    public CheckResult<RessortDTO> save(@NonNull RessortDTO ressortDTO) {
+        try {
+            return CheckResult.success(ressortDTOMapper.toDTO(ressortRepository.save(ressortDTOMapper.toEntity(ressortDTO))), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE, Locale.GERMAN));
+        } catch (Exception e) {
+            log.error("Error saving Ressort {}: {}", ressortDTO, e.getMessage(), e);
+            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE, Locale.GERMAN));
+        }
     }
 }

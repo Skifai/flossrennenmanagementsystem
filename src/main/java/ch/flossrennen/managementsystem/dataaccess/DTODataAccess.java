@@ -1,5 +1,6 @@
 package ch.flossrennen.managementsystem.dataaccess;
 
+import ch.flossrennen.managementsystem.util.CheckResult;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;
@@ -12,8 +13,9 @@ public interface DTODataAccess<DTO> {
     @NonNull
     Optional<DTO> findById(@NonNull Long id);
 
-    void deleteById(@NonNull Long id);
+    @NonNull
+    CheckResult<Void> deleteById(@NonNull Long id);
 
     @NonNull
-    DTO save(@NonNull DTO dto);
+    CheckResult<DTO> save(@NonNull DTO dto);
 }

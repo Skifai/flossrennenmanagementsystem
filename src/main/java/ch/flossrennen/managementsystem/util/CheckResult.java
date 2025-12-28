@@ -1,32 +1,40 @@
 package ch.flossrennen.managementsystem.util;
 
-public class CheckResult {
+import java.util.Optional;
 
-    private boolean result;
-    private String message;
+public class CheckResult<T> {
+
+    private final boolean success;
+    private final String message;
+    private final T data;
+
+    public CheckResult(boolean success, String message, T data) {
+        this.success = success;
+        this.message = message;
+        this.data = data;
+    }
+
+    public static <T> CheckResult<T> success(T data) {
+        return new CheckResult<>(true, null, data);
+    }
+
+    public static <T> CheckResult<T> success(T data, String message) {
+        return new CheckResult<>(true, message, data);
+    }
+
+    public static <T> CheckResult<T> failure(String message) {
+        return new CheckResult<>(false, message, null);
+    }
 
     public boolean isSuccess() {
-        return result;
-    }
-
-    public void setResult(boolean result) {
-        this.result = result;
-    }
-
-    public CheckResult(boolean result) {
-        this.result = result;
-    }
-
-    public CheckResult(boolean result, String message) {
-        this.result = result;
-        this.message = message;
+        return success;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public Optional<T> getData() {
+        return Optional.ofNullable(data);
     }
 }

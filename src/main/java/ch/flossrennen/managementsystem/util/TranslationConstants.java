@@ -36,4 +36,12 @@ public interface TranslationConstants {
     String RESSORT_BESCHREIBUNG = "ressort.beschreibung";
     String RESSORT_ZUSTAENDIGKEIT = "ressort.zustaendigkeit";
     String RESSORT_RESSORTLEITUNG = "ressort.ressortleitung";
+
+    // Notifications
+    String SUCCESS_SAVE = "notification.success.save";
+    String SUCCESS_DELETE = "notification.success.delete";
+    String ERROR_SAVE = "notification.error.save";
+    String ERROR_DELETE = "notification.error.delete";
+    String ERROR_MISSING_ID = "notification.error.missing.id";
+    String ERROR_MISSING_RESSORT = "notification.error.missing.ressort";
 }
