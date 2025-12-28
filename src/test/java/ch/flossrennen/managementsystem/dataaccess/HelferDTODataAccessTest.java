@@ -3,6 +3,7 @@ package ch.flossrennen.managementsystem.dataaccess;
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
 import ch.flossrennen.managementsystem.util.CheckResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,12 +35,12 @@ class HelferDTODataAccessTest {
 
     @BeforeEach
     void setUp() {
-        BenutzerDTO benutzer = new BenutzerDTO(null, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", "ADMIN");
+        BenutzerDTO benutzer = new BenutzerDTO(null, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.ADMINISTRATOR);
         CheckResult<BenutzerDTO> benutzerResult = benutzerDataAccess.save(benutzer);
         assertTrue(benutzerResult.isSuccess());
         BenutzerDTO savedBenutzer = benutzerResult.getData().orElseThrow();
 
-        RessortDTO ressortDto = new RessortDTO(null, "TestRessort", "Test Desc", "Test Zust", savedBenutzer.id());
+        RessortDTO ressortDto = new RessortDTO(null, "TestRessort", "Test Desc", "Test Zust", savedBenutzer);
         CheckResult<RessortDTO> ressortResult = ressortDataAccess.save(ressortDto);
         assertTrue(ressortResult.isSuccess());
         savedRessort = ressortResult.getData().orElseThrow();

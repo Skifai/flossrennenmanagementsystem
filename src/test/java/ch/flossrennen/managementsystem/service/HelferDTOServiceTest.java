@@ -3,6 +3,7 @@ package ch.flossrennen.managementsystem.service;
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
 import ch.flossrennen.managementsystem.util.CheckResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,12 +34,12 @@ class HelferDTOServiceTest {
 
     @BeforeEach
     void setUp() {
-        BenutzerDTO benutzer = new BenutzerDTO(null, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", "ADMIN");
+        BenutzerDTO benutzer = new BenutzerDTO(null, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.ADMINISTRATOR);
         CheckResult<BenutzerDTO> benutzerResult = benutzerService.save(benutzer);
         assertTrue(benutzerResult.isSuccess());
         BenutzerDTO savedBenutzer = benutzerResult.getData().orElseThrow();
 
-        RessortDTO ressortDto = new RessortDTO(null, "TestRessort", "Desc", "Zust", savedBenutzer.id());
+        RessortDTO ressortDto = new RessortDTO(null, "TestRessort", "Desc", "Zust", savedBenutzer);
         CheckResult<RessortDTO> ressortResult = ressortService.save(ressortDto);
         assertTrue(ressortResult.isSuccess());
         savedRessort = ressortResult.getData().orElseThrow();

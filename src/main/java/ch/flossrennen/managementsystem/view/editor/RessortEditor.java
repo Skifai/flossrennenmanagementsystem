@@ -1,16 +1,29 @@
 package ch.flossrennen.managementsystem.view.editor;
 
+import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.converter.StringToLongConverter;
 import org.jspecify.annotations.NonNull;
 
+import java.util.List;
+
 public class RessortEditor extends AbstractEditorView<RessortDTO> {
+
+    private ComboBox<BenutzerDTO> fieldRessortleitung;
 
     public RessortEditor() {
         super(RessortDTO.class);
+    }
+
+    public void setAvailableBenutzer(List<BenutzerDTO> benutzer) {
+        if (fieldRessortleitung != null) {
+            fieldRessortleitung.setItems(benutzer);
+            fieldRessortleitung.setItemLabelGenerator(b -> b.vorname() + " " + b.nachname());
+        }
     }
 
     @Override
@@ -32,7 +45,8 @@ public class RessortEditor extends AbstractEditorView<RessortDTO> {
         TextField fieldZustaendigkeit = new TextField("Zuständigkeit");
         fieldZustaendigkeit.setMaxLength(255);
 
-        TextField fieldRessortleitung = new TextField("Ressortleitung (ID)");
+        fieldRessortleitung = new ComboBox<>("Ressortleitung");
+        fieldRessortleitung.setPrefixComponent(VaadinIcon.USER.create());
 
         formFields.addFormRow(fieldID);
         formFields.addFormRow(fieldName);
@@ -52,8 +66,6 @@ public class RessortEditor extends AbstractEditorView<RessortDTO> {
         binder.forField(fieldZustaendigkeit)
                 .bind("zustaendigkeit");
         binder.forField(fieldRessortleitung)
-                .withNullRepresentation("")
-                .withConverter(new StringToLongConverter("Ressortleitung ID muss eine Zahl sein."))
                 .bind("ressortleitung");
 
         return formFields;

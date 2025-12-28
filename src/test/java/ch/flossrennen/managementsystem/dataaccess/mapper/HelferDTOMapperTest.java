@@ -1,21 +1,33 @@
 package ch.flossrennen.managementsystem.dataaccess.mapper;
 
+import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Helfer;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Ressort;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HelferDTOMapperTest {
 
-    private final RessortDTOMapper ressortMapper = new RessortDTOMapper();
-    private final HelferDTOMapper mapper = new HelferDTOMapper(ressortMapper);
+    private RessortDTOMapper ressortMapper;
+    private HelferDTOMapper mapper;
+
+    @BeforeEach
+    void setUp() {
+        BenutzerDTOMapper benutzerDTOMapper = new BenutzerDTOMapper();
+        ressortMapper = new RessortDTOMapper(benutzerDTOMapper);
+        mapper = new HelferDTOMapper(ressortMapper);
+    }
 
     @Test
     void toDTO() {
-        Ressort ressort = new Ressort(1L, "Sicherheit", "Sicherheit auf dem Fluss", "Rettung", 2L);
+        Benutzer benutzer = new Benutzer(2L, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.RESSORTLEITER);
+        Ressort ressort = new Ressort(1L, "Sicherheit", "Sicherheit auf dem Fluss", "Rettung", benutzer);
         Helfer helfer = new Helfer(1L, "Hans", "Muster", "hans.muster@test.ch", "0791234567", ressort);
 
         HelferDTO dto = mapper.toDTO(helfer);
@@ -30,7 +42,8 @@ class HelferDTOMapperTest {
 
     @Test
     void toEntity() {
-        RessortDTO ressortDto = new RessortDTO(1L, "Sicherheit", "Sicherheit auf dem Fluss", "Rettung", 2L);
+        BenutzerDTO ressortleitung = new BenutzerDTO(2L, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.RESSORTLEITER);
+        RessortDTO ressortDto = new RessortDTO(1L, "Sicherheit", "Sicherheit auf dem Fluss", "Rettung", ressortleitung);
         HelferDTO dto = new HelferDTO(1L, "Hans", "Muster", "hans.muster@test.ch", "0791234567", ressortDto);
 
         Helfer helfer = mapper.toEntity(dto);

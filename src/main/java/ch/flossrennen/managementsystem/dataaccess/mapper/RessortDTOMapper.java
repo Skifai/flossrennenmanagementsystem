@@ -8,6 +8,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class RessortDTOMapper implements DTOMapper<Ressort, RessortDTO> {
 
+    private final BenutzerDTOMapper benutzerDTOMapper;
+
+    public RessortDTOMapper(BenutzerDTOMapper benutzerDTOMapper) {
+        this.benutzerDTOMapper = benutzerDTOMapper;
+    }
+
     @NonNull
     public RessortDTO toDTO(@NonNull Ressort ressort) {
         return new RessortDTO(
@@ -15,7 +21,8 @@ public class RessortDTOMapper implements DTOMapper<Ressort, RessortDTO> {
                 ressort.getName(),
                 ressort.getBeschreibung(),
                 ressort.getZustaendigkeit(),
-                ressort.getRessortleitung());
+                ressort.getRessortleitung() != null ?
+                        benutzerDTOMapper.toDTO(ressort.getRessortleitung()) : null);
     }
 
     @NonNull
@@ -25,7 +32,7 @@ public class RessortDTOMapper implements DTOMapper<Ressort, RessortDTO> {
                 ressortDTO.name(),
                 ressortDTO.beschreibung(),
                 ressortDTO.zustaendigkeit(),
-                ressortDTO.ressortleitung()
+                ressortDTO.ressortleitung() != null ? benutzerDTOMapper.toEntity(ressortDTO.ressortleitung()) : null
         );
     }
 }

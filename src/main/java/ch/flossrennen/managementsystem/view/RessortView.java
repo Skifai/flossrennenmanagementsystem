@@ -1,5 +1,6 @@
 package ch.flossrennen.managementsystem.view;
 
+import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTOProperties;
 import ch.flossrennen.managementsystem.service.DTOService;
@@ -13,12 +14,23 @@ import org.jspecify.annotations.NonNull;
 @AnonymousAllowed
 public class RessortView extends AbstractContentBaseView<RessortDTO, RessortDTOProperties> {
 
-    public RessortView(DTOService<RessortDTO> ressortDTOService) {
+    private final DTOService<BenutzerDTO> benutzerDTOService;
+
+    public RessortView(DTOService<RessortDTO> ressortDTOService, DTOService<BenutzerDTO> benutzerDTOService) {
         super(ressortDTOService, RessortDTO.class, RessortDTOProperties.values(), "Ressortverwaltung", "Neues Ressort", RessortDTO::createEmptyDTO);
+        this.benutzerDTOService = benutzerDTOService;
     }
 
     @Override
     protected @NonNull AbstractEditorView<RessortDTO> createEditor() {
         return new RessortEditor();
+    }
+
+    @Override
+    protected void editDTO(RessortDTO ressortDTO) {
+        if (ressortDTO != null) {
+            ((RessortEditor) editor).setAvailableBenutzer(benutzerDTOService.findAll());
+        }
+        super.editDTO(ressortDTO);
     }
 }

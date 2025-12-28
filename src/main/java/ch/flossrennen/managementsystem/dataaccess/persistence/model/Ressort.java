@@ -27,6 +27,7 @@ public class Ressort implements RessortSchema {
     @Column(name = ZUSTAENDIGKEIT, length = 300)
     private String zustaendigkeit;
 
-    @Column(name = RESSORTLEITUNG)
-    private Long ressortleitung;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = RESSORTLEITUNG)
+    private Benutzer ressortleitung;
 }

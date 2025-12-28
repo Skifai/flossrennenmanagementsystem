@@ -10,7 +10,7 @@ public enum RessortDTOProperties implements DTOProperty<RessortDTO> {
     NAME(RessortDTO::name, RessortSchema.NAME, TranslationConstants.RESSORT_NAME),
     BESCHREIBUNG(RessortDTO::beschreibung, RessortSchema.BESCHREIBUNG, TranslationConstants.RESSORT_BESCHREIBUNG),
     ZUSTAENDIGKEIT(RessortDTO::zustaendigkeit, RessortSchema.ZUSTAENDIGKEIT, TranslationConstants.RESSORT_ZUSTAENDIGKEIT),
-    RESSORTLEITUNG(RessortDTO::ressortleitung, RessortSchema.RESSORTLEITUNG, TranslationConstants.RESSORT_RESSORTLEITUNG);
+    RESSORTLEITUNG(ressortDTO -> ressortDTO.ressortleitung() != null ? ressortDTO.ressortleitung().vorname() + " " + ressortDTO.ressortleitung().nachname() : "", RessortSchema.RESSORTLEITUNG, TranslationConstants.RESSORT_RESSORTLEITUNG);
 
     private final Function<RessortDTO, ?> getter;
     private final String schemaKey;

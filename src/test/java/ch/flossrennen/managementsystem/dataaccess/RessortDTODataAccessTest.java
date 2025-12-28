@@ -2,6 +2,7 @@ package ch.flossrennen.managementsystem.dataaccess;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
 import ch.flossrennen.managementsystem.util.CheckResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,19 +27,19 @@ class RessortDTODataAccessTest {
     @Autowired
     private BenutzerDTODataAccess benutzerDataAccess;
 
-    private Long savedBenutzerId;
+    private BenutzerDTO savedBenutzer;
 
     @BeforeEach
     void setUp() {
-        BenutzerDTO benutzer = new BenutzerDTO(null, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", "ADMIN");
+        BenutzerDTO benutzer = new BenutzerDTO(null, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.ADMINISTRATOR);
         CheckResult<BenutzerDTO> result = benutzerDataAccess.save(benutzer);
         assertTrue(result.isSuccess());
-        savedBenutzerId = result.getData().orElseThrow().id();
+        savedBenutzer = result.getData().orElseThrow();
     }
 
     @Test
     void save() {
-        RessortDTO dto = new RessortDTO(null, "TestRessort", "Test Beschreibung", "Test Zustaendigkeit", savedBenutzerId);
+        RessortDTO dto = new RessortDTO(null, "TestRessort", "Test Beschreibung", "Test Zustaendigkeit", savedBenutzer);
         CheckResult<RessortDTO> result = dataAccess.save(dto);
         assertTrue(result.isSuccess());
         RessortDTO saved = result.getData().orElseThrow();
@@ -48,7 +49,7 @@ class RessortDTODataAccessTest {
 
     @Test
     void findAll() {
-        RessortDTO dto = new RessortDTO(null, "TestRessort", "Test Beschreibung", "Test Zustaendigkeit", savedBenutzerId);
+        RessortDTO dto = new RessortDTO(null, "TestRessort", "Test Beschreibung", "Test Zustaendigkeit", savedBenutzer);
         dataAccess.save(dto);
 
         List<RessortDTO> all = dataAccess.findAll();
@@ -57,7 +58,7 @@ class RessortDTODataAccessTest {
 
     @Test
     void findById() {
-        RessortDTO dto = new RessortDTO(null, "FindMe", "Desc", "Zust", savedBenutzerId);
+        RessortDTO dto = new RessortDTO(null, "FindMe", "Desc", "Zust", savedBenutzer);
         CheckResult<RessortDTO> result = dataAccess.save(dto);
         assertTrue(result.isSuccess());
         RessortDTO saved = result.getData().orElseThrow();
@@ -69,7 +70,7 @@ class RessortDTODataAccessTest {
 
     @Test
     void deleteById() {
-        RessortDTO dto = new RessortDTO(null, "DeleteMe", "Desc", "Zust", savedBenutzerId);
+        RessortDTO dto = new RessortDTO(null, "DeleteMe", "Desc", "Zust", savedBenutzer);
         CheckResult<RessortDTO> result = dataAccess.save(dto);
         assertTrue(result.isSuccess());
         RessortDTO saved = result.getData().orElseThrow();
