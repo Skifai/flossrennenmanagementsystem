@@ -55,7 +55,7 @@ class HelferDTODataAccessTest {
     @Test
     void findById() {
         List<HelferDTO> all = helferDataAccess.findAll();
-        HelferDTO first = all.get(0);
+        HelferDTO first = all.getFirst();
 
         Optional<HelferDTO> found = helferDataAccess.findById(first.id());
         assertTrue(found.isPresent());

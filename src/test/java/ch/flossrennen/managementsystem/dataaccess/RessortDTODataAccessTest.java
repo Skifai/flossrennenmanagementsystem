@@ -55,7 +55,7 @@ class RessortDTODataAccessTest {
     @Test
     void findById() {
         List<RessortDTO> all = dataAccess.findAll();
-        RessortDTO first = all.get(0);
+        RessortDTO first = all.getFirst();
 
         Optional<RessortDTO> found = dataAccess.findById(first.id());
         assertTrue(found.isPresent());

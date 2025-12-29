@@ -90,7 +90,7 @@ class BenutzerDTODataAccessTest {
     @Test
     void findById() {
         List<BenutzerDTO> all = dataAccess.findAll();
-        BenutzerDTO first = all.get(0);
+        BenutzerDTO first = all.getFirst();
 
         Optional<BenutzerDTO> found = dataAccess.findById(first.id());
         assertTrue(found.isPresent());
