@@ -2,6 +2,7 @@ package ch.flossrennen.managementsystem.service;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
+import ch.flossrennen.managementsystem.initialisation.constants.InitialDataConstants;
 import ch.flossrennen.managementsystem.util.CheckResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,9 +30,7 @@ class RessortDTOServiceTest {
 
     @BeforeEach
     void setUp() {
-        List<BenutzerDTO> users = benutzerService.findAll();
-        assertFalse(users.isEmpty(), "Initial users should be loaded");
-        savedBenutzer = users.get(0);
+        savedBenutzer = benutzerService.findById(InitialDataConstants.BAU_USER_ID).orElseThrow();
     }
 
     @Test

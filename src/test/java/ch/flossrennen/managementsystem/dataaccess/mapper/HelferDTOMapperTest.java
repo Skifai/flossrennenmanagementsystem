@@ -4,9 +4,9 @@ import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
-import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Helfer;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Ressort;
+import ch.flossrennen.managementsystem.initialisation.constants.InitialDataConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -35,9 +35,9 @@ class HelferDTOMapperTest {
 
     @Test
     void toDTO() {
-        Benutzer benutzer = new Benutzer(2L, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.RESSORTLEITER);
-        Ressort ressort = new Ressort(1L, "Sicherheit", "Sicherheit auf dem Fluss", "Rettung", benutzer);
-        Helfer helfer = new Helfer(1L, "Hans", "Muster", "hans.muster@test.ch", "0791234567", ressort);
+        Benutzer benutzer = new Benutzer(2L, InitialDataConstants.FESTWIRTSCHAFT_USER_VORNAME, InitialDataConstants.FESTWIRTSCHAFT_USER_NACHNAME, InitialDataConstants.FESTWIRTSCHAFT_USER_TEL, InitialDataConstants.FESTWIRTSCHAFT_USER_EMAIL, "hash", InitialDataConstants.ADMIN_ROLLE);
+        Ressort ressort = new Ressort(1L, InitialDataConstants.RESSORT_FESTWIRTSCHAFT_NAME, InitialDataConstants.RESSORT_FESTWIRTSCHAFT_BESCHREIBUNG, InitialDataConstants.RESSORT_FESTWIRTSCHAFT_ZUSTAENDIGKEIT, benutzer);
+        Helfer helfer = new Helfer(1L, InitialDataConstants.FESTWIRTSCHAFT_HELFER1_VORNAME, InitialDataConstants.FESTWIRTSCHAFT_HELFER1_NACHNAME, InitialDataConstants.FESTWIRTSCHAFT_HELFER1_EMAIL, InitialDataConstants.FESTWIRTSCHAFT_HELFER1_TEL, ressort);
 
         HelferDTO dto = mapper.toDTO(helfer);
 
@@ -51,9 +51,9 @@ class HelferDTOMapperTest {
 
     @Test
     void toEntity() {
-        BenutzerDTO ressortleitung = new BenutzerDTO(2L, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.RESSORTLEITER);
-        RessortDTO ressortDto = new RessortDTO(1L, "Sicherheit", "Sicherheit auf dem Fluss", "Rettung", ressortleitung);
-        HelferDTO dto = new HelferDTO(1L, "Hans", "Muster", "hans.muster@test.ch", "0791234567", ressortDto);
+        BenutzerDTO ressortleitung = new BenutzerDTO(2L, InitialDataConstants.FINANZEN_USER_VORNAME, InitialDataConstants.FINANZEN_USER_NACHNAME, InitialDataConstants.FINANZEN_USER_TEL, InitialDataConstants.FINANZEN_USER_EMAIL, "hash", InitialDataConstants.ADMIN_ROLLE);
+        RessortDTO ressortDto = new RessortDTO(1L, InitialDataConstants.RESSORT_FINANZEN_NAME, InitialDataConstants.RESSORT_FINANZEN_BESCHREIBUNG, InitialDataConstants.RESSORT_FINANZEN_ZUSTAENDIGKEIT, ressortleitung);
+        HelferDTO dto = new HelferDTO(1L, InitialDataConstants.FINANZEN_HELFER1_VORNAME, InitialDataConstants.FINANZEN_HELFER1_NACHNAME, InitialDataConstants.FINANZEN_HELFER1_EMAIL, InitialDataConstants.FINANZEN_HELFER1_TEL, ressortDto);
 
         Helfer helfer = mapper.toEntity(dto);
 

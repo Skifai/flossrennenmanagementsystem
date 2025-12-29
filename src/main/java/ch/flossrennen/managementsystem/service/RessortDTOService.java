@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RessortDTOService implements DTOService<RessortDTO> {
@@ -27,6 +28,11 @@ public class RessortDTOService implements DTOService<RessortDTO> {
     @Override
     public @NonNull List<RessortDTO> findAll() {
         return ressortDTODataAccess.findAll();
+    }
+
+    @Override
+    public @NonNull Optional<RessortDTO> findById(@NonNull Long id) {
+        return ressortDTODataAccess.findById(id);
     }
 
     @Override

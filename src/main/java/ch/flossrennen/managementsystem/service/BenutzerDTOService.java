@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BenutzerDTOService implements DTOService<BenutzerDTO> {
@@ -27,6 +28,11 @@ public class BenutzerDTOService implements DTOService<BenutzerDTO> {
     @Override
     public @NonNull List<BenutzerDTO> findAll() {
         return benutzerDTODataAccess.findAll();
+    }
+
+    @Override
+    public @NonNull Optional<BenutzerDTO> findById(@NonNull Long id) {
+        return benutzerDTODataAccess.findById(id);
     }
 
     @Override

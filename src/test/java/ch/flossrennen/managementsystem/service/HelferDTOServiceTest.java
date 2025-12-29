@@ -2,6 +2,7 @@ package ch.flossrennen.managementsystem.service;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
+import ch.flossrennen.managementsystem.initialisation.constants.InitialDataConstants;
 import ch.flossrennen.managementsystem.util.CheckResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,9 +30,7 @@ class HelferDTOServiceTest {
 
     @BeforeEach
     void setUp() {
-        List<RessortDTO> ressorts = ressortService.findAll();
-        assertFalse(ressorts.isEmpty(), "Initial ressorts should be loaded");
-        savedRessort = ressorts.get(0);
+        savedRessort = ressortService.findById(InitialDataConstants.RESSORT_BAU_ID).orElseThrow();
     }
 
     @Test

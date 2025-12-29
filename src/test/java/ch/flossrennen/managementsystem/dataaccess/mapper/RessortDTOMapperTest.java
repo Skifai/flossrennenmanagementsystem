@@ -3,8 +3,8 @@ package ch.flossrennen.managementsystem.dataaccess.mapper;
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
-import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Ressort;
+import ch.flossrennen.managementsystem.initialisation.constants.InitialDataConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -31,9 +31,9 @@ class RessortDTOMapperTest {
 
     @Test
     void toDTO() {
-        Benutzer benutzer = new Benutzer(2L, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.RESSORTLEITER);
+        Benutzer benutzer = new Benutzer(2L, InitialDataConstants.VERKEHR_USER_VORNAME, InitialDataConstants.VERKEHR_USER_NACHNAME, InitialDataConstants.VERKEHR_USER_TEL, InitialDataConstants.VERKEHR_USER_EMAIL, "hash", InitialDataConstants.ADMIN_ROLLE);
 
-        Ressort ressort = new Ressort(1L, "Sicherheit", "Sicherheit auf dem Fluss", "Rettung", benutzer);
+        Ressort ressort = new Ressort(1L, InitialDataConstants.RESSORT_VERKEHR_NAME, InitialDataConstants.RESSORT_VERKEHR_BESCHREIBUNG, InitialDataConstants.RESSORT_VERKEHR_ZUSTAENDIGKEIT, benutzer);
         RessortDTO dto = mapper.toDTO(ressort);
 
         assertEquals(ressort.getId(), dto.id());
@@ -45,8 +45,8 @@ class RessortDTOMapperTest {
 
     @Test
     void toEntity() {
-        BenutzerDTO ressortleitung = new BenutzerDTO(2L, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.RESSORTLEITER);
-        RessortDTO dto = new RessortDTO(1L, "Sicherheit", "Sicherheit auf dem Fluss", "Rettung", ressortleitung);
+        BenutzerDTO ressortleitung = new BenutzerDTO(2L, InitialDataConstants.RENNLEITUNG_USER_VORNAME, InitialDataConstants.RENNLEITUNG_USER_NACHNAME, InitialDataConstants.RENNLEITUNG_USER_TEL, InitialDataConstants.RENNLEITUNG_USER_EMAIL, "hash", InitialDataConstants.ADMIN_ROLLE);
+        RessortDTO dto = new RessortDTO(1L, InitialDataConstants.RESSORT_RENNLEITUNG_NAME, InitialDataConstants.RESSORT_RENNLEITUNG_BESCHREIBUNG, InitialDataConstants.RESSORT_RENNLEITUNG_ZUSTAENDIGKEIT, ressortleitung);
         Ressort ressort = mapper.toEntity(dto);
 
         assertEquals(dto.id(), ressort.getId());
