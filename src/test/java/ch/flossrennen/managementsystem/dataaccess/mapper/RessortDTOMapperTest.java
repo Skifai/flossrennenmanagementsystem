@@ -7,8 +7,12 @@ import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRoll
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Ressort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 
 class RessortDTOMapperTest {
 
@@ -17,8 +21,12 @@ class RessortDTOMapperTest {
 
     @BeforeEach
     void setUp() {
-        benutzerDTOMapper = new BenutzerDTOMapper();
-        mapper = new RessortDTOMapper(benutzerDTOMapper);
+        benutzerDTOMapper = Mappers.getMapper(BenutzerDTOMapper.class);
+        benutzerDTOMapper.passwordEncoder = mock(PasswordEncoder.class);
+
+        mapper = Mappers.getMapper(RessortDTOMapper.class);
+        // MapStruct uses the mapper instance, we need to make sure it's injected if not using Spring context
+        ReflectionTestUtils.setField(mapper, "benutzerDTOMapper", benutzerDTOMapper);
     }
 
     @Test

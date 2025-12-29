@@ -24,7 +24,7 @@ class BenutzerDTODataAccessTest {
 
     @Test
     void save() {
-        BenutzerDTO dto = new BenutzerDTO(null, "New", "User", "0761234567", "new.dataaccess@test.ch", "hash", BenutzerRolle.ADMINISTRATOR);
+        BenutzerDTO dto = new BenutzerDTO(null, "New", "User", "0761234567", "new.dataaccess@test.ch", "password123", BenutzerRolle.ADMINISTRATOR);
         CheckResult<BenutzerDTO> result = dataAccess.save(dto);
         assertTrue(result.isSuccess());
         BenutzerDTO saved = result.getData().orElseThrow();
@@ -53,7 +53,7 @@ class BenutzerDTODataAccessTest {
     @Test
     void deleteById() {
         // Create a new user to delete
-        BenutzerDTO dto = new BenutzerDTO(null, "Delete", "Me", "0771112233", "delete.dataaccess@test.ch", "hash", BenutzerRolle.RESSORTLEITER);
+        BenutzerDTO dto = new BenutzerDTO(null, "Delete", "Me", "0771112233", "delete.dataaccess@test.ch", "password", BenutzerRolle.RESSORTLEITER);
         CheckResult<BenutzerDTO> result = dataAccess.save(dto);
         assertTrue(result.isSuccess());
         BenutzerDTO saved = result.getData().orElseThrow();

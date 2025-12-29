@@ -54,7 +54,23 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
     @NonNull
     public CheckResult<BenutzerDTO> save(@NonNull BenutzerDTO benutzerDTO) {
         try {
-            Benutzer entity = benutzerDTOMapper.toEntity(benutzerDTO);
+            Benutzer entity;
+            if (benutzerDTO.id() != null) {
+                Optional<Benutzer> existing = benutzerRepository.findById(benutzerDTO.id());
+                if (existing.isPresent()) {
+                    entity = existing.get();
+                    benutzerDTOMapper.updateEntity(benutzerDTO, entity);
+                } else {
+                    return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
+                }
+            } else {
+                entity = benutzerDTOMapper.toEntity(benutzerDTO);
+            }
+
+            if (entity.getPasswordhash() == null) {
+                log.error("Error saving Benutzer: Password is required for new users.");
+                return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
+            }
             Benutzer savedEntity = benutzerRepository.saveAndFlush(entity);
             return CheckResult.success(benutzerDTOMapper.toDTO(savedEntity), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
         } catch (Exception e) {

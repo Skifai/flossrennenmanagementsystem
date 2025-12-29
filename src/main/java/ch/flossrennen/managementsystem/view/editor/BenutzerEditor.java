@@ -70,7 +70,7 @@ public class BenutzerEditor extends AbstractEditorView<BenutzerDTO> {
         binder.forField(fieldTelefon)
                 .bind("telefonnummer");
         binder.forField(fieldPassword)
-                .bind("passwordhash");
+                .bind("password");
         binder.forField(fieldRolle)
                 .asRequired("Die Rolle ist erforderlich.")
                 .bind("rolle");

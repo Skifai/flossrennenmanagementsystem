@@ -11,7 +11,6 @@ public enum BenutzerDTOProperties implements DTOProperty<BenutzerDTO> {
     NACHNAME(BenutzerDTO::nachname, BenutzerSchema.NACHNAME, TranslationConstants.BENUTZER_NACHNAME),
     TELEFONNUMMER(BenutzerDTO::telefonnummer, BenutzerSchema.TELEFONNUMMER, TranslationConstants.BENUTZER_TELEFONNUMMER),
     EMAIL(BenutzerDTO::email, BenutzerSchema.EMAIL, TranslationConstants.BENUTZER_EMAIL),
-    PASSWORDHASH(BenutzerDTO::passwordhash, BenutzerSchema.PASSWORDHASH, TranslationConstants.BENUTZER_PASSWORDHASH),
     ROLLE(BenutzerDTO::rolle, BenutzerSchema.ROLLE, TranslationConstants.BENUTZER_ROLLE);
 
     private final Function<BenutzerDTO, ?> getter;

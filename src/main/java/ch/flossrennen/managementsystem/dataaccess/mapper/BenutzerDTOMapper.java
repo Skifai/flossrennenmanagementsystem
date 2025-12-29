@@ -3,7 +3,9 @@ package ch.flossrennen.managementsystem.dataaccess.mapper;
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
 import org.jspecify.annotations.NonNull;
-import org.springframework.stereotype.Component;
+import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Component
 public class BenutzerDTOMapper implements DTOMapper<Benutzer, BenutzerDTO> {

@@ -7,7 +7,7 @@ public record BenutzerDTO(Long id,
                           String nachname,
                           String telefonnummer,
                           String email,
-                          String passwordhash,
+                          String password,
                           BenutzerRolle rolle) {
 
     public static BenutzerDTO createEmptyDTO() {
