@@ -9,8 +9,12 @@ import ch.flossrennen.managementsystem.dataaccess.persistence.model.Helfer;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Ressort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 
 class HelferDTOMapperTest {
 
@@ -19,9 +23,14 @@ class HelferDTOMapperTest {
 
     @BeforeEach
     void setUp() {
-        BenutzerDTOMapper benutzerDTOMapper = new BenutzerDTOMapper();
-        ressortMapper = new RessortDTOMapper(benutzerDTOMapper);
-        mapper = new HelferDTOMapper(ressortMapper);
+        BenutzerDTOMapper benutzerDTOMapper = Mappers.getMapper(BenutzerDTOMapper.class);
+        benutzerDTOMapper.passwordEncoder = mock(PasswordEncoder.class);
+
+        ressortMapper = Mappers.getMapper(RessortDTOMapper.class);
+        ReflectionTestUtils.setField(ressortMapper, "benutzerDTOMapper", benutzerDTOMapper);
+
+        mapper = Mappers.getMapper(HelferDTOMapper.class);
+        ReflectionTestUtils.setField(mapper, "ressortDTOMapper", ressortMapper);
     }
 
     @Test

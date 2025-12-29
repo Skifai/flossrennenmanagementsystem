@@ -3,39 +3,25 @@ package ch.flossrennen.managementsystem.dataaccess.mapper;
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Helfer;
 import org.jspecify.annotations.NonNull;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 
-@Component
-public class HelferDTOMapper implements DTOMapper<Helfer, HelferDTO> {
+@Mapper(componentModel = "spring",
+        uses = {RessortDTOMapper.class},
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface HelferDTOMapper extends DTOMapper<Helfer, HelferDTO> {
 
-    private final RessortDTOMapper ressortDTOMapper;
-
-    public HelferDTOMapper(RessortDTOMapper ressortDTOMapper) {
-        this.ressortDTOMapper = ressortDTOMapper;
-    }
-
-    @NonNull
     @Override
-    public HelferDTO toDTO(@NonNull Helfer helfer) {
-        return new HelferDTO(
-                helfer.getId(),
-                helfer.getVorname(),
-                helfer.getNachname(),
-                helfer.getEmail(),
-                helfer.getTelefonnummer(),
-                ressortDTOMapper.toDTO(helfer.getRessort()));
-    }
-
     @NonNull
+    HelferDTO toDTO(@NonNull Helfer entity);
+
     @Override
-    public Helfer toEntity(@NonNull HelferDTO helferDTO) {
-        return new Helfer(
-                helferDTO.id(),
-                helferDTO.vorname(),
-                helferDTO.nachname(),
-                helferDTO.email(),
-                helferDTO.telefonnummer(),
-                ressortDTOMapper.toEntity(helferDTO.ressort())
-        );
-    }
+    @NonNull
+    Helfer toEntity(@NonNull HelferDTO dto);
+
+    @Override
+    void updateEntity(@NonNull HelferDTO dto, @MappingTarget @NonNull Helfer entity);
 }

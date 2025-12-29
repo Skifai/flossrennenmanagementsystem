@@ -7,31 +7,36 @@ import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Component
-public class BenutzerDTOMapper implements DTOMapper<Benutzer, BenutzerDTO> {
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public abstract class BenutzerDTOMapper implements DTOMapper<Benutzer, BenutzerDTO> {
 
+    @Autowired
+    protected PasswordEncoder passwordEncoder;
+
+    @Override
+    @Mapping(target = "password", constant = "")
     @NonNull
-    public BenutzerDTO toDTO(@NonNull Benutzer benutzer) {
-        return new BenutzerDTO(
-                benutzer.getId(),
-                benutzer.getVorname(),
-                benutzer.getNachname(),
-                benutzer.getTelefonnummer(),
-                benutzer.getEmail(),
-                benutzer.getPasswordhash(),
-                benutzer.getRolle());
+    public abstract BenutzerDTO toDTO(@NonNull Benutzer benutzer);
+
+    @Override
+    @Mapping(target = "passwordhash", source = "password", qualifiedByName = "passwordToHash")
+    @NonNull
+    public abstract Benutzer toEntity(@NonNull BenutzerDTO benutzerDTO);
+
+    @Override
+    @Mapping(target = "passwordhash", source = "password", qualifiedByName = "passwordToHash")
+    public abstract void updateEntity(@NonNull BenutzerDTO dto, @MappingTarget @NonNull Benutzer entity);
+
+    @Named("passwordToHash")
+    protected String passwordToHash(String password) {
+        if (password != null && !password.isBlank()) {
+            return passwordEncoder.encode(password);
+        }
+        return null;
     }
 
-    @NonNull
-    public Benutzer toEntity(@NonNull BenutzerDTO benutzerDTO) {
-        return new Benutzer(
-                benutzerDTO.id(),
-                benutzerDTO.vorname(),
-                benutzerDTO.nachname(),
-                benutzerDTO.telefonnummer(),
-                benutzerDTO.email(),
-                benutzerDTO.passwordhash(),
-                benutzerDTO.rolle()
-        );
+    @Condition
+    protected boolean isNotBlank(String value) {
+        return value != null && !value.isBlank();
     }
 }

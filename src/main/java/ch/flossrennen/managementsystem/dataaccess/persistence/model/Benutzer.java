@@ -1,12 +1,16 @@
 package ch.flossrennen.managementsystem.dataaccess.persistence.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = BenutzerSchema.TABLE_NAME)
 public class Benutzer implements BenutzerSchema {
 
@@ -32,17 +36,4 @@ public class Benutzer implements BenutzerSchema {
     @Column(name = ROLLE, nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private BenutzerRolle rolle;
-
-    protected Benutzer() {
-    }
-
-    public Benutzer(Long id, String vorname, String nachname, String telefonnummer, String email, String passwordhash, BenutzerRolle rolle) {
-        this.id = id;
-        this.vorname = vorname;
-        this.nachname = nachname;
-        this.telefonnummer = telefonnummer;
-        this.email = email;
-        this.passwordhash = passwordhash;
-        this.rolle = rolle;
-    }
 }

@@ -8,4 +8,6 @@ public interface DTOMapper<Model, DTO> {
 
     @NonNull
     Model toEntity(@NonNull DTO dto);
+
+    void updateEntity(@NonNull DTO dto, @NonNull Model entity);
 }

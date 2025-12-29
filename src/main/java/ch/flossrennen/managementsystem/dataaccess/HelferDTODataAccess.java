@@ -58,8 +58,19 @@ public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
                 log.error("Error saving Helfer {}: Missing Ressort", helferDTO);
                 return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_MISSING_RESSORT));
             }
-            Helfer helfer = helferDTOMapper.toEntity(helferDTO);
-            Helfer savedHelfer = helferRepository.saveAndFlush(helfer);
+            Helfer entity;
+            if (helferDTO.id() != null) {
+                Optional<Helfer> existing = helferRepository.findById(helferDTO.id());
+                if (existing.isPresent()) {
+                    entity = existing.get();
+                    helferDTOMapper.updateEntity(helferDTO, entity);
+                } else {
+                    return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
+                }
+            } else {
+                entity = helferDTOMapper.toEntity(helferDTO);
+            }
+            Helfer savedHelfer = helferRepository.saveAndFlush(entity);
             return CheckResult.success(helferDTOMapper.toDTO(savedHelfer), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
         } catch (Exception e) {
             log.error("Error saving Helfer {}: {}", helferDTO, e.getMessage(), e);
