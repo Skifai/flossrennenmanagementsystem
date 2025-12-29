@@ -2,7 +2,6 @@ package ch.flossrennen.managementsystem.dataaccess;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
-import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
 import ch.flossrennen.managementsystem.util.CheckResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,46 +30,42 @@ class RessortDTODataAccessTest {
 
     @BeforeEach
     void setUp() {
-        BenutzerDTO benutzer = new BenutzerDTO(null, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.ADMINISTRATOR);
-        CheckResult<BenutzerDTO> result = benutzerDataAccess.save(benutzer);
-        assertTrue(result.isSuccess());
-        savedBenutzer = result.getData().orElseThrow();
+        List<BenutzerDTO> users = benutzerDataAccess.findAll();
+        assertFalse(users.isEmpty(), "Initial users should be loaded");
+        savedBenutzer = users.get(0);
     }
 
     @Test
     void save() {
-        RessortDTO dto = new RessortDTO(null, "TestRessort", "Test Beschreibung", "Test Zustaendigkeit", savedBenutzer);
+        RessortDTO dto = new RessortDTO(null, "New Ressort", "Test Beschreibung", "Test Zustaendigkeit", savedBenutzer);
         CheckResult<RessortDTO> result = dataAccess.save(dto);
         assertTrue(result.isSuccess());
         RessortDTO saved = result.getData().orElseThrow();
         assertNotNull(saved.id());
-        assertEquals("TestRessort", saved.name());
+        assertEquals("New Ressort", saved.name());
     }
 
     @Test
     void findAll() {
-        RessortDTO dto = new RessortDTO(null, "TestRessort", "Test Beschreibung", "Test Zustaendigkeit", savedBenutzer);
-        dataAccess.save(dto);
-
         List<RessortDTO> all = dataAccess.findAll();
-        assertFalse(all.isEmpty());
+        assertFalse(all.isEmpty(), "Initial ressorts should be loaded");
+        // InitialData creates 5 ressorts
+        assertTrue(all.size() >= 5);
     }
 
     @Test
     void findById() {
-        RessortDTO dto = new RessortDTO(null, "FindMe", "Desc", "Zust", savedBenutzer);
-        CheckResult<RessortDTO> result = dataAccess.save(dto);
-        assertTrue(result.isSuccess());
-        RessortDTO saved = result.getData().orElseThrow();
+        List<RessortDTO> all = dataAccess.findAll();
+        RessortDTO first = all.get(0);
 
-        Optional<RessortDTO> found = dataAccess.findById(saved.id());
+        Optional<RessortDTO> found = dataAccess.findById(first.id());
         assertTrue(found.isPresent());
-        assertEquals("FindMe", found.get().name());
+        assertEquals(first.name(), found.get().name());
     }
 
     @Test
     void deleteById() {
-        RessortDTO dto = new RessortDTO(null, "DeleteMe", "Desc", "Zust", savedBenutzer);
+        RessortDTO dto = new RessortDTO(null, "Ressort to Delete", "Desc", "Zust", savedBenutzer);
         CheckResult<RessortDTO> result = dataAccess.save(dto);
         assertTrue(result.isSuccess());
         RessortDTO saved = result.getData().orElseThrow();

@@ -7,6 +7,7 @@ import ch.flossrennen.managementsystem.dataaccess.persistence.model.Ressort;
 import ch.flossrennen.managementsystem.dataaccess.persistence.repository.BenutzerRepository;
 import ch.flossrennen.managementsystem.dataaccess.persistence.repository.HelferRepository;
 import ch.flossrennen.managementsystem.dataaccess.persistence.repository.RessortRepository;
+import ch.flossrennen.managementsystem.initialisation.constants.InitialDataConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -14,11 +15,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Component
-@Profile("dev")
+@Profile({"dev", "test"})
 @Order(2)
 @RequiredArgsConstructor
 public class InitialData implements CommandLineRunner {
@@ -34,73 +32,232 @@ public class InitialData implements CommandLineRunner {
             return;
         }
 
-        String[] vornamen = {"Lukas", "Sarah", "Marco", "Elena", "Thomas"};
-        String[] nachnamen = {"Müller", "Schmidt", "Schneider", "Fischer", "Weber"};
-        String[] ressortNamen = {"Logistik", "Sicherheit", "Verpflegung", "Infrastruktur", "Kommunikation"};
-        String[] ressortBeschreibungen = {
-                "Planung und Durchführung der Transportlogistik für das Flossrennen.",
-                "Gewährleistung der Sicherheit für Teilnehmer und Zuschauer.",
-                "Organisation der Verpflegungsstände und Helfermahlzeiten.",
-                "Aufbau und Unterhalt der Start- und Zielgelände.",
-                "Betreuung der Social Media Kanäle und Pressearbeit."
-        };
-        String[] ressortZustaendigkeiten = {
-                "Fahrzeuge, Absperrungen, Transporte",
-                "Sanität, Security, Wasserrettung",
-                "Catering, Getränke, Standpersonal",
-                "Zelte, Elektrizität, Sanitäranlagen",
-                "Webseite, Facebook, Instagram, lokale Presse"
-        };
+        // Benutzer / Ressortleiter
+        Benutzer u1 = benutzerRepository.save(
+                new Benutzer(
+                        null,
+                        InitialDataConstants.VERKEHR_USER_VORNAME,
+                        InitialDataConstants.VERKEHR_USER_NACHNAME,
+                        InitialDataConstants.VERKEHR_USER_TEL,
+                        InitialDataConstants.VERKEHR_USER_EMAIL,
+                        passwordEncoder.encode(InitialDataConstants.VERKEHR_USER_PW),
+                        BenutzerRolle.RESSORTLEITER));
 
-        List<Benutzer> benutzerList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            String email = vornamen[i].toLowerCase() + "." + nachnamen[i].toLowerCase() + "@flossrennen-test.ch";
-            Benutzer benutzer = new Benutzer(
-                    null,
-                    vornamen[i],
-                    nachnamen[i],
-                    "079 123 45 0" + (i + 1),
-                    email,
-                    passwordEncoder.encode("password" + (i + 1)),
-                    BenutzerRolle.RESSORTLEITER
-            );
-            benutzerList.add(benutzerRepository.save(benutzer));
-        }
+        Benutzer u2 = benutzerRepository.save(
+                new Benutzer(
+                        null,
+                        InitialDataConstants.RENNLEITUNG_USER_VORNAME,
+                        InitialDataConstants.RENNLEITUNG_USER_NACHNAME,
+                        InitialDataConstants.RENNLEITUNG_USER_TEL,
+                        InitialDataConstants.RENNLEITUNG_USER_EMAIL,
+                        passwordEncoder.encode(InitialDataConstants.RENNLEITUNG_USER_PW),
+                        BenutzerRolle.RESSORTLEITER));
 
-        List<Ressort> ressortList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            Ressort ressort = new Ressort(
-                    null,
-                    ressortNamen[i],
-                    ressortBeschreibungen[i],
-                    ressortZustaendigkeiten[i],
-                    benutzerList.get(i)
-            );
-            ressortList.add(ressortRepository.save(ressort));
-        }
+        Benutzer u3 = benutzerRepository.save(
+                new Benutzer(
+                        null,
+                        InitialDataConstants.FESTWIRTSCHAFT_USER_VORNAME,
+                        InitialDataConstants.FESTWIRTSCHAFT_USER_NACHNAME,
+                        InitialDataConstants.FESTWIRTSCHAFT_USER_TEL,
+                        InitialDataConstants.FESTWIRTSCHAFT_USER_EMAIL,
+                        passwordEncoder.encode(InitialDataConstants.FESTWIRTSCHAFT_USER_PW),
+                        BenutzerRolle.RESSORTLEITER));
 
-        String[] helferVornamen = {
-                "Anna", "Beat", "Christian", "Daniela", "Erik",
-                "Fabienne", "Gabriel", "Hanna", "Ivan", "Julia",
-                "Kevin", "Laura", "Marcel", "Nadine", "Oliver"
-        };
-        String[] helferNachnamen = {
-                "Keller", "Meier", "Huber", "Frei", "Widmer",
-                "Graf", "Baumann", "Sutter", "Ziegler", "Brun",
-                "Vogt", "Bieri", "Arm", "Lutz", "Stucki"
-        };
+        Benutzer u4 = benutzerRepository.save(
+                new Benutzer(
+                        null,
+                        InitialDataConstants.BAU_USER_VORNAME,
+                        InitialDataConstants.BAU_USER_NACHNAME,
+                        InitialDataConstants.BAU_USER_TEL,
+                        InitialDataConstants.BAU_USER_EMAIL,
+                        passwordEncoder.encode(InitialDataConstants.BAU_USER_PW),
+                        BenutzerRolle.RESSORTLEITER));
 
-        for (int i = 0; i < 15; i++) {
-            String email = helferVornamen[i].toLowerCase() + "." + helferNachnamen[i].toLowerCase() + "@example.ch";
-            Helfer helfer = new Helfer(
-                    null,
-                    helferVornamen[i],
-                    helferNachnamen[i],
-                    email,
-                    "078 987 65 " + (i < 10 ? "0" + i : i),
-                    ressortList.get(i % 5)
-            );
-            helferRepository.save(helfer);
-        }
+        Benutzer u5 = benutzerRepository.save(
+                new Benutzer(null,
+                        InitialDataConstants.FINANZEN_USER_VORNAME,
+                        InitialDataConstants.FINANZEN_USER_NACHNAME,
+                        InitialDataConstants.FINANZEN_USER_TEL,
+                        InitialDataConstants.FINANZEN_USER_EMAIL,
+                        passwordEncoder.encode(InitialDataConstants.FINANZEN_USER_PW),
+                        BenutzerRolle.RESSORTLEITER));
+
+        // Ressorts
+        Ressort r1 = ressortRepository.save(
+                new Ressort(
+                        null,
+                        InitialDataConstants.RESSORT_VERKEHR_NAME,
+                        InitialDataConstants.RESSORT_VERKEHR_BESCHREIBUNG,
+                        InitialDataConstants.RESSORT_VERKEHR_ZUSTAENDIGKEIT,
+                        u1));
+
+        Ressort r2 = ressortRepository.save(
+                new Ressort(null,
+                        InitialDataConstants.RESSORT_RENNLEITUNG_NAME,
+                        InitialDataConstants.RESSORT_RENNLEITUNG_BESCHREIBUNG,
+                        InitialDataConstants.RESSORT_RENNLEITUNG_ZUSTAENDIGKEIT,
+                        u2));
+
+        Ressort r3 = ressortRepository.save(
+                new Ressort(
+                        null,
+                        InitialDataConstants.RESSORT_FESTWIRTSCHAFT_NAME,
+                        InitialDataConstants.RESSORT_FESTWIRTSCHAFT_BESCHREIBUNG,
+                        InitialDataConstants.RESSORT_FESTWIRTSCHAFT_ZUSTAENDIGKEIT,
+                        u3));
+
+        Ressort r4 = ressortRepository.save(
+                new Ressort(
+                        null,
+                        InitialDataConstants.RESSORT_BAU_NAME,
+                        InitialDataConstants.RESSORT_BAU_BESCHREIBUNG,
+                        InitialDataConstants.RESSORT_BAU_ZUSTAENDIGKEIT,
+                        u4));
+
+        Ressort r5 = ressortRepository.save(
+                new Ressort(
+                        null,
+                        InitialDataConstants.RESSORT_FINANZEN_NAME,
+                        InitialDataConstants.RESSORT_FINANZEN_BESCHREIBUNG,
+                        InitialDataConstants.RESSORT_FINANZEN_ZUSTAENDIGKEIT,
+                        u5));
+
+        // Helfer
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.VERKEHR_HELFER1_VORNAME,
+                        InitialDataConstants.VERKEHR_HELFER1_NACHNAME,
+                        InitialDataConstants.VERKEHR_HELFER1_EMAIL,
+                        InitialDataConstants.VERKEHR_HELFER1_TEL,
+                        r1));
+
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.RENNLEITUNG_HELFER1_VORNAME,
+                        InitialDataConstants.RENNLEITUNG_HELFER1_NACHNAME,
+                        InitialDataConstants.RENNLEITUNG_HELFER1_EMAIL,
+                        InitialDataConstants.RENNLEITUNG_HELFER1_TEL,
+                        r2));
+
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.FESTWIRTSCHAFT_HELFER1_VORNAME,
+                        InitialDataConstants.FESTWIRTSCHAFT_HELFER1_NACHNAME,
+                        InitialDataConstants.FESTWIRTSCHAFT_HELFER1_EMAIL,
+                        InitialDataConstants.FESTWIRTSCHAFT_HELFER1_TEL,
+                        r3));
+
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.BAU_HELFER1_VORNAME,
+                        InitialDataConstants.BAU_HELFER1_NACHNAME,
+                        InitialDataConstants.BAU_HELFER1_EMAIL,
+                        InitialDataConstants.BAU_HELFER1_TEL,
+                        r4));
+
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.FINANZEN_HELFER1_VORNAME,
+                        InitialDataConstants.FINANZEN_HELFER1_NACHNAME,
+                        InitialDataConstants.FINANZEN_HELFER1_EMAIL,
+                        InitialDataConstants.FINANZEN_HELFER1_TEL,
+                        r5));
+
+
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.VERKEHR_HELFER2_VORNAME,
+                        InitialDataConstants.VERKEHR_HELFER2_NACHNAME,
+                        InitialDataConstants.VERKEHR_HELFER2_EMAIL,
+                        InitialDataConstants.VERKEHR_HELFER2_TEL,
+                        r1));
+
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.RENNLEITUNG_HELFER2_VORNAME,
+                        InitialDataConstants.RENNLEITUNG_HELFER2_NACHNAME,
+                        InitialDataConstants.RENNLEITUNG_HELFER2_EMAIL,
+                        InitialDataConstants.RENNLEITUNG_HELFER2_TEL,
+                        r2));
+
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.FESTWIRTSCHAFT_HELFER2_VORNAME,
+                        InitialDataConstants.FESTWIRTSCHAFT_HELFER2_NACHNAME,
+                        InitialDataConstants.FESTWIRTSCHAFT_HELFER2_EMAIL,
+                        InitialDataConstants.FESTWIRTSCHAFT_HELFER2_TEL,
+                        r3));
+
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.BAU_HELFER2_VORNAME,
+                        InitialDataConstants.BAU_HELFER2_NACHNAME,
+                        InitialDataConstants.BAU_HELFER2_EMAIL,
+                        InitialDataConstants.BAU_HELFER2_TEL,
+                        r4));
+
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.FINANZEN_HELFER2_VORNAME,
+                        InitialDataConstants.FINANZEN_HELFER2_NACHNAME,
+                        InitialDataConstants.FINANZEN_HELFER2_EMAIL,
+                        InitialDataConstants.FINANZEN_HELFER2_TEL,
+                        r5));
+
+
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.VERKEHR_HELFER3_VORNAME,
+                        InitialDataConstants.VERKEHR_HELFER3_NACHNAME,
+                        InitialDataConstants.VERKEHR_HELFER3_EMAIL,
+                        InitialDataConstants.VERKEHR_HELFER3_TEL,
+                        r1));
+
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.RENNLEITUNG_HELFER3_VORNAME,
+                        InitialDataConstants.RENNLEITUNG_HELFER3_NACHNAME,
+                        InitialDataConstants.RENNLEITUNG_HELFER3_EMAIL,
+                        InitialDataConstants.RENNLEITUNG_HELFER3_TEL,
+                        r2));
+
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.FESTWIRTSCHAFT_HELFER3_VORNAME,
+                        InitialDataConstants.FESTWIRTSCHAFT_HELFER3_NACHNAME,
+                        InitialDataConstants.FESTWIRTSCHAFT_HELFER3_EMAIL,
+                        InitialDataConstants.FESTWIRTSCHAFT_HELFER3_TEL,
+                        r3));
+
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.BAU_HELFER3_VORNAME,
+                        InitialDataConstants.BAU_HELFER3_NACHNAME,
+                        InitialDataConstants.BAU_HELFER3_EMAIL,
+                        InitialDataConstants.BAU_HELFER3_TEL,
+                        r4));
+
+        helferRepository.save(
+                new Helfer(
+                        null,
+                        InitialDataConstants.FINANZEN_HELFER3_VORNAME,
+                        InitialDataConstants.FINANZEN_HELFER3_NACHNAME,
+                        InitialDataConstants.FINANZEN_HELFER3_EMAIL,
+                        InitialDataConstants.FINANZEN_HELFER3_TEL,
+                        r5));
     }
 }

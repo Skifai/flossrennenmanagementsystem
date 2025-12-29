@@ -2,7 +2,6 @@ package ch.flossrennen.managementsystem.service;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
-import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
 import ch.flossrennen.managementsystem.util.CheckResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,27 +29,30 @@ class RessortDTOServiceTest {
 
     @BeforeEach
     void setUp() {
-        BenutzerDTO benutzer = new BenutzerDTO(null, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.ADMINISTRATOR);
-        CheckResult<BenutzerDTO> result = benutzerService.save(benutzer);
-        assertTrue(result.isSuccess());
-        savedBenutzer = result.getData().orElseThrow();
+        List<BenutzerDTO> users = benutzerService.findAll();
+        assertFalse(users.isEmpty(), "Initial users should be loaded");
+        savedBenutzer = users.get(0);
     }
 
     @Test
     void findAllAndSave() {
-        RessortDTO dto = new RessortDTO(null, "TestRessort", "Desc", "Zust", savedBenutzer);
+        List<RessortDTO> allBefore = service.findAll();
+        assertFalse(allBefore.isEmpty(), "Initial ressorts should be loaded");
+
+        RessortDTO dto = new RessortDTO(null, "New TestRessort", "Desc", "Zust", savedBenutzer);
         CheckResult<RessortDTO> result = service.save(dto);
         assertTrue(result.isSuccess());
         RessortDTO saved = result.getData().orElseThrow();
         assertNotNull(saved.id());
 
-        List<RessortDTO> all = service.findAll();
-        assertTrue(all.stream().anyMatch(r -> r.id().equals(saved.id())));
+        List<RessortDTO> allAfter = service.findAll();
+        assertEquals(allBefore.size() + 1, allAfter.size());
+        assertTrue(allAfter.stream().anyMatch(r -> r.id().equals(saved.id())));
     }
 
     @Test
     void delete() {
-        RessortDTO dto = new RessortDTO(null, "DeleteMe", "Desc", "Zust", savedBenutzer);
+        RessortDTO dto = new RessortDTO(null, "Ressort to Delete", "Desc", "Zust", savedBenutzer);
         CheckResult<RessortDTO> saveResult = service.save(dto);
         assertTrue(saveResult.isSuccess());
         RessortDTO saved = saveResult.getData().orElseThrow();

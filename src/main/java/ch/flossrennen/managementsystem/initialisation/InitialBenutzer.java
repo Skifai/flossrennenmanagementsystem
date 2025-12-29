@@ -1,8 +1,8 @@
 package ch.flossrennen.managementsystem.initialisation;
 
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
-import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
 import ch.flossrennen.managementsystem.dataaccess.persistence.repository.BenutzerRepository;
+import ch.flossrennen.managementsystem.initialisation.constants.InitialDataConstants;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("dev")
+@Profile({"dev", "test"})
 @Order(1)
 public class InitialBenutzer implements CommandLineRunner {
 
@@ -24,22 +24,17 @@ public class InitialBenutzer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String adminEmail = System.getenv("ADMIN_EMAIL");
-        String adminPassword = System.getenv("ADMIN_PASSWORD");
-
-        if (adminEmail == null || adminEmail.isBlank() || adminPassword == null || adminPassword.isBlank()) {
-            return;
-        }
+        String adminEmail = InitialDataConstants.ADMIN_EMAIL;
 
         benutzerRepository.findByEmail(adminEmail).orElseGet(() ->
                 benutzerRepository.save(new Benutzer(
                         null,
-                        "Admin",
-                        "Admin",
-                        "0000000000",
+                        InitialDataConstants.ADMIN_VORNAME,
+                        InitialDataConstants.ADMIN_NACHNAME,
+                        InitialDataConstants.ADMIN_TELEFONNUMMER,
                         adminEmail,
-                        passwordEncoder.encode(adminPassword),
-                        BenutzerRolle.ADMINISTRATOR
+                        passwordEncoder.encode(InitialDataConstants.ADMIN_PASSWORD),
+                        InitialDataConstants.ADMIN_ROLLE
                 ))
         );
     }

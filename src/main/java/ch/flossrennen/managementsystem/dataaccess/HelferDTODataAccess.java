@@ -59,7 +59,7 @@ public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
                 return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_MISSING_RESSORT));
             }
             Helfer helfer = helferDTOMapper.toEntity(helferDTO);
-            Helfer savedHelfer = helferRepository.save(helfer);
+            Helfer savedHelfer = helferRepository.saveAndFlush(helfer);
             return CheckResult.success(helferDTOMapper.toDTO(savedHelfer), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
         } catch (Exception e) {
             log.error("Error saving Helfer {}: {}", helferDTO, e.getMessage(), e);

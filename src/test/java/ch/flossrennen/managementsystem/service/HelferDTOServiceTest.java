@@ -1,9 +1,7 @@
 package ch.flossrennen.managementsystem.service;
 
-import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
-import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
 import ch.flossrennen.managementsystem.util.CheckResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,39 +25,34 @@ class HelferDTOServiceTest {
     @Autowired
     private RessortDTOService ressortService;
 
-    @Autowired
-    private BenutzerDTOService benutzerService;
-
     private RessortDTO savedRessort;
 
     @BeforeEach
     void setUp() {
-        BenutzerDTO benutzer = new BenutzerDTO(null, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.ADMINISTRATOR);
-        CheckResult<BenutzerDTO> benutzerResult = benutzerService.save(benutzer);
-        assertTrue(benutzerResult.isSuccess());
-        BenutzerDTO savedBenutzer = benutzerResult.getData().orElseThrow();
-
-        RessortDTO ressortDto = new RessortDTO(null, "TestRessort", "Desc", "Zust", savedBenutzer);
-        CheckResult<RessortDTO> ressortResult = ressortService.save(ressortDto);
-        assertTrue(ressortResult.isSuccess());
-        savedRessort = ressortResult.getData().orElseThrow();
+        List<RessortDTO> ressorts = ressortService.findAll();
+        assertFalse(ressorts.isEmpty(), "Initial ressorts should be loaded");
+        savedRessort = ressorts.get(0);
     }
 
     @Test
     void findAllAndSave() {
-        HelferDTO dto = new HelferDTO(null, "Hans", "Muster", "hans.muster@test.ch", "0791234567", savedRessort);
+        List<HelferDTO> allBefore = helferService.findAll();
+        assertFalse(allBefore.isEmpty(), "Initial helfers should be loaded");
+
+        HelferDTO dto = new HelferDTO(null, "New", "Helfer", "new.helfer@test.ch", "0790000000", savedRessort);
         CheckResult<HelferDTO> result = helferService.save(dto);
         assertTrue(result.isSuccess());
         HelferDTO saved = result.getData().orElseThrow();
         assertNotNull(saved.id());
 
-        List<HelferDTO> all = helferService.findAll();
-        assertTrue(all.stream().anyMatch(h -> h.id().equals(saved.id())));
+        List<HelferDTO> allAfter = helferService.findAll();
+        assertEquals(allBefore.size() + 1, allAfter.size());
+        assertTrue(allAfter.stream().anyMatch(h -> h.id().equals(saved.id())));
     }
 
     @Test
     void delete() {
-        HelferDTO dto = new HelferDTO(null, "DeleteMe", "Me", "delete.me@test.ch", "0000000000", savedRessort);
+        HelferDTO dto = new HelferDTO(null, "Delete", "Me", "delete.me@test.ch", "0770000000", savedRessort);
         CheckResult<HelferDTO> saveResult = helferService.save(dto);
         assertTrue(saveResult.isSuccess());
         HelferDTO saved = saveResult.getData().orElseThrow();

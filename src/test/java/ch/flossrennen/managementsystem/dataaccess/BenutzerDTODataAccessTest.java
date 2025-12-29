@@ -24,38 +24,36 @@ class BenutzerDTODataAccessTest {
 
     @Test
     void save() {
-        BenutzerDTO dto = new BenutzerDTO(null, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.ADMINISTRATOR);
+        BenutzerDTO dto = new BenutzerDTO(null, "New", "User", "0761234567", "new.dataaccess@test.ch", "hash", BenutzerRolle.ADMINISTRATOR);
         CheckResult<BenutzerDTO> result = dataAccess.save(dto);
         assertTrue(result.isSuccess());
         BenutzerDTO saved = result.getData().orElseThrow();
         assertNotNull(saved.id());
-        assertEquals("Hans", saved.vorname());
+        assertEquals("New", saved.vorname());
     }
 
     @Test
     void findAll() {
-        BenutzerDTO dto = new BenutzerDTO(null, "Hans", "Muster", "0791234567", "hans.muster@test.ch", "hash", BenutzerRolle.ADMINISTRATOR);
-        dataAccess.save(dto);
-
         List<BenutzerDTO> all = dataAccess.findAll();
-        assertFalse(all.isEmpty());
+        assertFalse(all.isEmpty(), "Initial data should be loaded");
+        // 1 Admin + 5 test Benutzer
+        assertTrue(all.size() >= 6);
     }
 
     @Test
     void findById() {
-        BenutzerDTO dto = new BenutzerDTO(null, "Peter", "Lustig", "0797654321", "peter.lustig@test.ch", "hash", BenutzerRolle.RESSORTLEITER);
-        CheckResult<BenutzerDTO> result = dataAccess.save(dto);
-        assertTrue(result.isSuccess());
-        BenutzerDTO saved = result.getData().orElseThrow();
+        List<BenutzerDTO> all = dataAccess.findAll();
+        BenutzerDTO first = all.get(0);
 
-        Optional<BenutzerDTO> found = dataAccess.findById(saved.id());
+        Optional<BenutzerDTO> found = dataAccess.findById(first.id());
         assertTrue(found.isPresent());
-        assertEquals("Peter", found.get().vorname());
+        assertEquals(first.email(), found.get().email());
     }
 
     @Test
     void deleteById() {
-        BenutzerDTO dto = new BenutzerDTO(null, "Delete", "Me", "0000000000", "delete.me@test.ch", "hash", BenutzerRolle.RESSORTLEITER);
+        // Create a new user to delete
+        BenutzerDTO dto = new BenutzerDTO(null, "Delete", "Me", "0771112233", "delete.dataaccess@test.ch", "hash", BenutzerRolle.RESSORTLEITER);
         CheckResult<BenutzerDTO> result = dataAccess.save(dto);
         assertTrue(result.isSuccess());
         BenutzerDTO saved = result.getData().orElseThrow();

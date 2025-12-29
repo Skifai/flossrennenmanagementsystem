@@ -54,7 +54,9 @@ public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
     @NonNull
     public CheckResult<RessortDTO> save(@NonNull RessortDTO ressortDTO) {
         try {
-            return CheckResult.success(ressortDTOMapper.toDTO(ressortRepository.save(ressortDTOMapper.toEntity(ressortDTO))), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
+            Ressort entity = ressortDTOMapper.toEntity(ressortDTO);
+            Ressort savedEntity = ressortRepository.saveAndFlush(entity);
+            return CheckResult.success(ressortDTOMapper.toDTO(savedEntity), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
         } catch (Exception e) {
             log.error("Error saving Ressort {}: {}", ressortDTO, e.getMessage(), e);
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));

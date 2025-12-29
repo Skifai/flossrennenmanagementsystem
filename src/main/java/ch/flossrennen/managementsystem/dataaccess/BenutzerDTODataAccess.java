@@ -55,7 +55,7 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
     public CheckResult<BenutzerDTO> save(@NonNull BenutzerDTO benutzerDTO) {
         try {
             Benutzer entity = benutzerDTOMapper.toEntity(benutzerDTO);
-            Benutzer savedEntity = benutzerRepository.save(entity);
+            Benutzer savedEntity = benutzerRepository.saveAndFlush(entity);
             return CheckResult.success(benutzerDTOMapper.toDTO(savedEntity), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
         } catch (Exception e) {
             log.error("Error saving Benutzer {}: {}", benutzerDTO, e.getMessage(), e);
