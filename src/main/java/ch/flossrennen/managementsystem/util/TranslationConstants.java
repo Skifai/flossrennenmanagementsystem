@@ -46,4 +46,41 @@ public interface TranslationConstants {
     String ERROR_DELETE = "notification.error.delete";
     String ERROR_MISSING_ID = "notification.error.missing.id";
     String ERROR_MISSING_RESSORT = "notification.error.missing.ressort";
+
+    // Validation
+    String VALIDATION_REQUIRED = "validation.required";
+    String VALIDATION_EMAIL = "validation.email";
+    String VALIDATION_TELEFONNUMMER = "validation.telefonnummer";
+    String VALIDATION_SIZE = "validation.size";
+    String VALIDATION_UNIQUE_EMAIL = "validation.unique.email";
+    String VALIDATION_UNIQUE_TELEFONNUMMER = "validation.unique.telefonnummer";
+    String VALIDATION_UNIQUE_NAME = "validation.unique.name";
+    String VALIDATION_ID_NAN = "validation.id.nan";
+
+    // Common
+    String SAVE = "common.save";
+    String CANCEL = "common.cancel";
+    String DELETE = "common.delete";
+    String FILTER = "common.filter";
+
+    // Main View
+    String NAV_HOME = "nav.home";
+    String NAV_HELFER = "nav.helfer";
+    String NAV_RESSORT = "nav.ressort";
+    String NAV_BENUTZER = "nav.benutzer";
+
+    // Home View
+    String HOME_WELCOME = "home.welcome";
+
+    // Helfer View
+    String HELFER_TITLE = "helfer.title";
+    String HELFER_NEW = "helfer.new";
+
+    // Ressort View
+    String RESSORT_TITLE = "ressort.title";
+    String RESSORT_NEW = "ressort.new";
+
+    // Benutzer View
+    String BENUTZER_TITLE = "benutzer.title";
+    String BENUTZER_NEW = "benutzer.new";
 }
