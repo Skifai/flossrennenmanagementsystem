@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface HelferRepository extends JpaRepository<Helfer, Long> {
 
     Optional<Helfer> findByEmail(String email);
+
+    Optional<Helfer> findByTelefonnummer(String telefonnummer);
 }

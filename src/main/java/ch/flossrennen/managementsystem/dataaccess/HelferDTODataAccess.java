@@ -41,6 +41,16 @@ public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
     }
 
     @NonNull
+    public Optional<HelferDTO> findByEmail(@NonNull String email) {
+        return helferRepository.findByEmail(email).map(helferDTOMapper::toDTO);
+    }
+
+    @NonNull
+    public Optional<HelferDTO> findByTelefonnummer(@NonNull String telefonnummer) {
+        return helferRepository.findByTelefonnummer(telefonnummer).map(helferDTOMapper::toDTO);
+    }
+
+    @NonNull
     public CheckResult<Void> deleteById(@NonNull Long id) {
         try {
             helferRepository.deleteById(id);

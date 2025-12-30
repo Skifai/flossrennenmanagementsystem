@@ -1,6 +1,7 @@
 package ch.flossrennen.managementsystem.view.editor;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
+import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTOProperties;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
 import ch.flossrennen.managementsystem.util.TranslationConstants;
 import ch.flossrennen.managementsystem.view.ViewStyles;
@@ -95,22 +96,12 @@ public class HelferEditor extends AbstractEditorView<HelferDTO> {
         binder.forField(fieldID)
                 .withNullRepresentation("")
                 .withConverter(new StringToLongConverter(getTranslation(TranslationConstants.VALIDATION_ID_NAN)))
-                .bind("id");
-        binder.forField(fieldVorname)
-                .asRequired("Der Vorname ist erforderlich.")
-                .bind("vorname");
-        binder.forField(fieldNachname)
-                .asRequired("Der Nachname ist erforderlich.")
-                .bind("nachname");
-        binder.forField(fieldEmail)
-                .asRequired("Die Email ist erforderlich.")
-                .bind("email");
-        binder.forField(fieldTelefon)
-                .asRequired("Die Telefonnummer ist erforderlich.")
-                .bind("telefonnummer");
-        binder.forField(fieldRessort)
-                .asRequired("Das Ressort ist erforderlich.")
-                .bind("ressort");
+                .bind(HelferDTOProperties.ID.getSchemaKey());
+        binder.bind(fieldVorname, HelferDTOProperties.VORNAME.getSchemaKey());
+        binder.bind(fieldNachname, HelferDTOProperties.NACHNAME.getSchemaKey());
+        binder.bind(fieldEmail, HelferDTOProperties.EMAIL.getSchemaKey());
+        binder.bind(fieldTelefon, HelferDTOProperties.TELEFONNUMMER.getSchemaKey());
+        binder.bind(fieldRessort, HelferDTOProperties.RESSORT.getSchemaKey());
 
         return helferFormFields;
     }
