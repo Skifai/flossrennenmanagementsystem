@@ -24,14 +24,16 @@ public interface TranslationConstants {
     String HELFER_RESSORT = "helfer.ressort";
 
     // Entity Benutzer
+    String BENUTZER_ID = "benutzer.id";
     String BENUTZER_VORNAME = "benutzer.vorname";
     String BENUTZER_NACHNAME = "benutzer.nachname";
     String BENUTZER_TELEFONNUMMER = "benutzer.telefonnummer";
     String BENUTZER_EMAIL = "benutzer.email";
-    String BENUTZER_PASSWORDHASH = "benutzer.passwordhash";
+    String BENUTZER_PASSWORT = "benutzer.passwort";
     String BENUTZER_ROLLE = "benutzer.rolle";
 
     // Entity Ressort
+    String RESSORT_ID = "ressort.id";
     String RESSORT_NAME = "ressort.name";
     String RESSORT_BESCHREIBUNG = "ressort.beschreibung";
     String RESSORT_ZUSTAENDIGKEIT = "ressort.zustaendigkeit";
