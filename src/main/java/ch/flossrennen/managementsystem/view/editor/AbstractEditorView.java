@@ -1,5 +1,7 @@
 package ch.flossrennen.managementsystem.view.editor;
 
+import ch.flossrennen.managementsystem.util.TranslationConstants;
+import ch.flossrennen.managementsystem.view.ViewStyles;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -48,7 +50,8 @@ public abstract class AbstractEditorView<DTO> extends Composite<VerticalLayout> 
     }
 
     private @NonNull HorizontalLayout createButtonLayout() {
-        Button saveButton = new Button("Speichern");
+        Button saveButton = new Button(getTranslation(TranslationConstants.SAVE));
+        saveButton.addClassName(ViewStyles.BUTTON);
         saveButton.addClickListener(e -> {
             if (binder.validate().isOk()) {
                 DTO updatedDto = getDTO();
@@ -58,14 +61,16 @@ public abstract class AbstractEditorView<DTO> extends Composite<VerticalLayout> 
             }
         });
 
-        Button cancelButton = new Button("Abbrechen");
+        Button cancelButton = new Button(getTranslation(TranslationConstants.CANCEL));
+        cancelButton.addClassName(ViewStyles.BUTTON);
         cancelButton.addClickListener(e -> {
             if (cancelListener != null) {
                 cancelListener.onCancel();
             }
         });
 
-        Button deleteButton = new Button("Löschen");
+        Button deleteButton = new Button(getTranslation(TranslationConstants.DELETE));
+        deleteButton.addClassName(ViewStyles.BUTTON);
         deleteButton.addClickListener(e -> {
             if (deleteListener != null) {
                 deleteListener.onDelete(dto);
