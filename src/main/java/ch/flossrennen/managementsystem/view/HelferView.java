@@ -4,6 +4,7 @@ import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTOProperties;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
 import ch.flossrennen.managementsystem.service.DTOService;
+import ch.flossrennen.managementsystem.util.TranslationConstants;
 import ch.flossrennen.managementsystem.view.editor.HelferEditor;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -17,7 +18,12 @@ public class HelferView extends AbstractContentBaseView<HelferDTO, HelferDTOProp
     private final DTOService<RessortDTO> ressortDTOService;
 
     public HelferView(DTOService<HelferDTO> helferDTOService, DTOService<RessortDTO> ressortDTOService) {
-        super(helferDTOService, HelferDTO.class, HelferDTOProperties.values(), "Helferverwaltung", "Neuer Helfer", HelferDTO::createEmptyDTO);
+        super(helferDTOService,
+                HelferDTO.class,
+                HelferDTOProperties.values(),
+                TranslationConstants.HELFER_TITLE,
+                TranslationConstants.HELFER_NEW,
+                HelferDTO::createEmptyDTO);
         this.ressortDTOService = ressortDTOService;
     }
 
