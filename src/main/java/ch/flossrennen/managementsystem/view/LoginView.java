@@ -70,7 +70,10 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     private @NonNull Div createTitleDiv() {
         Div titelDiv = new Div();
-        titelDiv.addClassNames("LoginHeaderBar", LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN, LumoUtility.JustifyContent.CENTER);
+        titelDiv.addClassNames(ViewStyles.APP_TITEL,
+                LumoUtility.Display.FLEX,
+                LumoUtility.FlexDirection.COLUMN,
+                LumoUtility.JustifyContent.CENTER);
         H1 titel = new H1(getTranslation(TranslationConstants.TITEL));
         titelDiv.add(titel);
         H2 subtitle = new H2(getTranslation(TranslationConstants.SUBTITEL));
@@ -80,7 +83,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     private @NonNull Div createLogoDiv() {
         Div logoDiv = new Div();
-        logoDiv.addClassNames("LoginHeaderBar", LumoUtility.Display.FLEX, LumoUtility.AlignItems.CENTER);
+        logoDiv.addClassNames(ViewStyles.APP_TITEL, LumoUtility.Display.FLEX, LumoUtility.AlignItems.CENTER);
         Image logo = new Image(ResourceConstants.LOGO, getTranslation(TranslationConstants.LOGO_DESC));
         logo.getStyle().setHeight("100%");
         logoDiv.add(logo);
