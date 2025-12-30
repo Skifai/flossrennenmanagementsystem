@@ -17,7 +17,7 @@ class DTOTest {
         assertEquals("", dto.telefonnummer());
         assertEquals("", dto.email());
         assertEquals("", dto.password());
-        assertEquals(BenutzerRolle.RESSORTLEITER, dto.rolle());
+        assertEquals(BenutzerRolle.KEINE, dto.rolle());
     }
 
     @Test
