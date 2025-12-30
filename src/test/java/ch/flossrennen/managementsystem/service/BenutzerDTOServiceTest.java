@@ -27,7 +27,7 @@ class BenutzerDTOServiceTest {
         BenutzerDTO dto2 = new BenutzerDTO(null, "Peter", "Lustig", "0797654321", existingEmail, "hash", BenutzerRolle.RESSORTLEITER);
         CheckResult<BenutzerDTO> result = service.save(dto2);
         assertFalse(result.isSuccess(), "Saving with duplicate email should fail");
-        assertEquals("Fehler beim Speichern", result.getMessage());
+        assertEquals("E-Mail-Adresse bereits vergeben", result.getMessage());
     }
 
     @Test
@@ -48,7 +48,6 @@ class BenutzerDTOServiceTest {
 
     @Test
     void delete() {
-        // Create a new user to delete, to avoid constraint issues with pre-loaded data
         BenutzerDTO dto = new BenutzerDTO(null, "Delete", "Me", "0770000000", "delete.me@test.ch", "hash", BenutzerRolle.RESSORTLEITER);
         CheckResult<BenutzerDTO> saveResult = service.save(dto);
         assertTrue(saveResult.isSuccess());

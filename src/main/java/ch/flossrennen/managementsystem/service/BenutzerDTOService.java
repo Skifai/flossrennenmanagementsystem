@@ -2,6 +2,7 @@ package ch.flossrennen.managementsystem.service;
 
 import ch.flossrennen.managementsystem.dataaccess.DTODataAccess;
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
+import ch.flossrennen.managementsystem.service.validation.Validator;
 import ch.flossrennen.managementsystem.textprovider.TextProvider;
 import ch.flossrennen.managementsystem.util.CheckResult;
 import ch.flossrennen.managementsystem.util.TranslationConstants;
@@ -18,10 +19,14 @@ public class BenutzerDTOService implements DTOService<BenutzerDTO> {
     private static final Logger log = LoggerFactory.getLogger(BenutzerDTOService.class);
 
     private final DTODataAccess<BenutzerDTO> benutzerDTODataAccess;
+    private final Validator<BenutzerDTO> benutzerValidator;
     private final TextProvider textProvider;
 
-    public BenutzerDTOService(DTODataAccess<BenutzerDTO> benutzerDTODataAccess, TextProvider textProvider) {
+    public BenutzerDTOService(DTODataAccess<BenutzerDTO> benutzerDTODataAccess,
+                              Validator<BenutzerDTO> benutzerValidator,
+                              TextProvider textProvider) {
         this.benutzerDTODataAccess = benutzerDTODataAccess;
+        this.benutzerValidator = benutzerValidator;
         this.textProvider = textProvider;
     }
 
@@ -37,6 +42,10 @@ public class BenutzerDTOService implements DTOService<BenutzerDTO> {
 
     @Override
     public @NonNull CheckResult<BenutzerDTO> save(@NonNull BenutzerDTO benutzerDTO) {
+        CheckResult<BenutzerDTO> validationResult = benutzerValidator.validate(benutzerDTO);
+        if (!validationResult.isSuccess()) {
+            return validationResult;
+        }
         return benutzerDTODataAccess.save(benutzerDTO);
     }
 

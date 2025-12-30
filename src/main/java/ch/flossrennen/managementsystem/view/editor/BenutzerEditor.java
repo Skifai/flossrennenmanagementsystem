@@ -1,6 +1,7 @@
 package ch.flossrennen.managementsystem.view.editor;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
+import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTOProperties;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
 import ch.flossrennen.managementsystem.util.TranslationConstants;
 import ch.flossrennen.managementsystem.view.ViewStyles;
@@ -85,23 +86,13 @@ public class BenutzerEditor extends AbstractEditorView<BenutzerDTO> {
         binder.forField(fieldID)
                 .withNullRepresentation("")
                 .withConverter(new StringToLongConverter(getTranslation(TranslationConstants.VALIDATION_ID_NAN)))
-                .bind("id");
-        binder.forField(fieldVorname)
-                .asRequired("Der Vorname ist erforderlich.")
-                .bind("vorname");
-        binder.forField(fieldNachname)
-                .asRequired("Der Nachname ist erforderlich.")
-                .bind("nachname");
-        binder.forField(fieldEmail)
-                .asRequired("Die Email ist erforderlich.")
-                .bind("email");
-        binder.forField(fieldTelefon)
-                .bind("telefonnummer");
-        binder.forField(fieldPassword)
-                .bind("password");
-        binder.forField(fieldRolle)
-                .asRequired("Die Rolle ist erforderlich.")
-                .bind("rolle");
+                .bind(BenutzerDTOProperties.ID.getSchemaKey());
+        binder.bind(fieldVorname, BenutzerDTOProperties.VORNAME.getSchemaKey());
+        binder.bind(fieldNachname, BenutzerDTOProperties.NACHNAME.getSchemaKey());
+        binder.bind(fieldEmail, BenutzerDTOProperties.EMAIL.getSchemaKey());
+        binder.bind(fieldTelefon, BenutzerDTOProperties.TELEFONNUMMER.getSchemaKey());
+        binder.bind(fieldPassword, BenutzerDTOProperties.PASSWORD.getSchemaKey());
+        binder.bind(fieldRolle, BenutzerDTOProperties.ROLLE.getSchemaKey());
 
         return formFields;
     }

@@ -22,7 +22,9 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
     private final DTOMapper<Benutzer, BenutzerDTO> benutzerDTOMapper;
     private final TextProvider textProvider;
 
-    public BenutzerDTODataAccess(BenutzerRepository benutzerRepository, DTOMapper<Benutzer, BenutzerDTO> benutzerDTOMapper, TextProvider textProvider) {
+    public BenutzerDTODataAccess(BenutzerRepository benutzerRepository,
+                                 DTOMapper<Benutzer, BenutzerDTO> benutzerDTOMapper,
+                                 TextProvider textProvider) {
         this.benutzerRepository = benutzerRepository;
         this.benutzerDTOMapper = benutzerDTOMapper;
         this.textProvider = textProvider;
@@ -38,6 +40,16 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
     @NonNull
     public Optional<BenutzerDTO> findById(@NonNull Long id) {
         return benutzerRepository.findById(id).map(benutzerDTOMapper::toDTO);
+    }
+
+    @NonNull
+    public Optional<BenutzerDTO> findByEmail(@NonNull String email) {
+        return benutzerRepository.findByEmail(email).map(benutzerDTOMapper::toDTO);
+    }
+
+    @NonNull
+    public Optional<BenutzerDTO> findByTelefonnummer(@NonNull String telefonnummer) {
+        return benutzerRepository.findByTelefonnummer(telefonnummer).map(benutzerDTOMapper::toDTO);
     }
 
     @NonNull
@@ -72,7 +84,8 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
                 return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
             }
             Benutzer savedEntity = benutzerRepository.saveAndFlush(entity);
-            return CheckResult.success(benutzerDTOMapper.toDTO(savedEntity), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
+            return CheckResult.success(benutzerDTOMapper.toDTO(savedEntity),
+                    textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
         } catch (Exception e) {
             log.error("Error saving Benutzer {}: {}", benutzerDTO, e.getMessage(), e);
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));

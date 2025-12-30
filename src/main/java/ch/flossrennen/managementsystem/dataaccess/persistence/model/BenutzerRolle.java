@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum BenutzerRolle {
     ADMINISTRATOR("Administrator"),
-    RESSORTLEITER("Ressortleiter");
+    RESSORTLEITER("Ressortleiter"),
+    KEINE("Keine");
 
     private final String displayValue;
 
