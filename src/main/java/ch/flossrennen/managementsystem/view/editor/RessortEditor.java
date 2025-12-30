@@ -2,6 +2,7 @@ package ch.flossrennen.managementsystem.view.editor;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
+import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTOProperties;
 import ch.flossrennen.managementsystem.util.TranslationConstants;
 import ch.flossrennen.managementsystem.view.ViewStyles;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -72,16 +73,11 @@ public class RessortEditor extends AbstractEditorView<RessortDTO> {
         binder.forField(fieldID)
                 .withNullRepresentation("")
                 .withConverter(new StringToLongConverter(getTranslation(TranslationConstants.VALIDATION_ID_NAN)))
-                .bind("id");
-        binder.forField(fieldName)
-                .asRequired("Der Name ist erforderlich.")
-                .bind("name");
-        binder.forField(fieldBeschreibung)
-                .bind("beschreibung");
-        binder.forField(fieldZustaendigkeit)
-                .bind("zustaendigkeit");
-        binder.forField(fieldRessortleitung)
-                .bind("ressortleitung");
+                .bind(RessortDTOProperties.ID.getSchemaKey());
+        binder.bind(fieldName, RessortDTOProperties.NAME.getSchemaKey());
+        binder.bind(fieldBeschreibung, RessortDTOProperties.BESCHREIBUNG.getSchemaKey());
+        binder.bind(fieldZustaendigkeit, RessortDTOProperties.ZUSTAENDIGKEIT.getSchemaKey());
+        binder.bind(fieldRessortleitung, RessortDTOProperties.RESSORTLEITUNG.getSchemaKey());
 
         return formFields;
     }

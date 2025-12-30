@@ -2,6 +2,7 @@ package ch.flossrennen.managementsystem.service;
 
 import ch.flossrennen.managementsystem.dataaccess.DTODataAccess;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
+import ch.flossrennen.managementsystem.service.validation.Validator;
 import ch.flossrennen.managementsystem.textprovider.TextProvider;
 import ch.flossrennen.managementsystem.util.CheckResult;
 import ch.flossrennen.managementsystem.util.TranslationConstants;
@@ -18,10 +19,14 @@ public class RessortDTOService implements DTOService<RessortDTO> {
     private static final Logger log = LoggerFactory.getLogger(RessortDTOService.class);
 
     private final DTODataAccess<RessortDTO> ressortDTODataAccess;
+    private final Validator<RessortDTO> ressortValidator;
     private final TextProvider textProvider;
 
-    public RessortDTOService(DTODataAccess<RessortDTO> ressortDTODataAccess, TextProvider textProvider) {
+    public RessortDTOService(DTODataAccess<RessortDTO> ressortDTODataAccess,
+                             Validator<RessortDTO> ressortValidator,
+                             TextProvider textProvider) {
         this.ressortDTODataAccess = ressortDTODataAccess;
+        this.ressortValidator = ressortValidator;
         this.textProvider = textProvider;
     }
 
@@ -37,6 +42,10 @@ public class RessortDTOService implements DTOService<RessortDTO> {
 
     @Override
     public @NonNull CheckResult<RessortDTO> save(@NonNull RessortDTO ressortDTO) {
+        CheckResult<RessortDTO> validationResult = ressortValidator.validate(ressortDTO);
+        if (!validationResult.isSuccess()) {
+            return validationResult;
+        }
         return ressortDTODataAccess.save(ressortDTO);
     }
 

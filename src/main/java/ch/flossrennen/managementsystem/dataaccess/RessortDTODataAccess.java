@@ -41,6 +41,11 @@ public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
     }
 
     @NonNull
+    public Optional<RessortDTO> findByName(@NonNull String name) {
+        return ressortRepository.findByName(name).map(ressortDTOMapper::toDTO);
+    }
+
+    @NonNull
     public CheckResult<Void> deleteById(@NonNull Long id) {
         try {
             ressortRepository.deleteById(id);
