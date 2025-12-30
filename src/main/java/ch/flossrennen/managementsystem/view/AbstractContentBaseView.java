@@ -3,6 +3,7 @@ package ch.flossrennen.managementsystem.view;
 import ch.flossrennen.managementsystem.dataaccess.dto.DTOProperty;
 import ch.flossrennen.managementsystem.service.DTOService;
 import ch.flossrennen.managementsystem.util.CheckResult;
+import ch.flossrennen.managementsystem.util.TranslationConstants;
 import ch.flossrennen.managementsystem.view.editor.AbstractEditorView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
@@ -32,8 +33,8 @@ public abstract class AbstractContentBaseView<DTO, PROPERTY extends DTOProperty<
     public AbstractContentBaseView(DTOService<DTO> dtoService,
                                    Class<DTO> dtoClass,
                                    PROPERTY[] allProperties,
-                                   String title,
-                                   String newButtonLabel,
+                                   String titleKey,
+                                   String newButtonLabelKey,
                                    Supplier<DTO> emptyDTOSupplier) {
 
         this.dtoService = dtoService;
@@ -41,29 +42,34 @@ public abstract class AbstractContentBaseView<DTO, PROPERTY extends DTOProperty<
         this.allProperties = allProperties;
         this.emptyDTOSupplier = emptyDTOSupplier;
 
-        setClassName("MainViewContent");
+        setClassName(ViewStyles.MAIN_VIEW_CONTENT);
         setSizeFull();
 
-        H1 titel = new H1(title);
-        titel.addClassName("AppTitel");
+        H1 titel = new H1(getTranslation(titleKey));
+        titel.addClassName(ViewStyles.APP_TITEL);
         add(titel);
 
         fieldFilter = new TextField();
-        // TODO: Implement Filtering for DTOs
+        fieldFilter.addClassName(ViewStyles.FIELD_FILTER);
+        fieldFilter.setPlaceholder(getTranslation(TranslationConstants.FILTER));
+        fieldFilter.setPrefixComponent(VaadinIcon.SEARCH.create());
+        fieldFilter.setClearButtonVisible(true);
 
         editor = createEditor();
+        editor.addClassName(ViewStyles.EDITOR_VIEW);
         editor.setVisible(false);
         editor.setSaveListener(this::saveDTO);
         editor.setCancelListener(() -> editDTO(null));
         editor.setDeleteListener(this::deleteDTO);
 
-        Button newButton = new Button(newButtonLabel, VaadinIcon.PLUS.create());
+        Button newButton = new Button(getTranslation(newButtonLabelKey), VaadinIcon.PLUS.create());
         newButton.addClickListener(e -> editDTO(emptyDTOSupplier.get()));
 
         HorizontalLayout actionBar = new HorizontalLayout(newButton, fieldFilter);
         add(actionBar, editor);
 
         grid = createGrid();
+        grid.addClassName(ViewStyles.DATA_GRID);
         updateGrid();
         add(grid);
     }
