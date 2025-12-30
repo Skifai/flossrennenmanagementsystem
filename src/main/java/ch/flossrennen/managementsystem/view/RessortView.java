@@ -4,6 +4,7 @@ import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTOProperties;
 import ch.flossrennen.managementsystem.service.DTOService;
+import ch.flossrennen.managementsystem.util.TranslationConstants;
 import ch.flossrennen.managementsystem.view.editor.AbstractEditorView;
 import ch.flossrennen.managementsystem.view.editor.RessortEditor;
 import com.vaadin.flow.router.Route;
@@ -17,7 +18,12 @@ public class RessortView extends AbstractContentBaseView<RessortDTO, RessortDTOP
     private final DTOService<BenutzerDTO> benutzerDTOService;
 
     public RessortView(DTOService<RessortDTO> ressortDTOService, DTOService<BenutzerDTO> benutzerDTOService) {
-        super(ressortDTOService, RessortDTO.class, RessortDTOProperties.values(), "Ressortverwaltung", "Neues Ressort", RessortDTO::createEmptyDTO);
+        super(ressortDTOService,
+                RessortDTO.class,
+                RessortDTOProperties.values(),
+                TranslationConstants.RESSORT_TITLE,
+                TranslationConstants.RESSORT_NEW,
+                RessortDTO::createEmptyDTO);
         this.benutzerDTOService = benutzerDTOService;
     }
 
