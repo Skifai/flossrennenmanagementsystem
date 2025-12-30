@@ -31,31 +31,31 @@ public class MainView extends AppLayout {
 
     }
 
-    private static @NonNull SideNav createSideNav() {
+    private @NonNull SideNav createSideNav() {
         SideNav sideNav = new SideNav();
-        sideNav.addClassName("MainViewSideNav");
-        SideNavItem home = new SideNavItem("Startseite", ViewRoutes.HOME);
+        sideNav.addClassName(ViewStyles.MAIN_VIEW_SIDE_NAV);
+        SideNavItem home = new SideNavItem(getTranslation(TranslationConstants.NAV_HOME), ViewRoutes.HOME);
         sideNav.addItem(home);
-        SideNavItem helferModul = new SideNavItem("Helferverwaltung", ViewRoutes.HELFER);
+        SideNavItem helferModul = new SideNavItem(getTranslation(TranslationConstants.NAV_HELFER), ViewRoutes.HELFER);
         sideNav.addItem(helferModul);
-        SideNavItem ressortModul = new SideNavItem("Ressortverwaltung", ViewRoutes.RESSORT);
+        SideNavItem ressortModul = new SideNavItem(getTranslation(TranslationConstants.NAV_RESSORT), ViewRoutes.RESSORT);
         sideNav.addItem(ressortModul);
-        SideNavItem benutzerModul = new SideNavItem("Benutzerverwaltung", ViewRoutes.BENUTZER);
+        SideNavItem benutzerModul = new SideNavItem(getTranslation(TranslationConstants.NAV_BENUTZER), ViewRoutes.BENUTZER);
         sideNav.addItem(benutzerModul);
         return sideNav;
     }
 
     private @NonNull HorizontalLayout createNavbarLayout() {
         HorizontalLayout navbarLayout = new HorizontalLayout();
-        navbarLayout.addClassName("AppNavbarLayout");
+        navbarLayout.addClassName(ViewStyles.APP_NAVBAR_LAYOUT);
         navbarLayout.setAlignItems(FlexComponent.Alignment.CENTER);
 
         DrawerToggle toggle = new DrawerToggle();
-        toggle.addClassName("AppDrawerToggle");
+        toggle.addClassName(ViewStyles.APP_DRAWER_TOGGLE);
         navbarLayout.add(toggle);
 
         H1 titel = new H1(getTranslation(TranslationConstants.TITEL));
-        titel.addClassName("AppTitel");
+        titel.addClassName(ViewStyles.APP_TITEL);
         navbarLayout.add(titel);
         return navbarLayout;
     }
