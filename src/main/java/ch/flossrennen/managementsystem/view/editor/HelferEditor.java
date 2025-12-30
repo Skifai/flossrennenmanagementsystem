@@ -2,6 +2,8 @@ package ch.flossrennen.managementsystem.view.editor;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
+import ch.flossrennen.managementsystem.util.TranslationConstants;
+import ch.flossrennen.managementsystem.view.ViewStyles;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -37,33 +39,44 @@ public class HelferEditor extends AbstractEditorView<HelferDTO> {
         FormLayout helferFormFields = new FormLayout();
         helferFormFields.setAutoResponsive(true);
 
-        fieldRessort = new ComboBox<>("Ressort");
+        fieldRessort = new ComboBox<>(getTranslation(TranslationConstants.NAV_RESSORT));
+        fieldRessort.addClassName(ViewStyles.EDITOR_FIELD);
 
-        fieldID = new TextField("ID");
+        fieldID = new TextField(getTranslation(TranslationConstants.HELFER_ID));
+        fieldID.addClassName(ViewStyles.EDITOR_FIELD);
         fieldID.setReadOnly(true);
+        fieldID.setWidthFull();
         fieldID.setPrefixComponent(VaadinIcon.HASH.create());
 
-        fieldVorname = new TextField("Vorname");
+        fieldVorname = new TextField(getTranslation(TranslationConstants.HELFER_VORNAME));
+        fieldVorname.addClassName(ViewStyles.EDITOR_FIELD);
         fieldVorname.setRequired(true);
         fieldVorname.setMaxLength(100);
+        fieldVorname.setWidthFull();
         fieldVorname.setMinLength(2);
         fieldVorname.setPrefixComponent(VaadinIcon.USER.create());
 
-        fieldNachname = new TextField("Nachname");
+        fieldNachname = new TextField(getTranslation(TranslationConstants.HELFER_NACHNAME));
+        fieldNachname.addClassName(ViewStyles.EDITOR_FIELD);
         fieldNachname.setRequired(true);
         fieldNachname.setMaxLength(100);
+        fieldNachname.setWidthFull();
         fieldNachname.setMinLength(2);
         fieldNachname.setPrefixComponent(VaadinIcon.USER.create());
 
-        fieldEmail = new TextField("Email");
+        fieldEmail = new TextField(getTranslation(TranslationConstants.HELFER_EMAIL));
+        fieldEmail.addClassName(ViewStyles.EDITOR_FIELD);
         fieldEmail.setRequired(true);
         fieldEmail.setMaxLength(254);
+        fieldEmail.setWidthFull();
         fieldEmail.setMinLength(3);
         fieldEmail.setPrefixComponent(VaadinIcon.ENVELOPE.create());
 
-        fieldTelefon = new TextField("Telefonnummer");
+        fieldTelefon = new TextField(getTranslation(TranslationConstants.HELFER_TELEFONNUMMER));
+        fieldTelefon.addClassName(ViewStyles.EDITOR_FIELD);
         fieldTelefon.setRequired(true);
         fieldTelefon.setMaxLength(15);
+        fieldTelefon.setWidthFull();
         fieldTelefon.setMinLength(10);
         fieldTelefon.setPrefixComponent(VaadinIcon.PHONE.create());
 
@@ -71,13 +84,17 @@ public class HelferEditor extends AbstractEditorView<HelferDTO> {
         fieldRessort.setPrefixComponent(VaadinIcon.GROUP.create());
 
         helferFormFields.addFormRow(fieldID);
+
         helferFormFields.addFormRow(fieldVorname, fieldNachname);
-        helferFormFields.addFormRow(fieldEmail, fieldTelefon);
-        helferFormFields.addFormRow(fieldRessort);
+
+        helferFormFields.addFormRow(fieldEmail);
+        helferFormFields.setColspan(fieldEmail, 2);
+
+        helferFormFields.addFormRow(fieldTelefon, fieldRessort);
 
         binder.forField(fieldID)
                 .withNullRepresentation("")
-                .withConverter(new StringToLongConverter("ID muss eine Zahl sein."))
+                .withConverter(new StringToLongConverter(getTranslation(TranslationConstants.VALIDATION_ID_NAN)))
                 .bind("id");
         binder.forField(fieldVorname)
                 .asRequired("Der Vorname ist erforderlich.")
