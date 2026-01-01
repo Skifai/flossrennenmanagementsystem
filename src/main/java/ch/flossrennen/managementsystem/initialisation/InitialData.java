@@ -1,18 +1,17 @@
 package ch.flossrennen.managementsystem.initialisation;
 
-import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
+import ch.flossrennen.managementsystem.dataaccess.BenutzerDTODataAccess;
+import ch.flossrennen.managementsystem.dataaccess.HelferDTODataAccess;
+import ch.flossrennen.managementsystem.dataaccess.RessortDTODataAccess;
+import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
+import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
+import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
-import ch.flossrennen.managementsystem.dataaccess.persistence.model.Helfer;
-import ch.flossrennen.managementsystem.dataaccess.persistence.model.Ressort;
-import ch.flossrennen.managementsystem.dataaccess.persistence.repository.BenutzerRepository;
-import ch.flossrennen.managementsystem.dataaccess.persistence.repository.HelferRepository;
-import ch.flossrennen.managementsystem.dataaccess.persistence.repository.RessortRepository;
 import ch.flossrennen.managementsystem.initialisation.constants.InitialDataConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,110 +20,109 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class InitialData implements CommandLineRunner {
 
-    private final BenutzerRepository benutzerRepository;
-    private final RessortRepository ressortRepository;
-    private final HelferRepository helferRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final BenutzerDTODataAccess benutzerDTODataAccess;
+    private final RessortDTODataAccess ressortDTODataAccess;
+    private final HelferDTODataAccess helferDTODataAccess;
 
     @Override
     public void run(String... args) throws Exception {
-        if (benutzerRepository.count() > 1 || ressortRepository.count() > 0 || helferRepository.count() > 0) {
+        if (benutzerDTODataAccess.findAll().size() > 1 || !ressortDTODataAccess.findAll().isEmpty() || !helferDTODataAccess.findAll().isEmpty()) {
             return;
         }
 
         // Benutzer / Ressortleiter
-        Benutzer u1 = benutzerRepository.save(
-                new Benutzer(
+        BenutzerDTO u1 = benutzerDTODataAccess.save(
+                new BenutzerDTO(
                         null,
                         InitialDataConstants.VERKEHR_USER_VORNAME,
                         InitialDataConstants.VERKEHR_USER_NACHNAME,
                         InitialDataConstants.VERKEHR_USER_TEL,
                         InitialDataConstants.VERKEHR_USER_EMAIL,
-                        passwordEncoder.encode(InitialDataConstants.VERKEHR_USER_PW),
-                        BenutzerRolle.RESSORTLEITER));
+                        InitialDataConstants.VERKEHR_USER_PW,
+                        BenutzerRolle.RESSORTLEITER)).getData().orElseThrow();
 
-        Benutzer u2 = benutzerRepository.save(
-                new Benutzer(
+        BenutzerDTO u2 = benutzerDTODataAccess.save(
+                new BenutzerDTO(
                         null,
                         InitialDataConstants.RENNLEITUNG_USER_VORNAME,
                         InitialDataConstants.RENNLEITUNG_USER_NACHNAME,
                         InitialDataConstants.RENNLEITUNG_USER_TEL,
                         InitialDataConstants.RENNLEITUNG_USER_EMAIL,
-                        passwordEncoder.encode(InitialDataConstants.RENNLEITUNG_USER_PW),
-                        BenutzerRolle.RESSORTLEITER));
+                        InitialDataConstants.RENNLEITUNG_USER_PW,
+                        BenutzerRolle.RESSORTLEITER)).getData().orElseThrow();
 
-        Benutzer u3 = benutzerRepository.save(
-                new Benutzer(
+        BenutzerDTO u3 = benutzerDTODataAccess.save(
+                new BenutzerDTO(
                         null,
                         InitialDataConstants.FESTWIRTSCHAFT_USER_VORNAME,
                         InitialDataConstants.FESTWIRTSCHAFT_USER_NACHNAME,
                         InitialDataConstants.FESTWIRTSCHAFT_USER_TEL,
                         InitialDataConstants.FESTWIRTSCHAFT_USER_EMAIL,
-                        passwordEncoder.encode(InitialDataConstants.FESTWIRTSCHAFT_USER_PW),
-                        BenutzerRolle.RESSORTLEITER));
+                        InitialDataConstants.FESTWIRTSCHAFT_USER_PW,
+                        BenutzerRolle.RESSORTLEITER)).getData().orElseThrow();
 
-        Benutzer u4 = benutzerRepository.save(
-                new Benutzer(
+        BenutzerDTO u4 = benutzerDTODataAccess.save(
+                new BenutzerDTO(
                         null,
                         InitialDataConstants.BAU_USER_VORNAME,
                         InitialDataConstants.BAU_USER_NACHNAME,
                         InitialDataConstants.BAU_USER_TEL,
                         InitialDataConstants.BAU_USER_EMAIL,
-                        passwordEncoder.encode(InitialDataConstants.BAU_USER_PW),
-                        BenutzerRolle.RESSORTLEITER));
+                        InitialDataConstants.BAU_USER_PW,
+                        BenutzerRolle.RESSORTLEITER)).getData().orElseThrow();
 
-        Benutzer u5 = benutzerRepository.save(
-                new Benutzer(null,
+        BenutzerDTO u5 = benutzerDTODataAccess.save(
+                new BenutzerDTO(null,
                         InitialDataConstants.FINANZEN_USER_VORNAME,
                         InitialDataConstants.FINANZEN_USER_NACHNAME,
                         InitialDataConstants.FINANZEN_USER_TEL,
                         InitialDataConstants.FINANZEN_USER_EMAIL,
-                        passwordEncoder.encode(InitialDataConstants.FINANZEN_USER_PW),
-                        BenutzerRolle.RESSORTLEITER));
+                        InitialDataConstants.FINANZEN_USER_PW,
+                        BenutzerRolle.RESSORTLEITER)).getData().orElseThrow();
 
         // Ressorts
-        Ressort r1 = ressortRepository.save(
-                new Ressort(
+        RessortDTO r1 = ressortDTODataAccess.save(
+                new RessortDTO(
                         null,
                         InitialDataConstants.RESSORT_VERKEHR_NAME,
                         InitialDataConstants.RESSORT_VERKEHR_BESCHREIBUNG,
                         InitialDataConstants.RESSORT_VERKEHR_ZUSTAENDIGKEIT,
-                        u1));
+                        u1)).getData().orElseThrow();
 
-        Ressort r2 = ressortRepository.save(
-                new Ressort(null,
+        RessortDTO r2 = ressortDTODataAccess.save(
+                new RessortDTO(null,
                         InitialDataConstants.RESSORT_RENNLEITUNG_NAME,
                         InitialDataConstants.RESSORT_RENNLEITUNG_BESCHREIBUNG,
                         InitialDataConstants.RESSORT_RENNLEITUNG_ZUSTAENDIGKEIT,
-                        u2));
+                        u2)).getData().orElseThrow();
 
-        Ressort r3 = ressortRepository.save(
-                new Ressort(
+        RessortDTO r3 = ressortDTODataAccess.save(
+                new RessortDTO(
                         null,
                         InitialDataConstants.RESSORT_FESTWIRTSCHAFT_NAME,
                         InitialDataConstants.RESSORT_FESTWIRTSCHAFT_BESCHREIBUNG,
                         InitialDataConstants.RESSORT_FESTWIRTSCHAFT_ZUSTAENDIGKEIT,
-                        u3));
+                        u3)).getData().orElseThrow();
 
-        Ressort r4 = ressortRepository.save(
-                new Ressort(
+        RessortDTO r4 = ressortDTODataAccess.save(
+                new RessortDTO(
                         null,
                         InitialDataConstants.RESSORT_BAU_NAME,
                         InitialDataConstants.RESSORT_BAU_BESCHREIBUNG,
                         InitialDataConstants.RESSORT_BAU_ZUSTAENDIGKEIT,
-                        u4));
+                        u4)).getData().orElseThrow();
 
-        Ressort r5 = ressortRepository.save(
-                new Ressort(
+        RessortDTO r5 = ressortDTODataAccess.save(
+                new RessortDTO(
                         null,
                         InitialDataConstants.RESSORT_FINANZEN_NAME,
                         InitialDataConstants.RESSORT_FINANZEN_BESCHREIBUNG,
                         InitialDataConstants.RESSORT_FINANZEN_ZUSTAENDIGKEIT,
-                        u5));
+                        u5)).getData().orElseThrow();
 
         // Helfer
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.VERKEHR_HELFER1_VORNAME,
                         InitialDataConstants.VERKEHR_HELFER1_NACHNAME,
@@ -132,8 +130,8 @@ public class InitialData implements CommandLineRunner {
                         InitialDataConstants.VERKEHR_HELFER1_TEL,
                         r1));
 
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.RENNLEITUNG_HELFER1_VORNAME,
                         InitialDataConstants.RENNLEITUNG_HELFER1_NACHNAME,
@@ -141,8 +139,8 @@ public class InitialData implements CommandLineRunner {
                         InitialDataConstants.RENNLEITUNG_HELFER1_TEL,
                         r2));
 
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.FESTWIRTSCHAFT_HELFER1_VORNAME,
                         InitialDataConstants.FESTWIRTSCHAFT_HELFER1_NACHNAME,
@@ -150,8 +148,8 @@ public class InitialData implements CommandLineRunner {
                         InitialDataConstants.FESTWIRTSCHAFT_HELFER1_TEL,
                         r3));
 
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.BAU_HELFER1_VORNAME,
                         InitialDataConstants.BAU_HELFER1_NACHNAME,
@@ -159,8 +157,8 @@ public class InitialData implements CommandLineRunner {
                         InitialDataConstants.BAU_HELFER1_TEL,
                         r4));
 
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.FINANZEN_HELFER1_VORNAME,
                         InitialDataConstants.FINANZEN_HELFER1_NACHNAME,
@@ -169,8 +167,8 @@ public class InitialData implements CommandLineRunner {
                         r5));
 
 
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.VERKEHR_HELFER2_VORNAME,
                         InitialDataConstants.VERKEHR_HELFER2_NACHNAME,
@@ -178,8 +176,8 @@ public class InitialData implements CommandLineRunner {
                         InitialDataConstants.VERKEHR_HELFER2_TEL,
                         r1));
 
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.RENNLEITUNG_HELFER2_VORNAME,
                         InitialDataConstants.RENNLEITUNG_HELFER2_NACHNAME,
@@ -187,8 +185,8 @@ public class InitialData implements CommandLineRunner {
                         InitialDataConstants.RENNLEITUNG_HELFER2_TEL,
                         r2));
 
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.FESTWIRTSCHAFT_HELFER2_VORNAME,
                         InitialDataConstants.FESTWIRTSCHAFT_HELFER2_NACHNAME,
@@ -196,8 +194,8 @@ public class InitialData implements CommandLineRunner {
                         InitialDataConstants.FESTWIRTSCHAFT_HELFER2_TEL,
                         r3));
 
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.BAU_HELFER2_VORNAME,
                         InitialDataConstants.BAU_HELFER2_NACHNAME,
@@ -205,8 +203,8 @@ public class InitialData implements CommandLineRunner {
                         InitialDataConstants.BAU_HELFER2_TEL,
                         r4));
 
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.FINANZEN_HELFER2_VORNAME,
                         InitialDataConstants.FINANZEN_HELFER2_NACHNAME,
@@ -215,8 +213,8 @@ public class InitialData implements CommandLineRunner {
                         r5));
 
 
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.VERKEHR_HELFER3_VORNAME,
                         InitialDataConstants.VERKEHR_HELFER3_NACHNAME,
@@ -224,8 +222,8 @@ public class InitialData implements CommandLineRunner {
                         InitialDataConstants.VERKEHR_HELFER3_TEL,
                         r1));
 
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.RENNLEITUNG_HELFER3_VORNAME,
                         InitialDataConstants.RENNLEITUNG_HELFER3_NACHNAME,
@@ -233,8 +231,8 @@ public class InitialData implements CommandLineRunner {
                         InitialDataConstants.RENNLEITUNG_HELFER3_TEL,
                         r2));
 
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.FESTWIRTSCHAFT_HELFER3_VORNAME,
                         InitialDataConstants.FESTWIRTSCHAFT_HELFER3_NACHNAME,
@@ -242,8 +240,8 @@ public class InitialData implements CommandLineRunner {
                         InitialDataConstants.FESTWIRTSCHAFT_HELFER3_TEL,
                         r3));
 
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.BAU_HELFER3_VORNAME,
                         InitialDataConstants.BAU_HELFER3_NACHNAME,
@@ -251,8 +249,8 @@ public class InitialData implements CommandLineRunner {
                         InitialDataConstants.BAU_HELFER3_TEL,
                         r4));
 
-        helferRepository.save(
-                new Helfer(
+        helferDTODataAccess.save(
+                new HelferDTO(
                         null,
                         InitialDataConstants.FINANZEN_HELFER3_VORNAME,
                         InitialDataConstants.FINANZEN_HELFER3_NACHNAME,
