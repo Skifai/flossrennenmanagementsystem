@@ -8,11 +8,11 @@ import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import ch.flossrennen.managementsystem.view.editor.AbstractEditorView;
 import ch.flossrennen.managementsystem.view.editor.RessortEditor;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
+import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
 
+@PermitAll
 @Route(value = ViewRoutes.RESSORT, layout = MainView.class)
-@AnonymousAllowed
 public class RessortView extends AbstractContentBaseView<RessortDTO, RessortDTOProperties> {
 
     private final DTOService<BenutzerDTO> benutzerDTOService;

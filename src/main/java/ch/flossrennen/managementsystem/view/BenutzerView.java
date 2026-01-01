@@ -7,11 +7,11 @@ import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import ch.flossrennen.managementsystem.view.editor.AbstractEditorView;
 import ch.flossrennen.managementsystem.view.editor.BenutzerEditor;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
+import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
 
+@PermitAll
 @Route(value = ViewRoutes.BENUTZER, layout = MainView.class)
-@AnonymousAllowed
 public class BenutzerView extends AbstractContentBaseView<BenutzerDTO, BenutzerDTOProperties> {
 
     public BenutzerView(DTOService<BenutzerDTO> benutzerDTOService) {

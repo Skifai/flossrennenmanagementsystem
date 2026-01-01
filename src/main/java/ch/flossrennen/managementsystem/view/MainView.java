@@ -9,13 +9,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
-import com.vaadin.flow.router.Layout;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
+import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
 
-//@PermitAll
-@AnonymousAllowed
-@Layout
+@PermitAll
 public class MainView extends AppLayout {
 
     public MainView() {

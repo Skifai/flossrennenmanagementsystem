@@ -17,8 +17,8 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.jspecify.annotations.NonNull;
 
-@Route(ViewRoutes.LOGIN)
 @AnonymousAllowed
+@Route(ViewRoutes.LOGIN)
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     private final LoginForm loginForm = new LoginForm();

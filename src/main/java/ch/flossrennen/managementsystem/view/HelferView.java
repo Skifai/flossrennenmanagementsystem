@@ -7,12 +7,11 @@ import ch.flossrennen.managementsystem.service.DTOService;
 import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import ch.flossrennen.managementsystem.view.editor.HelferEditor;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
+import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
 
-//@PermitAll
+@PermitAll
 @Route(value = ViewRoutes.HELFER, layout = MainView.class)
-@AnonymousAllowed
 public class HelferView extends AbstractContentBaseView<HelferDTO, HelferDTOProperties> {
 
     private final DTOService<RessortDTO> ressortDTOService;
