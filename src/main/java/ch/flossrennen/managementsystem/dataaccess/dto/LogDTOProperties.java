@@ -5,7 +5,7 @@ import ch.flossrennen.managementsystem.util.TranslationConstants;
 
 import java.util.function.Function;
 
-public enum LogTableDTOProperties implements DTOProperty<LogDTO> {
+public enum LogDTOProperties implements DTOProperty<LogDTO> {
     ID(LogDTO::id, LogSchema.ID, TranslationConstants.LOGTABLE_ID),
     TIMESTAMP(LogDTO::timestamp, LogSchema.TIMESTAMP, TranslationConstants.LOGTABLE_TIMESTAMP),
     TYPE(LogDTO::type, LogSchema.TYPE, TranslationConstants.LOGTABLE_TYPE),
@@ -17,7 +17,7 @@ public enum LogTableDTOProperties implements DTOProperty<LogDTO> {
     private final String schemaKey;
     private final String translationKey;
 
-    LogTableDTOProperties(Function<LogDTO, ?> getter, String schemaKey, String translationKey) {
+    LogDTOProperties(Function<LogDTO, ?> getter, String schemaKey, String translationKey) {
         this.getter = getter;
         this.schemaKey = schemaKey;
         this.translationKey = translationKey;

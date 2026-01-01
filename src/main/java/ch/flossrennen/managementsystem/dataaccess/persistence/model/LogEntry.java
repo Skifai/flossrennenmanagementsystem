@@ -24,10 +24,12 @@ public class LogEntry implements LogSchema {
     private LocalDateTime timestamp;
 
     @Column(name = TYPE, nullable = false, length = 50)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private LogType type;
 
     @Column(name = LOG_LEVEL, nullable = false, length = 20)
-    private String logLevel;
+    @Enumerated(EnumType.STRING)
+    private LogLevel logLevel;
 
     @Column(name = BENUTZER)
     private String benutzer;
