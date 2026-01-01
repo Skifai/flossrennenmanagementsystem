@@ -1,4 +1,4 @@
-package ch.flossrennen.managementsystem.util;
+package ch.flossrennen.managementsystem.util.textprovider;
 
 public interface TranslationConstants {
 
@@ -91,4 +91,29 @@ public interface TranslationConstants {
     // Benutzer View
     String BENUTZER_TITLE = "benutzer.title";
     String BENUTZER_NEW = "benutzer.new";
+
+
+    // LogEntry View
+    String LOGTABLE_TITLE = "logevent.title";
+    String NAV_LOGTABLE = "nav.logevent";
+    String LOGTABLE_FILTER_TYPE = "logevent.filter.type";
+    String LOGTABLE_FILTER_LEVEL = "logevent.filter.level";
+    String LOGTABLE_FILTER_USER = "logevent.filter.user";
+    String LOGTABLE_FILTER_FROM = "logevent.filter.from";
+    String LOGTABLE_FILTER_TO = "logevent.filter.to";
+
+    // Log Levels
+    String LOG_LEVEL_INFO = "log.level.info";
+    String LOG_LEVEL_ERROR = "log.level.error";
+
+    // Log Types
+    String LOG_TYPE_HELFER_CREATED = "log.type.helfer.created";
+    String LOG_TYPE_HELFER_UPDATED = "log.type.helfer.updated";
+    String LOG_TYPE_HELFER_DELETED = "log.type.helfer.deleted";
+    String LOG_TYPE_RESSORT_CREATED = "log.type.ressort.created";
+    String LOG_TYPE_RESSORT_UPDATED = "log.type.ressort.updated";
+    String LOG_TYPE_RESSORT_DELETED = "log.type.ressort.deleted";
+    String LOG_TYPE_BENUTZER_CREATED = "log.type.benutzer.created";
+    String LOG_TYPE_BENUTZER_UPDATED = "log.type.benutzer.updated";
+    String LOG_TYPE_BENUTZER_DELETED = "log.type.benutzer.deleted";
 }

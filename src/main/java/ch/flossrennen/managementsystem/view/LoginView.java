@@ -1,7 +1,7 @@
 package ch.flossrennen.managementsystem.view;
 
 import ch.flossrennen.managementsystem.util.ResourceConstants;
-import ch.flossrennen.managementsystem.util.TranslationConstants;
+import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;

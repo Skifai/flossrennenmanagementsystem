@@ -2,9 +2,9 @@ package ch.flossrennen.managementsystem.service.validation;
 
 import ch.flossrennen.managementsystem.dataaccess.BenutzerDTODataAccess;
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
-import ch.flossrennen.managementsystem.textprovider.TextProvider;
 import ch.flossrennen.managementsystem.util.CheckResult;
-import ch.flossrennen.managementsystem.util.TranslationConstants;
+import ch.flossrennen.managementsystem.util.textprovider.TextProvider;
+import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

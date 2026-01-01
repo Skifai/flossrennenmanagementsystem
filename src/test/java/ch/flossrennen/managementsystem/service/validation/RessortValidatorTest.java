@@ -2,9 +2,9 @@ package ch.flossrennen.managementsystem.service.validation;
 
 import ch.flossrennen.managementsystem.dataaccess.RessortDTODataAccess;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
-import ch.flossrennen.managementsystem.textprovider.TextProvider;
 import ch.flossrennen.managementsystem.util.CheckResult;
-import ch.flossrennen.managementsystem.util.TranslationConstants;
+import ch.flossrennen.managementsystem.util.textprovider.TextProvider;
+import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

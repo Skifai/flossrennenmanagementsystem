@@ -1,6 +1,6 @@
 package ch.flossrennen.managementsystem.dataaccess.persistence.model;
 
-import ch.flossrennen.managementsystem.util.TranslationConstants;
+import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import lombok.Getter;
 
 @Getter

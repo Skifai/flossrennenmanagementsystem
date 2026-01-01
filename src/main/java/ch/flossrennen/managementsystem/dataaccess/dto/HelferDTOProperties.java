@@ -1,7 +1,7 @@
 package ch.flossrennen.managementsystem.dataaccess.dto;
 
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.HelferSchema;
-import ch.flossrennen.managementsystem.util.TranslationConstants;
+import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 
 import java.util.function.Function;
 

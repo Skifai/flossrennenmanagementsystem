@@ -3,7 +3,7 @@ package ch.flossrennen.managementsystem.view;
 import ch.flossrennen.managementsystem.dataaccess.dto.DTOProperty;
 import ch.flossrennen.managementsystem.service.DTOService;
 import ch.flossrennen.managementsystem.util.CheckResult;
-import ch.flossrennen.managementsystem.util.TranslationConstants;
+import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import ch.flossrennen.managementsystem.view.editor.AbstractEditorView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;

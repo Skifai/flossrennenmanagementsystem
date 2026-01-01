@@ -1,4 +1,4 @@
-package ch.flossrennen.managementsystem.textprovider;
+package ch.flossrennen.managementsystem.util.textprovider;
 
 import ch.flossrennen.managementsystem.util.ResourceConstants;
 import com.vaadin.flow.component.UI;
