@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS benutzer
+CREATE TABLE benutzer
 (
     id            BIGSERIAL PRIMARY KEY,
     vorname       VARCHAR(100)        NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS benutzer
     rolle         VARCHAR(50)         NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS ressort
+CREATE TABLE ressort
 (
     id             BIGSERIAL PRIMARY KEY,
     name           VARCHAR(100) UNIQUE NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS ressort
     ressortleitung BIGINT REFERENCES benutzer (id)
 );
 
-CREATE TABLE IF NOT EXISTS helfer
+CREATE TABLE helfer
 (
     id            BIGSERIAL PRIMARY KEY,
     vorname       VARCHAR(100)        NOT NULL,
@@ -26,4 +26,14 @@ CREATE TABLE IF NOT EXISTS helfer
     email         VARCHAR(254) UNIQUE NOT NULL,
     telefonnummer VARCHAR(15) UNIQUE  NOT NULL,
     ressort       BIGINT              NOT NULL REFERENCES ressort (id)
+);
+
+CREATE TABLE log
+(
+    id        BIGSERIAL PRIMARY KEY,
+    timestamp TIMESTAMP   NOT NULL,
+    type      VARCHAR(50) NOT NULL,
+    log_level VARCHAR(20) NOT NULL,
+    benutzer  VARCHAR(255),
+    message   TEXT        NOT NULL
 );
