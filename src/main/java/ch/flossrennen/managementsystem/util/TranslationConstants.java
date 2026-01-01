@@ -39,6 +39,14 @@ public interface TranslationConstants {
     String RESSORT_ZUSTAENDIGKEIT = "ressort.zustaendigkeit";
     String RESSORT_RESSORTLEITUNG = "ressort.ressortleitung";
 
+    // Entity LogEntry
+    String LOGTABLE_ID = "logevent.id";
+    String LOGTABLE_TIMESTAMP = "logevent.timestamp";
+    String LOGTABLE_TYPE = "logevent.type";
+    String LOGTABLE_LOG_LEVEL = "logevent.log_level";
+    String LOGTABLE_BENUTZER = "logevent.benutzer";
+    String LOGTABLE_MESSAGE = "logevent.message";
+
     // Notifications
     String SUCCESS_SAVE = "notification.success.save";
     String SUCCESS_DELETE = "notification.success.delete";
