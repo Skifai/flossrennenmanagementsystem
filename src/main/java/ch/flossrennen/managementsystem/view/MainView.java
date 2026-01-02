@@ -1,6 +1,6 @@
 package ch.flossrennen.managementsystem.view;
 
-import ch.flossrennen.managementsystem.util.TranslationConstants;
+import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H1;
