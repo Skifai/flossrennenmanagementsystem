@@ -1,9 +1,13 @@
 package ch.flossrennen.managementsystem.dataaccess;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
+import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTOProperties;
 import ch.flossrennen.managementsystem.dataaccess.mapper.DTOMapper;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.LogLevel;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.LogType;
 import ch.flossrennen.managementsystem.dataaccess.persistence.repository.BenutzerRepository;
+import ch.flossrennen.managementsystem.logging.LogService;
 import ch.flossrennen.managementsystem.util.CheckResult;
 import ch.flossrennen.managementsystem.util.textprovider.TextProvider;
 import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
@@ -19,13 +23,16 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
     private final BenutzerRepository benutzerRepository;
     private final DTOMapper<Benutzer, BenutzerDTO> benutzerDTOMapper;
     private final TextProvider textProvider;
+    private final LogService logService;
 
     public BenutzerDTODataAccess(BenutzerRepository benutzerRepository,
                                  DTOMapper<Benutzer, BenutzerDTO> benutzerDTOMapper,
-                                 TextProvider textProvider) {
+                                 TextProvider textProvider,
+                                 LogService logService) {
         this.benutzerRepository = benutzerRepository;
         this.benutzerDTOMapper = benutzerDTOMapper;
         this.textProvider = textProvider;
+        this.logService = logService;
     }
 
     @NonNull
@@ -56,11 +63,16 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
         try {
             Optional<Benutzer> existing = benutzerRepository.findById(id);
             if (existing.isEmpty()) {
+                logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, textProvider.getTranslation(TranslationConstants.LOG_DELETE_NOT_FOUND, "Benutzer", id));
                 return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
             }
+            BenutzerDTO benutzerDTO = benutzerDTOMapper.toDTO(existing.get());
             benutzerRepository.deleteById(id);
-            return CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
+            CheckResult<Void> result = CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
+            logService.log(LogType.BENUTZER_DELETED, LogLevel.INFO, logService.createMessage(benutzerDTO, BenutzerDTOProperties.values()));
+            return result;
         } catch (Exception e) {
+            logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, e.getMessage());
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
         }
     }
@@ -69,32 +81,39 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
     @Transactional
     public CheckResult<BenutzerDTO> save(@NonNull BenutzerDTO benutzerDTO) {
         try {
-            Benutzer entity = (benutzerDTO.id() != null)
-                    ? updateExistingBenutzer(benutzerDTO)
-                    : createNewBenutzer(benutzerDTO);
+            Benutzer entity;
+            LogType operationType;
+            String message;
+            if (benutzerDTO.id() != null) {
+                Benutzer existing = benutzerRepository.findById(benutzerDTO.id())
+                        .orElseThrow(() -> new IllegalArgumentException(textProvider.getTranslation(TranslationConstants.EXCEPTION_NOT_FOUND, "Benutzer")));
+                BenutzerDTO oldDTO = benutzerDTOMapper.toDTO(existing);
+                benutzerDTOMapper.updateEntity(benutzerDTO, existing);
+                entity = existing;
+                operationType = LogType.BENUTZER_UPDATED;
+                message = logService.createChangeMessage(oldDTO, benutzerDTO, BenutzerDTOProperties.values());
+            } else {
+                entity = benutzerDTOMapper.toEntity(benutzerDTO);
+                operationType = LogType.BENUTZER_CREATED;
+                message = logService.createMessage(benutzerDTO, BenutzerDTOProperties.values());
+            }
 
             if (entity.getPasswordhash() == null) {
-                return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_NOPASSWORD));
+                String errorMsg = textProvider.getTranslation(TranslationConstants.ERROR_NOPASSWORD);
+                String identifier = benutzerDTO.id() != null ? "ID " + benutzerDTO.id() : textProvider.getTranslation(TranslationConstants.LOG_NEW);
+                logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, textProvider.getTranslation(TranslationConstants.LOG_SAVE_NO_PASSWORD, identifier));
+                return CheckResult.failure(errorMsg);
             }
 
             Benutzer savedEntity = benutzerRepository.saveAndFlush(entity);
-            return CheckResult.success(benutzerDTOMapper.toDTO(savedEntity),
+            CheckResult<BenutzerDTO> result = CheckResult.success(benutzerDTOMapper.toDTO(savedEntity),
                     textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
+
+            logService.log(operationType, LogLevel.INFO, message);
+            return result;
         } catch (Exception e) {
+            logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, e.getMessage());
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
         }
-    }
-
-    private Benutzer updateExistingBenutzer(BenutzerDTO benutzerDTO) {
-        return benutzerRepository.findById(benutzerDTO.id())
-                .map(existing -> {
-                    benutzerDTOMapper.updateEntity(benutzerDTO, existing);
-                    return existing;
-                })
-                .orElseThrow(() -> new IllegalArgumentException("Benutzer not found"));
-    }
-
-    private Benutzer createNewBenutzer(BenutzerDTO benutzerDTO) {
-        return benutzerDTOMapper.toEntity(benutzerDTO);
     }
 }

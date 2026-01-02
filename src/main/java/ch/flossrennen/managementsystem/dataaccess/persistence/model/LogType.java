@@ -13,7 +13,8 @@ public enum LogType {
     RESSORT_DELETED(TranslationConstants.LOG_TYPE_RESSORT_DELETED),
     BENUTZER_CREATED(TranslationConstants.LOG_TYPE_BENUTZER_CREATED),
     BENUTZER_UPDATED(TranslationConstants.LOG_TYPE_BENUTZER_UPDATED),
-    BENUTZER_DELETED(TranslationConstants.LOG_TYPE_BENUTZER_DELETED);
+    BENUTZER_DELETED(TranslationConstants.LOG_TYPE_BENUTZER_DELETED),
+    APPLICATION_ERROR(TranslationConstants.LOG_TYPE_APPERROR);
 
     private final String translationKey;
 

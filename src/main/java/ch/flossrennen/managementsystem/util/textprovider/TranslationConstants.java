@@ -35,6 +35,13 @@ public interface TranslationConstants {
     String ERROR_MISSING_RESSORT = "notification.error.missing.ressort";
     //endregion
 
+    //region Logging Messages
+    String LOG_DELETE_NOT_FOUND = "log.delete.notfound";
+    String LOG_SAVE_NO_PASSWORD = "log.save.nopassword";
+    String EXCEPTION_NOT_FOUND = "exception.notfound";
+    String LOG_NEW = "log.new";
+    //endregion
+
     //region Validation
     String VALIDATION_REQUIRED = "validation.required";
     String VALIDATION_EMAIL = "validation.email";
@@ -105,6 +112,7 @@ public interface TranslationConstants {
     String LOG_TYPE_BENUTZER_CREATED = "log.type.benutzer.created";
     String LOG_TYPE_BENUTZER_UPDATED = "log.type.benutzer.updated";
     String LOG_TYPE_BENUTZER_DELETED = "log.type.benutzer.deleted";
+    String LOG_TYPE_APPERROR = "log.type.apperror";
     //endregion
 
     //endregion

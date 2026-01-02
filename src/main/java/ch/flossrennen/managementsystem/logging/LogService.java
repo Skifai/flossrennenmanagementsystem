@@ -59,7 +59,7 @@ public class LogService {
         return stringBuilder.toString();
     }
 
-    public <DTO, PROPERTY extends DTOProperty<DTO>> String createCreationMessage(DTO dto, PROPERTY[] properties) {
+    public <DTO, PROPERTY extends DTOProperty<DTO>> String createMessage(DTO dto, PROPERTY[] properties) {
         StringBuilder stringBuilder = new StringBuilder();
         for (PROPERTY property : properties) {
             Object value = property.getGetter().apply(dto);
