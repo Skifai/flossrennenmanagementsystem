@@ -66,7 +66,8 @@ public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
             HelferDTO helferDTO = helferDTOMapper.toDTO(existing.get());
             helferRepository.deleteById(id);
             CheckResult<Void> result = CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
-            logService.log(LogType.HELFER_DELETED, LogLevel.INFO, logService.createMessage(helferDTO, HelferDTOProperties.values()));
+            String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_DELETED, "Helfer", id);
+            logService.log(LogType.HELFER_DELETED, LogLevel.INFO, logService.createMessage(header, helferDTO, HelferDTOProperties.values()));
             return result;
         } catch (Exception e) {
             logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, e.getMessage());
@@ -90,11 +91,13 @@ public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
                 helferDTOMapper.updateEntity(helferDTO, existing);
                 entity = existing;
                 operationType = LogType.HELFER_UPDATED;
-                message = logService.createChangeMessage(oldDTO, helferDTO, HelferDTOProperties.values());
+                String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_UPDATED, "Helfer", helferDTO.id());
+                message = logService.createChangeMessage(header, oldDTO, helferDTO, HelferDTOProperties.values());
             } else {
                 entity = helferDTOMapper.toEntity(helferDTO);
                 operationType = LogType.HELFER_CREATED;
-                message = logService.createMessage(helferDTO, HelferDTOProperties.values());
+                String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_CREATED, "Helfer");
+                message = logService.createMessage(header, helferDTO, HelferDTOProperties.values());
             }
 
             Helfer savedHelfer = helferRepository.saveAndFlush(entity);

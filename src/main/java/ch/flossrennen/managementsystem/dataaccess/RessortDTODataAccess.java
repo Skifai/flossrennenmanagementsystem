@@ -61,7 +61,8 @@ public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
             RessortDTO ressortDTO = ressortDTOMapper.toDTO(existing.get());
             ressortRepository.deleteById(id);
             CheckResult<Void> result = CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
-            logService.log(LogType.RESSORT_DELETED, LogLevel.INFO, logService.createMessage(ressortDTO, RessortDTOProperties.values()));
+            String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_DELETED, "Ressort", id);
+            logService.log(LogType.RESSORT_DELETED, LogLevel.INFO, logService.createMessage(header, ressortDTO, RessortDTOProperties.values()));
             return result;
         } catch (Exception e) {
             logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, e.getMessage());
@@ -83,11 +84,13 @@ public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
                 ressortDTOMapper.updateEntity(ressortDTO, existing);
                 entity = existing;
                 operationType = LogType.RESSORT_UPDATED;
-                message = logService.createChangeMessage(oldDTO, ressortDTO, RessortDTOProperties.values());
+                String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_UPDATED, "Ressort", ressortDTO.id());
+                message = logService.createChangeMessage(header, oldDTO, ressortDTO, RessortDTOProperties.values());
             } else {
                 entity = ressortDTOMapper.toEntity(ressortDTO);
                 operationType = LogType.RESSORT_CREATED;
-                message = logService.createMessage(ressortDTO, RessortDTOProperties.values());
+                String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_CREATED, "Ressort");
+                message = logService.createMessage(header, ressortDTO, RessortDTOProperties.values());
             }
 
             Ressort savedEntity = ressortRepository.saveAndFlush(entity);

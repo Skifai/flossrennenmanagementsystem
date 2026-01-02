@@ -40,6 +40,9 @@ public interface TranslationConstants {
     String LOG_SAVE_NO_PASSWORD = "log.save.nopassword";
     String EXCEPTION_NOT_FOUND = "exception.notfound";
     String LOG_NEW = "log.new";
+    String LOG_HEADER_CREATED = "log.header.created";
+    String LOG_HEADER_UPDATED = "log.header.updated";
+    String LOG_HEADER_DELETED = "log.header.deleted";
     //endregion
 
     //region Validation

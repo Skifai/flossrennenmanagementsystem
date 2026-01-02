@@ -69,7 +69,8 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
             BenutzerDTO benutzerDTO = benutzerDTOMapper.toDTO(existing.get());
             benutzerRepository.deleteById(id);
             CheckResult<Void> result = CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
-            logService.log(LogType.BENUTZER_DELETED, LogLevel.INFO, logService.createMessage(benutzerDTO, BenutzerDTOProperties.values()));
+            String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_DELETED, "Benutzer", id);
+            logService.log(LogType.BENUTZER_DELETED, LogLevel.INFO, logService.createMessage(header, benutzerDTO, BenutzerDTOProperties.values()));
             return result;
         } catch (Exception e) {
             logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, e.getMessage());
@@ -91,11 +92,13 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
                 benutzerDTOMapper.updateEntity(benutzerDTO, existing);
                 entity = existing;
                 operationType = LogType.BENUTZER_UPDATED;
-                message = logService.createChangeMessage(oldDTO, benutzerDTO, BenutzerDTOProperties.values());
+                String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_UPDATED, "Benutzer", benutzerDTO.id());
+                message = logService.createChangeMessage(header, oldDTO, benutzerDTO, BenutzerDTOProperties.values());
             } else {
                 entity = benutzerDTOMapper.toEntity(benutzerDTO);
                 operationType = LogType.BENUTZER_CREATED;
-                message = logService.createMessage(benutzerDTO, BenutzerDTOProperties.values());
+                String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_CREATED, "Benutzer");
+                message = logService.createMessage(header, benutzerDTO, BenutzerDTOProperties.values());
             }
 
             if (entity.getPasswordhash() == null) {

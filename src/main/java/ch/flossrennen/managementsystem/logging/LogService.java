@@ -39,16 +39,14 @@ public class LogService {
         return StringConstants.SYSTEM;
     }
 
-    public <DTO, PROPERTY extends DTOProperty<DTO>> String createChangeMessage(DTO oldDTO, DTO newDTO, PROPERTY[] properties) {
-        StringBuilder stringBuilder = new StringBuilder();
+    public <DTO, PROPERTY extends DTOProperty<DTO>> String createChangeMessage(String header, DTO oldDTO, DTO newDTO, PROPERTY[] properties) {
+        StringBuilder stringBuilder = new StringBuilder(header);
         for (PROPERTY property : properties) {
             Object oldValue = property.getGetter().apply(oldDTO);
             Object newValue = property.getGetter().apply(newDTO);
 
             if (!Objects.equals(oldValue, newValue)) {
-                if (!stringBuilder.isEmpty()) {
-                    stringBuilder.append(StringConstants.LINE_BREAK);
-                }
+                stringBuilder.append(StringConstants.LINE_BREAK);
                 stringBuilder.append(textProvider.getTranslation(property.getTranslationKey()))
                         .append(StringConstants.COLON_SPACE)
                         .append(oldValue != null ? oldValue : StringConstants.DASH)
@@ -59,14 +57,12 @@ public class LogService {
         return stringBuilder.toString();
     }
 
-    public <DTO, PROPERTY extends DTOProperty<DTO>> String createMessage(DTO dto, PROPERTY[] properties) {
-        StringBuilder stringBuilder = new StringBuilder();
+    public <DTO, PROPERTY extends DTOProperty<DTO>> String createMessage(String header, DTO dto, PROPERTY[] properties) {
+        StringBuilder stringBuilder = new StringBuilder(header);
         for (PROPERTY property : properties) {
             Object value = property.getGetter().apply(dto);
             if (value != null && !value.toString().isEmpty()) {
-                if (!stringBuilder.isEmpty()) {
-                    stringBuilder.append(StringConstants.LINE_BREAK);
-                }
+                stringBuilder.append(StringConstants.LINE_BREAK);
                 stringBuilder.append(textProvider.getTranslation(property.getTranslationKey()))
                         .append(StringConstants.COLON_SPACE)
                         .append(value);
