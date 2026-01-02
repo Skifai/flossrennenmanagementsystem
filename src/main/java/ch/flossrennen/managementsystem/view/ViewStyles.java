@@ -21,6 +21,7 @@ public interface ViewStyles {
     // Components
     String FIELD_FILTER = "FieldFilter";
     String DATA_GRID = "DataGrid";
+    String DATA_GRID_COLUMN = "DataGridColumn";
     String EDITOR_FIELD = "EditorField";
     String BUTTON = "Button";
 }
