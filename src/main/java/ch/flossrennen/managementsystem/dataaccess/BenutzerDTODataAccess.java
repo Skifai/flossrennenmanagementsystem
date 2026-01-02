@@ -69,27 +69,32 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
     @Transactional
     public CheckResult<BenutzerDTO> save(@NonNull BenutzerDTO benutzerDTO) {
         try {
-            Benutzer entity;
-            if (benutzerDTO.id() != null) {
-                Optional<Benutzer> existing = benutzerRepository.findById(benutzerDTO.id());
-                if (existing.isPresent()) {
-                    entity = existing.get();
-                    benutzerDTOMapper.updateEntity(benutzerDTO, entity);
-                } else {
-                    return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
-                }
-            } else {
-                entity = benutzerDTOMapper.toEntity(benutzerDTO);
-            }
+            Benutzer entity = (benutzerDTO.id() != null)
+                    ? updateExistingBenutzer(benutzerDTO)
+                    : createNewBenutzer(benutzerDTO);
 
             if (entity.getPasswordhash() == null) {
-                return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
+                return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_NOPASSWORD));
             }
+
             Benutzer savedEntity = benutzerRepository.saveAndFlush(entity);
             return CheckResult.success(benutzerDTOMapper.toDTO(savedEntity),
                     textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
         } catch (Exception e) {
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
         }
+    }
+
+    private Benutzer updateExistingBenutzer(BenutzerDTO benutzerDTO) {
+        return benutzerRepository.findById(benutzerDTO.id())
+                .map(existing -> {
+                    benutzerDTOMapper.updateEntity(benutzerDTO, existing);
+                    return existing;
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Benutzer not found"));
+    }
+
+    private Benutzer createNewBenutzer(BenutzerDTO benutzerDTO) {
+        return benutzerDTOMapper.toEntity(benutzerDTO);
     }
 }

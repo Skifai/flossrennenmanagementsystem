@@ -67,25 +67,36 @@ public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
     @Transactional
     public CheckResult<HelferDTO> save(@NonNull HelferDTO helferDTO) {
         try {
-            if (helferDTO.ressort() == null) {
-                return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_MISSING_RESSORT));
-            }
-            Helfer entity;
-            if (helferDTO.id() != null) {
-                Optional<Helfer> existing = helferRepository.findById(helferDTO.id());
-                if (existing.isPresent()) {
-                    entity = existing.get();
-                    helferDTOMapper.updateEntity(helferDTO, entity);
-                } else {
-                    return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
-                }
-            } else {
-                entity = helferDTOMapper.toEntity(helferDTO);
-            }
+            validateRessortExists(helferDTO);
+
+            Helfer entity = (helferDTO.id() != null)
+                    ? updateExistingHelfer(helferDTO)
+                    : createNewHelfer(helferDTO);
+
             Helfer savedHelfer = helferRepository.saveAndFlush(entity);
-            return CheckResult.success(helferDTOMapper.toDTO(savedHelfer), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
+            return CheckResult.success(helferDTOMapper.toDTO(savedHelfer),
+                    textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
         } catch (Exception e) {
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
         }
+    }
+
+    private void validateRessortExists(HelferDTO helferDTO) {
+        if (helferDTO.ressort() == null) {
+            throw new IllegalArgumentException(textProvider.getTranslation(TranslationConstants.ERROR_MISSING_RESSORT));
+        }
+    }
+
+    private Helfer updateExistingHelfer(HelferDTO helferDTO) {
+        return helferRepository.findById(helferDTO.id())
+                .map(existing -> {
+                    helferDTOMapper.updateEntity(helferDTO, existing);
+                    return existing;
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Helfer not found"));
+    }
+
+    private Helfer createNewHelfer(HelferDTO helferDTO) {
+        return helferDTOMapper.toEntity(helferDTO);
     }
 }
