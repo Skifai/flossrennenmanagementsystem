@@ -39,7 +39,7 @@ public class MainView extends AppLayout {
         sideNav.addItem(ressortModul);
         SideNavItem benutzerModul = new SideNavItem(getTranslation(TranslationConstants.NAV_BENUTZER), ViewRoutes.BENUTZER);
         sideNav.addItem(benutzerModul);
-        SideNavItem systemprotokollModul = new SideNavItem(getTranslation(TranslationConstants.NAV_LOGTABLE), ViewRoutes.SYSTEMPROTOKOLL);
+        SideNavItem systemprotokollModul = new SideNavItem(getTranslation(TranslationConstants.NAV_SYSTEMPROTOKOLL), ViewRoutes.SYSTEMPROTOKOLL);
         sideNav.addItem(systemprotokollModul);
         return sideNav;
     }

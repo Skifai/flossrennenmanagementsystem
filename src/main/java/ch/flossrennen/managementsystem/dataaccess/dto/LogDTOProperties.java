@@ -6,12 +6,12 @@ import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import java.util.function.Function;
 
 public enum LogDTOProperties implements DTOProperty<LogDTO> {
-    ID(LogDTO::id, LogSchema.ID, TranslationConstants.LOGTABLE_ID),
-    TIMESTAMP(LogDTO::timestamp, LogSchema.TIMESTAMP, TranslationConstants.LOGTABLE_TIMESTAMP),
-    TYPE(LogDTO::type, LogSchema.TYPE, TranslationConstants.LOGTABLE_TYPE),
-    LOG_LEVEL(LogDTO::logLevel, LogSchema.LOG_LEVEL, TranslationConstants.LOGTABLE_LOG_LEVEL),
-    BENUTZER(LogDTO::benutzer, LogSchema.BENUTZER, TranslationConstants.LOGTABLE_BENUTZER),
-    MESSAGE(LogDTO::message, LogSchema.MESSAGE, TranslationConstants.LOGTABLE_MESSAGE);
+    ID(LogDTO::id, LogSchema.ID, TranslationConstants.LOG_ID),
+    TIMESTAMP(LogDTO::timestamp, LogSchema.TIMESTAMP, TranslationConstants.LOG_TIMESTAMP),
+    TYPE(LogDTO::type, LogSchema.TYPE, TranslationConstants.LOG_TYPE),
+    LOG_LEVEL(LogDTO::logLevel, LogSchema.LOG_LEVEL, TranslationConstants.LOG_LEVEL),
+    BENUTZER(LogDTO::benutzer, LogSchema.BENUTZER, TranslationConstants.LOG_BENUTZER),
+    MESSAGE(LogDTO::message, LogSchema.MESSAGE, TranslationConstants.LOG_MESSAGE);
 
     private final Function<LogDTO, ?> getter;
     private final String schemaKey;
