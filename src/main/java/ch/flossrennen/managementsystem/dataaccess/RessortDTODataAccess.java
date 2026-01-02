@@ -4,20 +4,18 @@ import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
 import ch.flossrennen.managementsystem.dataaccess.mapper.DTOMapper;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Ressort;
 import ch.flossrennen.managementsystem.dataaccess.persistence.repository.RessortRepository;
-import ch.flossrennen.managementsystem.textprovider.TextProvider;
 import ch.flossrennen.managementsystem.util.CheckResult;
-import ch.flossrennen.managementsystem.util.TranslationConstants;
+import ch.flossrennen.managementsystem.util.textprovider.TextProvider;
+import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
 public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
-    private static final Logger log = LoggerFactory.getLogger(RessortDTODataAccess.class);
     private final RessortRepository ressortRepository;
     private final DTOMapper<Ressort, RessortDTO> ressortDTOMapper;
     private final TextProvider textProvider;
@@ -46,17 +44,22 @@ public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
     }
 
     @NonNull
+    @Transactional
     public CheckResult<Void> deleteById(@NonNull Long id) {
         try {
+            Optional<Ressort> existing = ressortRepository.findById(id);
+            if (existing.isEmpty()) {
+                return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
+            }
             ressortRepository.deleteById(id);
             return CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
         } catch (Exception e) {
-            log.error("Error deleting Ressort with id {}: {}", id, e.getMessage(), e);
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
         }
     }
 
     @NonNull
+    @Transactional
     public CheckResult<RessortDTO> save(@NonNull RessortDTO ressortDTO) {
         try {
             Ressort entity;
@@ -74,7 +77,6 @@ public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
             Ressort savedEntity = ressortRepository.saveAndFlush(entity);
             return CheckResult.success(ressortDTOMapper.toDTO(savedEntity), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
         } catch (Exception e) {
-            log.error("Error saving Ressort {}: {}", ressortDTO, e.getMessage(), e);
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
         }
     }

@@ -7,8 +7,6 @@ import ch.flossrennen.managementsystem.util.CheckResult;
 import ch.flossrennen.managementsystem.util.textprovider.TextProvider;
 import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +14,6 @@ import java.util.Optional;
 
 @Service
 public class RessortDTOService implements DTOService<RessortDTO> {
-    private static final Logger log = LoggerFactory.getLogger(RessortDTOService.class);
 
     private final DTODataAccess<RessortDTO> ressortDTODataAccess;
     private final Validator<RessortDTO> ressortValidator;
@@ -54,7 +51,6 @@ public class RessortDTOService implements DTOService<RessortDTO> {
         if (ressortDTO.id() != null) {
             return ressortDTODataAccess.deleteById(ressortDTO.id());
         }
-        log.error("Error deleting Ressort: Missing ID for DTO {}", ressortDTO);
         return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_MISSING_ID));
     }
 }

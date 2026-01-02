@@ -7,8 +7,6 @@ import ch.flossrennen.managementsystem.util.CheckResult;
 import ch.flossrennen.managementsystem.util.textprovider.TextProvider;
 import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +14,6 @@ import java.util.Optional;
 
 @Service
 public class HelferDTOService implements DTOService<HelferDTO> {
-    private static final Logger log = LoggerFactory.getLogger(HelferDTOService.class);
 
     private final DTODataAccess<HelferDTO> helferDTODataAccess;
     private final Validator<HelferDTO> helferValidator;
@@ -58,7 +55,6 @@ public class HelferDTOService implements DTOService<HelferDTO> {
         if (helferDTO.id() != null) {
             return helferDTODataAccess.deleteById(helferDTO.id());
         }
-        log.error("Error deleting Helfer: Missing ID for DTO {}", helferDTO);
         return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_MISSING_ID));
     }
 }

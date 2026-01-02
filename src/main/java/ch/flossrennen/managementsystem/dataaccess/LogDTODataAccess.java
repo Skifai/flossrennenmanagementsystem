@@ -11,8 +11,6 @@ import ch.flossrennen.managementsystem.util.textprovider.TextProvider;
 import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import jakarta.persistence.criteria.Predicate;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -25,7 +23,6 @@ import java.util.Optional;
 
 @Component
 public class LogDTODataAccess implements DTODataAccess<LogDTO> {
-    private static final Logger log = LoggerFactory.getLogger(LogDTODataAccess.class);
     private final LogRepository logRepository;
     private final LogDTOMapper logDTOMapper;
     private final TextProvider textProvider;
@@ -57,7 +54,6 @@ public class LogDTODataAccess implements DTODataAccess<LogDTO> {
             logRepository.deleteById(id);
             return CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
         } catch (Exception e) {
-            log.error("Error deleting LogEntry with id {}: {}", id, e.getMessage(), e);
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
         }
     }
@@ -71,7 +67,6 @@ public class LogDTODataAccess implements DTODataAccess<LogDTO> {
             LogEntry savedEntity = logRepository.saveAndFlush(entity);
             return CheckResult.success(logDTOMapper.toDTO(savedEntity), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
         } catch (Exception e) {
-            log.error("Error saving LogEntry {}: {}", logTableDTO, e.getMessage(), e);
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
         }
     }

@@ -6,15 +6,12 @@ import ch.flossrennen.managementsystem.util.CheckResult;
 import ch.flossrennen.managementsystem.util.textprovider.TextProvider;
 import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
 public class BenutzerValidator implements Validator<BenutzerDTO> {
-    private static final Logger log = LoggerFactory.getLogger(BenutzerValidator.class);
     private final BenutzerDTODataAccess benutzerDTODataAccess;
     private final TextProvider textProvider;
 
@@ -42,9 +39,6 @@ public class BenutzerValidator implements Validator<BenutzerDTO> {
         if (benutzerDTO.email() != null && !benutzerDTO.email().isBlank()) {
             Optional<BenutzerDTO> existingByEmail = benutzerDTODataAccess.findByEmail(benutzerDTO.email());
             if (existingByEmail.isPresent() && !existingByEmail.get().id().equals(benutzerDTO.id())) {
-                log.warn("Validation failed: Email {} is already in use by user {}",
-                        benutzerDTO.email(),
-                        existingByEmail.get().id());
                 return CheckResult.failure(textProvider.getTranslation(TranslationConstants.VALIDATION_UNIQUE_EMAIL));
             }
         }
@@ -55,9 +49,6 @@ public class BenutzerValidator implements Validator<BenutzerDTO> {
         if (benutzerDTO.telefonnummer() != null && !benutzerDTO.telefonnummer().isBlank()) {
             Optional<BenutzerDTO> existingByTelefon = benutzerDTODataAccess.findByTelefonnummer(benutzerDTO.telefonnummer());
             if (existingByTelefon.isPresent() && !existingByTelefon.get().id().equals(benutzerDTO.id())) {
-                log.warn("Validation failed: Telefon {} is already in use by user {}",
-                        benutzerDTO.telefonnummer(),
-                        existingByTelefon.get().id());
                 return CheckResult.failure(textProvider.getTranslation(TranslationConstants.VALIDATION_UNIQUE_TELEFONNUMMER));
             }
         }

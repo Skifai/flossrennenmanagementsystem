@@ -4,20 +4,18 @@ import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.mapper.DTOMapper;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
 import ch.flossrennen.managementsystem.dataaccess.persistence.repository.BenutzerRepository;
-import ch.flossrennen.managementsystem.textprovider.TextProvider;
 import ch.flossrennen.managementsystem.util.CheckResult;
-import ch.flossrennen.managementsystem.util.TranslationConstants;
+import ch.flossrennen.managementsystem.util.textprovider.TextProvider;
+import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
 public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
-    private static final Logger log = LoggerFactory.getLogger(BenutzerDTODataAccess.class);
     private final BenutzerRepository benutzerRepository;
     private final DTOMapper<Benutzer, BenutzerDTO> benutzerDTOMapper;
     private final TextProvider textProvider;
@@ -53,17 +51,22 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
     }
 
     @NonNull
+    @Transactional
     public CheckResult<Void> deleteById(@NonNull Long id) {
         try {
+            Optional<Benutzer> existing = benutzerRepository.findById(id);
+            if (existing.isEmpty()) {
+                return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
+            }
             benutzerRepository.deleteById(id);
             return CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
         } catch (Exception e) {
-            log.error("Error deleting Benutzer with id {}: {}", id, e.getMessage(), e);
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
         }
     }
 
     @NonNull
+    @Transactional
     public CheckResult<BenutzerDTO> save(@NonNull BenutzerDTO benutzerDTO) {
         try {
             Benutzer entity;
@@ -80,14 +83,12 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
             }
 
             if (entity.getPasswordhash() == null) {
-                log.error("Error saving Benutzer: Password is required for new users.");
                 return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
             }
             Benutzer savedEntity = benutzerRepository.saveAndFlush(entity);
             return CheckResult.success(benutzerDTOMapper.toDTO(savedEntity),
                     textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
         } catch (Exception e) {
-            log.error("Error saving Benutzer {}: {}", benutzerDTO, e.getMessage(), e);
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
         }
     }
