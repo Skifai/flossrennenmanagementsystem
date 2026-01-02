@@ -11,7 +11,7 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface LogTableDTOMapper extends DTOMapper<LogEntry, LogDTO> {
+public interface LogDTOMapper extends DTOMapper<LogEntry, LogDTO> {
 
     @Override
     @NonNull

@@ -7,4 +7,5 @@ public interface ViewRoutes {
     String HELFER = "helfer";
     String RESSORT = "ressort";
     String BENUTZER = "benutzer";
+    String SYSTEMPROTOKOLL = "systemprotokoll";
 }

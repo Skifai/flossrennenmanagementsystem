@@ -1,0 +1,135 @@
+package ch.flossrennen.managementsystem.dataaccess;
+
+import ch.flossrennen.managementsystem.dataaccess.dto.LogDTO;
+import ch.flossrennen.managementsystem.dataaccess.mapper.LogDTOMapper;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.LogEntry;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.LogLevel;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.LogType;
+import ch.flossrennen.managementsystem.dataaccess.persistence.repository.LogRepository;
+import ch.flossrennen.managementsystem.util.CheckResult;
+import ch.flossrennen.managementsystem.util.textprovider.TextProvider;
+import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
+import jakarta.persistence.criteria.Predicate;
+import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Component
+public class LogDTODataAccess implements DTODataAccess<LogDTO> {
+    private static final Logger log = LoggerFactory.getLogger(LogDTODataAccess.class);
+    private final LogRepository logRepository;
+    private final LogDTOMapper logDTOMapper;
+    private final TextProvider textProvider;
+
+    public LogDTODataAccess(LogRepository logRepository, LogDTOMapper logDTOMapper, TextProvider textProvider) {
+        this.logRepository = logRepository;
+        this.logDTOMapper = logDTOMapper;
+        this.textProvider = textProvider;
+    }
+
+    @NonNull
+    @Override
+    public List<LogDTO> findAll() {
+        return logRepository.findAll().stream()
+                .map(logDTOMapper::toDTO)
+                .toList();
+    }
+
+    @NonNull
+    @Override
+    public Optional<LogDTO> findById(@NonNull Long id) {
+        return logRepository.findById(id).map(logDTOMapper::toDTO);
+    }
+
+    @NonNull
+    @Override
+    public CheckResult<Void> deleteById(@NonNull Long id) {
+        try {
+            logRepository.deleteById(id);
+            return CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
+        } catch (Exception e) {
+            log.error("Error deleting LogEntry with id {}: {}", id, e.getMessage(), e);
+            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
+        }
+    }
+
+    @NonNull
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public CheckResult<LogDTO> save(@NonNull LogDTO logTableDTO) {
+        try {
+            LogEntry entity = logDTOMapper.toEntity(logTableDTO);
+            LogEntry savedEntity = logRepository.saveAndFlush(entity);
+            return CheckResult.success(logDTOMapper.toDTO(savedEntity), textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
+        } catch (Exception e) {
+            log.error("Error saving LogEntry {}: {}", logTableDTO, e.getMessage(), e);
+            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
+        }
+    }
+
+    @NonNull
+    public List<LogDTO> findAllFiltered(LogType type, LogLevel logLevel, String benutzer, LocalDateTime from, LocalDateTime to, List<LogType> types) {
+        Specification<LogEntry> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (type != null) {
+                predicates.add(cb.equal(root.get("type"), type));
+            }
+            if (logLevel != null) {
+                predicates.add(cb.equal(root.get("logLevel"), logLevel));
+            }
+            if (benutzer != null && !benutzer.isEmpty()) {
+                predicates.add(cb.equal(root.get("benutzer"), benutzer));
+            }
+            if (from != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("timestamp"), from));
+            }
+            if (to != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("timestamp"), to));
+            }
+            if (types != null && !types.isEmpty()) {
+                predicates.add(root.get("type").in(types));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return logRepository.findAll(spec).stream()
+                .map(logDTOMapper::toDTO)
+                .toList();
+    }
+
+    @NonNull
+    public List<LogType> findUniqueTypes() {
+        return logRepository.findAll().stream()
+                .map(LogEntry::getType)
+                .distinct()
+                .toList();
+    }
+
+    @NonNull
+    public List<LogLevel> findUniqueLogLevels() {
+        return logRepository.findAll().stream()
+                .map(LogEntry::getLogLevel)
+                .distinct()
+                .toList();
+    }
+
+    @NonNull
+    public List<String> findUniqueUsers() {
+        return logRepository.findAll().stream()
+                .map(LogEntry::getBenutzer)
+                .filter(u -> u != null && !u.isEmpty())
+                .distinct()
+                .toList();
+    }
+}
