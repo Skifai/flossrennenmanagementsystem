@@ -64,7 +64,8 @@ public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
                 return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
             }
             HelferDTO helferDTO = helferDTOMapper.toDTO(existing.get());
-            helferRepository.deleteById(id);
+            helferRepository.delete(existing.get());
+            helferRepository.flush();
             CheckResult<Void> result = CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
             String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_DELETED, "Helfer", id);
             logService.log(LogType.HELFER_DELETED, LogLevel.INFO, logService.createMessage(header, helferDTO, HelferDTOProperties.values()));

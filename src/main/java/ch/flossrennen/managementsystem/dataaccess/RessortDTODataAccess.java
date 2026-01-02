@@ -59,7 +59,8 @@ public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
                 return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
             }
             RessortDTO ressortDTO = ressortDTOMapper.toDTO(existing.get());
-            ressortRepository.deleteById(id);
+            ressortRepository.delete(existing.get());
+            ressortRepository.flush();
             CheckResult<Void> result = CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
             String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_DELETED, "Ressort", id);
             logService.log(LogType.RESSORT_DELETED, LogLevel.INFO, logService.createMessage(header, ressortDTO, RessortDTOProperties.values()));

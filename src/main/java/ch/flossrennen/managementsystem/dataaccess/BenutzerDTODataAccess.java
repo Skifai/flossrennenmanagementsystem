@@ -67,7 +67,8 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
                 return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
             }
             BenutzerDTO benutzerDTO = benutzerDTOMapper.toDTO(existing.get());
-            benutzerRepository.deleteById(id);
+            benutzerRepository.delete(existing.get());
+            benutzerRepository.flush();
             CheckResult<Void> result = CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
             String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_DELETED, "Benutzer", id);
             logService.log(LogType.BENUTZER_DELETED, LogLevel.INFO, logService.createMessage(header, benutzerDTO, BenutzerDTOProperties.values()));

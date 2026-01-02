@@ -49,9 +49,11 @@ public class LogDTODataAccess implements DTODataAccess<LogDTO> {
 
     @NonNull
     @Override
+    @Transactional
     public CheckResult<Void> deleteById(@NonNull Long id) {
         try {
             logRepository.deleteById(id);
+            logRepository.flush();
             return CheckResult.success(null, textProvider.getTranslation(TranslationConstants.SUCCESS_DELETE));
         } catch (Exception e) {
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
