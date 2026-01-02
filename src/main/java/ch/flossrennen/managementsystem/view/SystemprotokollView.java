@@ -119,7 +119,8 @@ public class SystemprotokollView extends VerticalLayout {
                     .setKey(property.getSchemaKey())
                     .setResizable(true)
                     .setSortable(true)
-                    .setAutoWidth(true);
+                    .setAutoWidth(true)
+                    .setFlexGrow(0);
         }
 
         return grid;

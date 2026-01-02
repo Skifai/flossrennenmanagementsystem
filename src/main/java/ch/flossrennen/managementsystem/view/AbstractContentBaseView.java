@@ -85,6 +85,7 @@ public abstract class AbstractContentBaseView<DTO, PROPERTY extends DTOProperty<
                     .setKey(property.getSchemaKey())
                     .setSortable(true)
                     .setAutoWidth(true)
+                    .setFlexGrow(0)
                     .setResizable(true);
         }
         grid.asSingleSelect().addValueChangeListener(event -> editDTO(event.getValue()));
