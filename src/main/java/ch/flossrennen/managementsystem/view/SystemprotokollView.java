@@ -12,8 +12,11 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
@@ -52,6 +55,7 @@ public class SystemprotokollView extends VerticalLayout {
         add(filterBar);
 
         grid = createLogGrid();
+        add(grid);
         updateGrid();
     }
 
@@ -98,15 +102,26 @@ public class SystemprotokollView extends VerticalLayout {
         grid.addClassName(ViewStyles.DATA_GRID);
 
         for (LogDTOProperties property : LogDTOProperties.values()) {
-            grid.addColumn(property.getGetter()::apply)
-                    .setHeader(getTranslation(property.getTranslationKey()))
+            Grid.Column<LogDTO> column;
+            switch (property) {
+                case TIMESTAMP -> column = grid.addColumn(new LocalDateTimeRenderer<>(LogDTO::timestamp));
+                case MESSAGE -> column = grid.addColumn(new ComponentRenderer<>(logDTO -> {
+                    Span span = new Span(logDTO.message());
+                    span.getStyle().set("white-space", "pre-wrap");
+                    return span;
+                }));
+                case TYPE -> column = grid.addColumn(logDTO -> getTranslation(logDTO.type().getTranslationKey()));
+                case LOG_LEVEL ->
+                        column = grid.addColumn(logDTO -> getTranslation(logDTO.logLevel().getTranslationKey()));
+                default -> column = grid.addColumn(property.getGetter()::apply);
+            }
+            column.setHeader(getTranslation(property.getTranslationKey()))
                     .setKey(property.getSchemaKey())
+                    .setResizable(true)
                     .setSortable(true)
-                    .setAutoWidth(true)
-                    .setResizable(true);
+                    .setAutoWidth(true);
         }
 
-        add(grid);
         return grid;
     }
 
