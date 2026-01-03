@@ -341,7 +341,7 @@ public class InitialData implements CommandLineRunner {
                 InitialDataConstants.EINSATZ_BAU_1_ORT,
                 "Werkzeugkiste",
                 2,
-                EinsatzStatus.ABGESCHLOSSEN,
+                EinsatzStatus.OFFEN,
                 r4));
 
         einsatzDTODataAccess.save(new EinsatzDTO(null,

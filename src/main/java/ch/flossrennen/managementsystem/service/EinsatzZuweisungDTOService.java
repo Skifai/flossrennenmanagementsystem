@@ -1,7 +1,10 @@
 package ch.flossrennen.managementsystem.service;
 
 import ch.flossrennen.managementsystem.dataaccess.EinsatzZuweisungDTODataAccess;
+import ch.flossrennen.managementsystem.dataaccess.dto.EinsatzDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.EinsatzZuweisungDTO;
+import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
+import ch.flossrennen.managementsystem.dataaccess.dto.HelferSelectionDTO;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Einsatz;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.EinsatzStatus;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.EinsatzZuweisung;
@@ -18,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,15 +32,58 @@ public class EinsatzZuweisungDTOService {
     private final EinsatzZuweisungRepository repository;
     private final EinsatzRepository einsatzRepository;
     private final HelferRepository helferRepository;
+    private final DTOService<EinsatzDTO> einsatzDTOService;
+    private final DTOService<HelferDTO> helferDTOService;
     private final TextProvider textProvider;
+
+    public List<EinsatzDTO> findAllEinsatzForZuweisung() {
+        return einsatzDTOService.findAll().stream()
+                .filter(einsatzDTO -> einsatzDTO.status() != EinsatzStatus.ERSTELLT)
+                .toList();
+    }
+
+    public HelferSelectionDTO getHelferSelection(EinsatzDTO einsatz) {
+        if (einsatz == null) {
+            return new HelferSelectionDTO(List.of(), List.of());
+        }
+
+        List<EinsatzZuweisungDTO> zuweisungen = findByEinsatzId(einsatz.id());
+        Set<Long> zugewieseneIds = zuweisungen.stream().map(EinsatzZuweisungDTO::helferId).collect(Collectors.toSet());
+
+        List<Long> overlappingHelferIds = findAllHelferIdsWithOverlappingAssignments(
+                einsatz.id(), einsatz.startzeit(), einsatz.endzeit());
+
+        List<HelferDTO> allHelfer = helferDTOService.findAll();
+
+        List<HelferDTO> zugewieseneHelfer = allHelfer.stream()
+                .filter(helferDTO -> zugewieseneIds.contains(helferDTO.id()))
+                .toList();
+
+        List<HelferDTO> verfuegbareHelfer = allHelfer.stream()
+                .filter(helferDTO -> !zugewieseneIds.contains(helferDTO.id()))
+                .filter(helferDTO -> !overlappingHelferIds.contains(helferDTO.id()))
+                .toList();
+
+        return new HelferSelectionDTO(zugewieseneHelfer, verfuegbareHelfer);
+    }
 
     public List<EinsatzZuweisungDTO> findByEinsatzId(Long einsatzId) {
         return dataAccess.findByEinsatzId(einsatzId);
     }
 
+    public int getMissingHelferCount(EinsatzDTO einsatz) {
+        if (einsatz == null) return 0;
+        int assignedCount = findByEinsatzId(einsatz.id()).size();
+        return einsatz.benoetigte_helfer() - assignedCount;
+    }
+
     @Transactional
     public CheckResult<EinsatzZuweisungDTO> save(EinsatzZuweisungDTO dto) {
         Einsatz einsatz = einsatzRepository.findById(dto.einsatzId()).orElseThrow();
+
+        if (einsatz.getStatus() == EinsatzStatus.ABGESCHLOSSEN) {
+            return CheckResult.failure(textProvider.getTranslation(TranslationConstants.VALIDATION_EINSATZ_FULL));
+        }
 
         List<EinsatzZuweisung> overlapping = repository.findOverlappingZuweisungen(
                 dto.helferId(),

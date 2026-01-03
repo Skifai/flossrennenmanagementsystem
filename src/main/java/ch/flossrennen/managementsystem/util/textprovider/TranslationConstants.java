@@ -58,6 +58,7 @@ public interface TranslationConstants {
     String VALIDATION_ID_NAN = "validation.id.nan";
     String VALIDATION_EINSATZ_START_BEFORE_END = "validation.einsatz.start.before.end";
     String VALIDATION_EINSATZ_HELFER_OVERLAP = "validation.einsatz.helfer.overlap";
+    String VALIDATION_EINSATZ_FULL = "validation.einsatz.full";
     //endregion
 
     //endregion

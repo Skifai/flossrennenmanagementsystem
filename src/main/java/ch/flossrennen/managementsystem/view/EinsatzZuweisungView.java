@@ -21,30 +21,27 @@ import jakarta.annotation.security.PermitAll;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @PermitAll
 @Route(value = ViewRoutes.EINSATZZUWEISUNG, layout = MainView.class)
 public class EinsatzZuweisungView extends VerticalLayout {
 
     private final DTOService<EinsatzDTO> einsatzDTOService;
-    private final DTOService<HelferDTO> helferDTOService;
     private final EinsatzZuweisungDTOService zuweisungDTOService;
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     private FlossrennenGrid<EinsatzDTO> einsatzGrid;
     private FlossrennenGrid<HelferDTO> verfuegbareHelferGrid;
     private FlossrennenGrid<HelferDTO> zugewieseneHelferGrid;
+    private Button zuweisenButton;
+    private Button entfernenButton;
 
     private final List<HelferDTO> zugewieseneHelfer = new ArrayList<>();
     private final List<HelferDTO> verfuegbareHelfer = new ArrayList<>();
 
     public EinsatzZuweisungView(DTOService<EinsatzDTO> einsatzDTOService,
-                                DTOService<HelferDTO> helferDTOService,
                                 EinsatzZuweisungDTOService zuweisungDTOService) {
         this.einsatzDTOService = einsatzDTOService;
-        this.helferDTOService = helferDTOService;
         this.zuweisungDTOService = zuweisungDTOService;
 
         addClassName(ViewStyles.MAIN_VIEW_CONTENT);
@@ -79,12 +76,11 @@ public class EinsatzZuweisungView extends VerticalLayout {
                 .setSortable(false);
 
         addEinsatzColumn(EinsatzDTOProperties.ORT);
+        addEinsatzColumn(EinsatzDTOProperties.STATUS);
+        addEinsatzColumn(EinsatzDTOProperties.BENOETIGTE_HELFER);
 
         einsatzGrid.addStaticColumn(getTranslation(TranslationConstants.EINSATZ_ZUWEISUNG_MISSING_HELFER),
-                einsatzDTO -> {
-                    int assignedCount = zuweisungDTOService.findByEinsatzId(einsatzDTO.id()).size();
-                    return String.valueOf(einsatzDTO.benoetigte_helfer() - assignedCount);
-                });
+                einsatzDTO -> String.valueOf(zuweisungDTOService.getMissingHelferCount(einsatzDTO)));
 
         einsatzGrid.setDefaultSort(idColumn, SortDirection.ASCENDING);
 
@@ -111,10 +107,43 @@ public class EinsatzZuweisungView extends VerticalLayout {
                         String.valueOf(property.getFormattedValue(einsatzDTO, this::getTranslation, dateTimeFormatter)));
     }
 
+    private void onEinsatzSelected(EinsatzDTO einsatz) {
+        HelferSelectionDTO selection = zuweisungDTOService.getHelferSelection(einsatz);
+        zugewieseneHelfer.clear();
+        zugewieseneHelfer.addAll(selection.zugewieseneHelfer());
+        verfuegbareHelfer.clear();
+        verfuegbareHelfer.addAll(selection.verfuegbareHelfer());
+
+        updateHelperGrids();
+        updateButtonStates();
+    }
+
+    private void updateButtonStates() {
+        EinsatzDTO selectedEinsatz = einsatzGrid.asSingleSelect().getValue();
+        HelferDTO selectedVerfuegbar = verfuegbareHelferGrid.asSingleSelect().getValue();
+        HelferDTO selectedZugewiesen = zugewieseneHelferGrid.asSingleSelect().getValue();
+
+        boolean canAssign = selectedEinsatz != null
+                && selectedVerfuegbar != null
+                && selectedEinsatz.status() != EinsatzStatus.ABGESCHLOSSEN;
+        zuweisenButton.setEnabled(canAssign);
+
+        boolean canUnassign = selectedEinsatz != null
+                && selectedZugewiesen != null;
+        entfernenButton.setEnabled(canUnassign);
+    }
+
+    private Grid.Column<HelferDTO> addHelferColumn(FlossrennenGrid<HelferDTO> grid, HelferDTOProperties property) {
+        return grid.addFilterableColumn(getTranslation(property.getTranslationKey()),
+                helferDTO ->
+                        property.getFormattedValue(helferDTO, this::getTranslation, dateTimeFormatter),
+                property.getSchemaKey(),
+                helferDTO ->
+                        String.valueOf(property.getFormattedValue(helferDTO, this::getTranslation, dateTimeFormatter)));
+    }
+
     private void updateEinsatzGrid() {
-        einsatzGrid.setFilterableItems(einsatzDTOService.findAll().stream()
-                .filter(einsatzDTO -> einsatzDTO.status() == EinsatzStatus.OFFEN)
-                .collect(Collectors.toList()));
+        einsatzGrid.setFilterableItems(zuweisungDTOService.findAllEinsatzForZuweisung());
     }
 
     private void createHelferGrids() {
@@ -133,15 +162,17 @@ public class EinsatzZuweisungView extends VerticalLayout {
         verfuegbareHelferGrid.setDefaultSort(verfuegbareIdColumn, SortDirection.ASCENDING);
 
         verfuegbareHelferGrid.setFilterableItems(verfuegbareHelfer);
+        verfuegbareHelferGrid.addSelectionListener(event -> updateButtonStates());
 
         HorizontalLayout verfuegbareHelferTitleBar = new HorizontalLayout();
 
         H4 verfuegbarTitel = new H4(getTranslation(TranslationConstants.EINSATZ_ZUWEISUNG_VERFUEGBAR));
         verfuegbarTitel.addClassName(ViewStyles.APP_SUB_TITEL);
 
-        Button zuweisenButton = new Button(getTranslation(TranslationConstants.EINSATZ_ZUWEISUNG_BUTTON_ASSIGN));
+        zuweisenButton = new Button(getTranslation(TranslationConstants.EINSATZ_ZUWEISUNG_BUTTON_ASSIGN));
         zuweisenButton.addClickListener(event -> helferZuweisen());
         zuweisenButton.addClassName(ViewStyles.BUTTON);
+        zuweisenButton.setEnabled(false);
 
         verfuegbareHelferTitleBar.add(verfuegbarTitel, zuweisenButton);
 
@@ -163,15 +194,17 @@ public class EinsatzZuweisungView extends VerticalLayout {
         zugewieseneHelferGrid.setDefaultSort(zugewieseneIdColumn, SortDirection.ASCENDING);
 
         zugewieseneHelferGrid.setFilterableItems(zugewieseneHelfer);
+        zugewieseneHelferGrid.addSelectionListener(event -> updateButtonStates());
 
         HorizontalLayout zugewieseneHelferTitleBar = new HorizontalLayout();
 
         H4 zugewiesenTitle = new H4(getTranslation(TranslationConstants.EINSATZ_ZUWEISUNG_ZUGEWIESEN));
         zugewiesenTitle.addClassName(ViewStyles.APP_SUB_TITEL);
 
-        Button entfernenButton = new Button(getTranslation(TranslationConstants.EINSATZ_ZUWEISUNG_BUTTON_UNASSIGN));
+        entfernenButton = new Button(getTranslation(TranslationConstants.EINSATZ_ZUWEISUNG_BUTTON_UNASSIGN));
         entfernenButton.addClickListener(event -> helferEntfernen());
         entfernenButton.addClassName(ViewStyles.BUTTON);
+        entfernenButton.setEnabled(false);
 
         zugewieseneHelferTitleBar.add(zugewiesenTitle, entfernenButton);
 
@@ -186,15 +219,6 @@ public class EinsatzZuweisungView extends VerticalLayout {
         setFlexGrow(1, helferGridsLayout);
     }
 
-    private Grid.Column<HelferDTO> addHelferColumn(FlossrennenGrid<HelferDTO> grid, HelferDTOProperties property) {
-        return grid.addFilterableColumn(getTranslation(property.getTranslationKey()),
-                helferDTO ->
-                        property.getFormattedValue(helferDTO, this::getTranslation, dateTimeFormatter),
-                property.getSchemaKey(),
-                helferDTO ->
-                        String.valueOf(property.getFormattedValue(helferDTO, this::getTranslation, dateTimeFormatter)));
-    }
-
     private void helferZuweisen() {
         EinsatzDTO selectedEinsatz = einsatzGrid.asSingleSelect().getValue();
         HelferDTO selectedHelfer = verfuegbareHelferGrid.asSingleSelect().getValue();
@@ -205,15 +229,15 @@ public class EinsatzZuweisungView extends VerticalLayout {
 
             if (result.isSuccess()) {
                 Notification.show(getTranslation(TranslationConstants.SUCCESS_SAVE));
-                onEinsatzSelected(selectedEinsatz);
-
+                updateEinsatzGrid();
+                verfuegbareHelferGrid.deselectAll();
                 einsatzDTOService.findById(selectedEinsatz.id()).ifPresent(einsatzDTO -> {
                     if (einsatzDTO.status() != EinsatzStatus.OFFEN) {
-                        updateEinsatzGrid();
                         einsatzGrid.deselectAll();
+                        onEinsatzSelected(null);
                     } else {
-                        updateEinsatzGrid();
                         einsatzGrid.select(einsatzDTO);
+                        onEinsatzSelected(einsatzDTO);
                     }
                 });
             } else {
@@ -229,35 +253,13 @@ public class EinsatzZuweisungView extends VerticalLayout {
         if (selectedEinsatz != null && selectedHelfer != null) {
             zuweisungDTOService.deleteByEinsatzIdAndHelferId(selectedEinsatz.id(), selectedHelfer.id());
             Notification.show(getTranslation(TranslationConstants.SUCCESS_DELETE));
-            onEinsatzSelected(selectedEinsatz);
             updateEinsatzGrid();
-            einsatzGrid.select(selectedEinsatz);
+            zugewieseneHelferGrid.deselectAll();
+            einsatzDTOService.findById(selectedEinsatz.id()).ifPresent(einsatzDTO -> {
+                einsatzGrid.select(einsatzDTO);
+                onEinsatzSelected(einsatzDTO);
+            });
         }
-    }
-
-    private void onEinsatzSelected(EinsatzDTO einsatz) {
-        if (einsatz == null) {
-            zugewieseneHelfer.clear();
-            verfuegbareHelfer.clear();
-        } else {
-            List<EinsatzZuweisungDTO> zuweisungen = zuweisungDTOService.findByEinsatzId(einsatz.id());
-            Set<Long> assignedIds = zuweisungen.stream().map(EinsatzZuweisungDTO::helferId).collect(Collectors.toSet());
-
-            List<Long> overlappingHelferIds = zuweisungDTOService.findAllHelferIdsWithOverlappingAssignments(
-                    einsatz.id(), einsatz.startzeit(), einsatz.endzeit());
-
-            List<HelferDTO> allHelfer = helferDTOService.findAll();
-            zugewieseneHelfer.clear();
-            zugewieseneHelfer.addAll(allHelfer.stream()
-                    .filter(helferDTO -> assignedIds.contains(helferDTO.id()))
-                    .toList());
-            verfuegbareHelfer.clear();
-            verfuegbareHelfer.addAll(allHelfer.stream()
-                    .filter(helferDTO -> !assignedIds.contains(helferDTO.id()))
-                    .filter(helferDTO -> !overlappingHelferIds.contains(helferDTO.id()))
-                    .toList());
-        }
-        updateHelperGrids();
     }
 
     private void updateHelperGrids() {
