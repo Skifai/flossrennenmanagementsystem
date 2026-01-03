@@ -42,6 +42,13 @@ CREATE TABLE einsatz
     ressort           BIGINT       NOT NULL REFERENCES ressort (id)
 );
 
+CREATE TABLE einsatz_zuweisung
+(
+    id         BIGSERIAL PRIMARY KEY,
+    einsatz_id BIGINT NOT NULL REFERENCES einsatz (id),
+    helfer_id  BIGINT NOT NULL REFERENCES helfer (id)
+);
+
 CREATE TABLE log
 (
     id        BIGSERIAL PRIMARY KEY,
