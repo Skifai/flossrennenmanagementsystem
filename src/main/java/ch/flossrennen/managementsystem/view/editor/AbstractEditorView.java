@@ -5,6 +5,8 @@ import ch.flossrennen.managementsystem.view.ViewStyles;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -40,6 +42,10 @@ public abstract class AbstractEditorView<DTO> extends Composite<VerticalLayout> 
         try {
             return binder.writeRecord();
         } catch (ValidationException e) {
+            return null;
+        } catch (Exception e) {
+            Notification.show(getTranslation(TranslationConstants.ERROR_SAVE), 5000, Notification.Position.BOTTOM_END)
+                    .addThemeVariants(NotificationVariant.LUMO_ERROR);
             return null;
         }
     }

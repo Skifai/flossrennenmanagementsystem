@@ -55,6 +55,7 @@ public interface TranslationConstants {
     String VALIDATION_UNIQUE_TELEFONNUMMER = "validation.unique.telefonnummer";
     String VALIDATION_UNIQUE_NAME = "validation.unique.name";
     String VALIDATION_ID_NAN = "validation.id.nan";
+    String VALIDATION_EINSATZ_START_BEFORE_END = "validation.einsatz.start.before.end";
     //endregion
 
     //endregion
