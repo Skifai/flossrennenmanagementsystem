@@ -14,7 +14,7 @@ html {
   border-color:rgba(0,0,0,0);
   border-radius:100vh;
   border-style:solid;
-  padding:var(--lumo-space-s);
+    padding: var(--lumo-space-m);
 }
 
 .AppNavbarLayout { padding:var(--lumo-space-s); }

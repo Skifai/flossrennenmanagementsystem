@@ -8,7 +8,7 @@ import ch.flossrennen.managementsystem.view.editor.AbstractEditorView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -45,7 +45,7 @@ public abstract class AbstractContentBaseView<DTO, PROPERTY extends DTOProperty<
         setClassName(ViewStyles.MAIN_VIEW_CONTENT);
         setSizeFull();
 
-        H1 titel = new H1(getTranslation(titleKey));
+        H2 titel = new H2(getTranslation(titleKey));
         titel.addClassName(ViewStyles.APP_TITEL);
         add(titel);
 

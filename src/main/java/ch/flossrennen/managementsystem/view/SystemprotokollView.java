@@ -11,7 +11,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -47,7 +47,7 @@ public class SystemprotokollView extends VerticalLayout {
         setClassName(ViewStyles.MAIN_VIEW_CONTENT);
         setSizeFull();
 
-        H1 titel = new H1(getTranslation(TranslationConstants.SYSTEMPROTOKOLL_TITLE));
+        H2 titel = new H2(getTranslation(TranslationConstants.SYSTEMPROTOKOLL_TITLE));
         titel.addClassName(ViewStyles.APP_TITEL);
         add(titel);
 
