@@ -2,10 +2,16 @@
  * This file has been created by the Vaadin Theme Editor. Please note that
  * manual changes to individual CSS properties may be overwritten by the theme editor.
  */
-html {
-    --lumo-base-color: rgba(0, 133, 201);
-    --lumo-body-text-color: rgba(10, 10, 10, 1);
-    --lumo-header-text-color: rgba(0, 133, 201);
+.AppNavbarLayout {
+    padding: var(--lumo-space-s);
+}
+
+.AppSubTitel {
+    background-color: rgb(255, 255, 255, 1);
+    border-color: rgba(0, 0, 0, 0);
+    border-radius: 100vh;
+    border-style: solid;
+    padding: var(--lumo-space-s);
 }
 
 .AppTitel,
@@ -17,14 +23,22 @@ html {
     padding: var(--lumo-space-m);
 }
 
-.AppNavbarLayout { padding:var(--lumo-space-s); }
+.Button {
+    background-color: rgb(230, 230, 230, 1);
+}
 
 .MainViewContent {
-  background-color:rgba(200,200,200,1);
+    background-color: rgba(200, 200, 200, 1);
 }
 
 .MainViewContentElements {
-  background-color:rgba(255,255,255,1);
+    background-color: rgba(255, 255, 255, 1);
+}
+
+html {
+    --lumo-base-color: rgba(0, 133, 201);
+    --lumo-body-text-color: rgba(10, 10, 10, 1);
+    --lumo-header-text-color: rgba(0, 133, 201);
 }
 
 vaadin-login-form vaadin-login-form-wrapper {

@@ -24,4 +24,5 @@ public interface ViewStyles {
     String DATA_GRID_COLUMN = "DataGridColumn";
     String EDITOR_FIELD = "EditorField";
     String BUTTON = "Button";
+    String APP_SUB_TITEL = "AppSubTitel";
 }

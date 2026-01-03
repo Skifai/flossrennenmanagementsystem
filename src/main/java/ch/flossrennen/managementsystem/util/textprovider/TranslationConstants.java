@@ -16,6 +16,7 @@ public interface TranslationConstants {
     String NAV_RESSORT = "nav.ressort";
     String NAV_BENUTZER = "nav.benutzer";
     String NAV_EINSATZ = "nav.einsatz";
+    String NAV_EINSATZ_ZUWEISUNG = "nav.einsatz.zuweisung";
     String NAV_SYSTEMPROTOKOLL = "nav.systemprotokoll";
     //endregion
 
@@ -56,6 +57,7 @@ public interface TranslationConstants {
     String VALIDATION_UNIQUE_NAME = "validation.unique.name";
     String VALIDATION_ID_NAN = "validation.id.nan";
     String VALIDATION_EINSATZ_START_BEFORE_END = "validation.einsatz.start.before.end";
+    String VALIDATION_EINSATZ_HELFER_OVERLAP = "validation.einsatz.helfer.overlap";
     //endregion
 
     //endregion
@@ -174,6 +176,17 @@ public interface TranslationConstants {
     //region Einsatz View
     String EINSATZ_TITLE = "einsatz.title";
     String EINSATZ_NEW = "einsatz.new";
+    //endregion
+
+    //region Einsatz Zuweisung View
+    String EINSATZ_ZUWEISUNG_TITLE = "einsatz.zuweisung.title";
+    String EINSATZ_ZUWEISUNG_EINSATZ = "einsatz.zuweisung.einsatz";
+    String EINSATZ_ZUWEISUNG_HELFER = "einsatz.zuweisung.helfer";
+    String EINSATZ_ZUWEISUNG_ZUGEWIESEN = "einsatz.zuweisung.zuegewiesen";
+    String EINSATZ_ZUWEISUNG_VERFUEGBAR = "einsatz.zuweisung.verfuegbar";
+    String EINSATZ_ZUWEISUNG_BUTTON_ASSIGN = "einsatz.zuweisung.button.assign";
+    String EINSATZ_ZUWEISUNG_BUTTON_UNASSIGN = "einsatz.zuweisung.button.unassign";
+    String EINSATZ_ZUWEISUNG_MISSING_HELFER = "einsatz.zuweisung.missing.helfer";
     //endregion
 
     //region Systemprotokoll View
