@@ -28,6 +28,20 @@ CREATE TABLE helfer
     ressort       BIGINT              NOT NULL REFERENCES ressort (id)
 );
 
+CREATE TABLE einsatz
+(
+    id                BIGSERIAL PRIMARY KEY,
+    name              VARCHAR(100) NOT NULL,
+    beschreibung      VARCHAR(300) NOT NULL,
+    startzeit         TIMESTAMP    NOT NULL,
+    endzeit           TIMESTAMP    NOT NULL,
+    ort               VARCHAR(150) NOT NULL,
+    einsatzmittel     VARCHAR(200),
+    benoetigte_helfer INTEGER      NOT NULL,
+    status            VARCHAR(50)  NOT NULL,
+    ressort           BIGINT       NOT NULL REFERENCES ressort (id)
+);
+
 CREATE TABLE log
 (
     id        BIGSERIAL PRIMARY KEY,
