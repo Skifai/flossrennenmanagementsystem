@@ -80,7 +80,7 @@ public abstract class AbstractContentBaseView<DTO, PROPERTY extends DTOProperty<
         Grid<DTO> grid = new Grid<>(dtoClass, false);
 
         for (PROPERTY property : allProperties) {
-            grid.addColumn(property.getGetter()::apply)
+            grid.addColumn(dto -> getPropertyValue(dto, property))
                     .setHeader(getTranslation(property.getTranslationKey()))
                     .setKey(property.getSchemaKey())
                     .setSortable(true)
@@ -102,6 +102,10 @@ public abstract class AbstractContentBaseView<DTO, PROPERTY extends DTOProperty<
         });
 
         return grid;
+    }
+
+    protected Object getPropertyValue(DTO dto, PROPERTY property) {
+        return property.getGetter().apply(dto);
     }
 
     protected void updateGrid() {

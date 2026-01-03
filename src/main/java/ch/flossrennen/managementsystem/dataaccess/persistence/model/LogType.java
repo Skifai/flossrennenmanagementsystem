@@ -14,6 +14,9 @@ public enum LogType {
     BENUTZER_CREATED(TranslationConstants.LOG_TYPE_BENUTZER_CREATED),
     BENUTZER_UPDATED(TranslationConstants.LOG_TYPE_BENUTZER_UPDATED),
     BENUTZER_DELETED(TranslationConstants.LOG_TYPE_BENUTZER_DELETED),
+    EINSATZ_CREATED(TranslationConstants.LOG_TYPE_EINSATZ_CREATED),
+    EINSATZ_UPDATED(TranslationConstants.LOG_TYPE_EINSATZ_UPDATED),
+    EINSATZ_DELETED(TranslationConstants.LOG_TYPE_EINSATZ_DELETED),
     APPLICATION_ERROR(TranslationConstants.LOG_TYPE_APPERROR);
 
     private final String translationKey;
