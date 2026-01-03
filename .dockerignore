@@ -1,0 +1,6 @@
+target/
+node_modules/
+.idea/
+.mvn/wrapper/maven-wrapper.jar
+*.log
+.git/

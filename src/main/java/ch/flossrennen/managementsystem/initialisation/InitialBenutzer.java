@@ -4,12 +4,11 @@ import ch.flossrennen.managementsystem.dataaccess.BenutzerDTODataAccess;
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.initialisation.constants.InitialDataConstants;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile({"dev", "test"})
+//@Profile({"dev", "test"})
 @Order(1)
 public class InitialBenutzer implements CommandLineRunner {
 

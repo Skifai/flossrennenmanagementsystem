@@ -10,12 +10,11 @@ import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRoll
 import ch.flossrennen.managementsystem.initialisation.constants.InitialDataConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile({"dev", "test"})
+//@Profile({"dev", "test"})
 @Order(2)
 @RequiredArgsConstructor
 public class InitialData implements CommandLineRunner {
