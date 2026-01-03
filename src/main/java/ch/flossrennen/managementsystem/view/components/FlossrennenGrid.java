@@ -3,6 +3,7 @@ package ch.flossrennen.managementsystem.view.components;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridSortOrder;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.textfield.TextField;
@@ -80,6 +81,7 @@ public class FlossrennenGrid<T> extends Grid<T> {
         if (filterRow == null) {
             getHeaderRows().clear();
             filterRow = appendHeaderRow();
+            addThemeVariants(GridVariant.LUMO_ROW_STRIPES, GridVariant.LUMO_COLUMN_BORDERS);
         }
     }
 
@@ -88,7 +90,7 @@ public class FlossrennenGrid<T> extends Grid<T> {
         textField.setPlaceholder(labelText);
         textField.setValueChangeMode(ValueChangeMode.EAGER);
         textField.setClearButtonVisible(true);
-        textField.addThemeVariants(TextFieldVariant.LUMO_SMALL);
+        textField.addThemeVariants(TextFieldVariant.LUMO_SMALL, TextFieldVariant.LUMO_ALIGN_CENTER);
         textField.setWidthFull();
         textField.getStyle().set("max-width", "100%");
         textField.addValueChangeListener(event -> filterChangeConsumer.accept(event.getValue()));
@@ -114,11 +116,13 @@ public class FlossrennenGrid<T> extends Grid<T> {
     private @NonNull Component createStaticHeader(@NonNull String labelText) {
         TextField textField = new TextField();
         textField.setValue(labelText);
-        textField.addThemeVariants(TextFieldVariant.LUMO_SMALL);
+        textField.addThemeVariants(TextFieldVariant.LUMO_SMALL, TextFieldVariant.LUMO_ALIGN_CENTER);
         textField.setWidthFull();
         textField.getStyle().set("max-width", "100%");
         textField.setReadOnly(true);
-        textField.getStyle().set("color", "var(--lumo-secondary-text-color)");
+        textField.getStyle().set("color", "var(--lumo-header-text-color)");
+        textField.getStyle().set("font-weight", "bold");
+        textField.getStyle().set("pointer-events", "none");
 
         return textField;
     }

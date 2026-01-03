@@ -57,3 +57,38 @@ vaadin-side-nav-item::part(content) {
 }
 
 vaadin-side-nav.MainViewSideNav { padding:var(--lumo-space-s); }
+
+/* Grid Styles */
+.DataGrid {
+    background-color: rgb(255, 255, 255, 1);
+    border: 1px solid var(--lumo-contrast-10pct);
+    overflow: hidden;
+}
+
+.DataGrid::part(header-cell) {
+    background-color: rgb(255, 255, 255, 1);
+    color: black;
+    font-weight: bold;
+    border-bottom: 1px solid var(--lumo-contrast-10pct);
+}
+
+.DataGrid::part(row)[selected] {
+    background-color: var(--lumo-primary-color-50pct) !important;
+    color: var(--lumo-primary-contrast-color) !important;
+}
+
+.DataGrid::part(cell) {
+    background-color: rgb(255, 255, 255, 1);
+    padding: var(--lumo-space-s);
+}
+
+.DataGrid vaadin-text-field {
+    --lumo-contrast-10pct: transparent;
+    background-color: transparent;
+    border-radius: var(--lumo-border-radius-s);
+    margin: 0;
+}
+
+.DataGrid vaadin-text-field::part(input-field) {
+    background-color: transparent;
+}
