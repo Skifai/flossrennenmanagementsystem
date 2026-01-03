@@ -37,11 +37,17 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Prepare Docker Metadata
+        id: meta
+        run: |
+          REPO_NAME_LC=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          echo "repo_name_lc=$REPO_NAME_LC" >> $GITHUB_OUTPUT
+
       - name: Build Docker Image
         uses: docker/build-push-action@v5
         with:
           context: .
-          tags: ghcr.io/${{ github.repository }}:latest
+          tags: ghcr.io/${{ steps.meta.outputs.repo_name_lc }}:latest
           outputs: type=docker,dest=/tmp/flossrennen-image.tar
 
       - name: Upload Docker Image Artifact
