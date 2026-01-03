@@ -165,4 +165,67 @@ public interface InitialDataConstants {
     String FINANZEN_HELFER3_NACHNAME = "Stucki";
     String FINANZEN_HELFER3_EMAIL = "oliver.stucki@example.ch";
     String FINANZEN_HELFER3_TEL = "078 987 65 14";
+
+    // Einsätze
+    String EINSATZ_DATE = "2026-05-11";
+
+    String EINSATZ_VERKEHR_1_NAME = "Parkdienst Vormittag";
+    String EINSATZ_VERKEHR_1_DESC = "Einweisung der Teilnehmerfahrzeuge auf die Parkplätze.";
+    String EINSATZ_VERKEHR_1_START = "07:00";
+    String EINSATZ_VERKEHR_1_END = "12:00";
+    String EINSATZ_VERKEHR_1_ORT = "Parkplatz Sitter";
+
+    String EINSATZ_VERKEHR_2_NAME = "Strassensperrung Nachmittag";
+    String EINSATZ_VERKEHR_2_DESC = "Überwachung der Strassensperren während des Hauptrennens.";
+    String EINSATZ_VERKEHR_2_START = "13:00";
+    String EINSATZ_VERKEHR_2_END = "18:00";
+    String EINSATZ_VERKEHR_2_ORT = "Hauptstrasse / Sitterbrücke";
+
+    String EINSATZ_RENNLEITUNG_1_NAME = "Zeitmessung Block 1";
+    String EINSATZ_RENNLEITUNG_1_DESC = "Bedienung der Zeitmessanlage für die erste Gruppe.";
+    String EINSATZ_RENNLEITUNG_1_START = "09:00";
+    String EINSATZ_RENNLEITUNG_1_END = "11:30";
+    String EINSATZ_RENNLEITUNG_1_ORT = "Zielbereich";
+
+    String EINSATZ_RENNLEITUNG_2_NAME = "Zeitmessung Block 2";
+    String EINSATZ_RENNLEITUNG_2_DESC = "Bedienung der Zeitmessanlage für die zweite Gruppe (Überschneidet Block 1).";
+    String EINSATZ_RENNLEITUNG_2_START = "11:00";
+    String EINSATZ_RENNLEITUNG_2_END = "14:00";
+    String EINSATZ_RENNLEITUNG_2_ORT = "Zielbereich";
+
+    String EINSATZ_FESTWIRTSCHAFT_1_NAME = "Mittagsservice";
+    String EINSATZ_FESTWIRTSCHAFT_1_DESC = "Ausgabe von Speisen und Getränken während der Mittagszeit.";
+    String EINSATZ_FESTWIRTSCHAFT_1_START = "11:00";
+    String EINSATZ_FESTWIRTSCHAFT_1_END = "14:30";
+    String EINSATZ_FESTWIRTSCHAFT_1_ORT = "Festzelt";
+
+    String EINSATZ_FESTWIRTSCHAFT_2_NAME = "Abendservice";
+    String EINSATZ_FESTWIRTSCHAFT_2_DESC = "Bewirtung der Gäste nach dem Rennen.";
+    String EINSATZ_FESTWIRTSCHAFT_2_START = "17:00";
+    String EINSATZ_FESTWIRTSCHAFT_2_END = "22:00";
+    String EINSATZ_FESTWIRTSCHAFT_2_ORT = "Festzelt";
+
+    String EINSATZ_BAU_1_NAME = "Letzte Vorbereitungen";
+    String EINSATZ_BAU_1_DESC = "Kontrolle der Absperrungen und Stromversorgung.";
+    String EINSATZ_BAU_1_START = "06:00";
+    String EINSATZ_BAU_1_END = "09:00";
+    String EINSATZ_BAU_1_ORT = "Eventareal";
+
+    String EINSATZ_BAU_2_NAME = "Sofortreparaturen";
+    String EINSATZ_BAU_2_DESC = "Bereitschaft für technische Defekte (Überschneidet Vorbereitungen).";
+    String EINSATZ_BAU_2_START = "08:30";
+    String EINSATZ_BAU_2_END = "12:00";
+    String EINSATZ_BAU_2_ORT = "Werkstatt / Areal";
+
+    String EINSATZ_FINANZEN_1_NAME = "Tageskasse Vormittag";
+    String EINSATZ_FINANZEN_1_DESC = "Verkauf von Eintrittskarten und Programmen.";
+    String EINSATZ_FINANZEN_1_START = "08:00";
+    String EINSATZ_FINANZEN_1_END = "13:00";
+    String EINSATZ_FINANZEN_1_ORT = "Eingang Nord";
+
+    String EINSATZ_FINANZEN_2_NAME = "Tageskasse Nachmittag";
+    String EINSATZ_FINANZEN_2_DESC = "Verkauf von Eintrittskarten und Programmen.";
+    String EINSATZ_FINANZEN_2_START = "13:00";
+    String EINSATZ_FINANZEN_2_END = "17:00";
+    String EINSATZ_FINANZEN_2_ORT = "Eingang Nord";
 }

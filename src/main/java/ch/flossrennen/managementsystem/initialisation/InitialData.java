@@ -1,17 +1,23 @@
 package ch.flossrennen.managementsystem.initialisation;
 
 import ch.flossrennen.managementsystem.dataaccess.BenutzerDTODataAccess;
+import ch.flossrennen.managementsystem.dataaccess.EinsatzDTODataAccess;
 import ch.flossrennen.managementsystem.dataaccess.HelferDTODataAccess;
 import ch.flossrennen.managementsystem.dataaccess.RessortDTODataAccess;
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
+import ch.flossrennen.managementsystem.dataaccess.dto.EinsatzDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
 import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.EinsatzStatus;
 import ch.flossrennen.managementsystem.initialisation.constants.InitialDataConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Component
 //@Profile({"dev", "test"})
@@ -22,10 +28,11 @@ public class InitialData implements CommandLineRunner {
     private final BenutzerDTODataAccess benutzerDTODataAccess;
     private final RessortDTODataAccess ressortDTODataAccess;
     private final HelferDTODataAccess helferDTODataAccess;
+    private final EinsatzDTODataAccess einsatzDTODataAccess;
 
     @Override
     public void run(String... args) throws Exception {
-        if (benutzerDTODataAccess.findAll().size() > 1 || !ressortDTODataAccess.findAll().isEmpty() || !helferDTODataAccess.findAll().isEmpty()) {
+        if (benutzerDTODataAccess.findAll().size() > 1 || !ressortDTODataAccess.findAll().isEmpty() || !helferDTODataAccess.findAll().isEmpty() || !einsatzDTODataAccess.findAll().isEmpty()) {
             return;
         }
 
@@ -256,5 +263,118 @@ public class InitialData implements CommandLineRunner {
                         InitialDataConstants.FINANZEN_HELFER3_EMAIL,
                         InitialDataConstants.FINANZEN_HELFER3_TEL,
                         r5));
+
+        // Einsätze
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        einsatzDTODataAccess.save(new EinsatzDTO(null,
+                InitialDataConstants.EINSATZ_VERKEHR_1_NAME,
+                InitialDataConstants.EINSATZ_VERKEHR_1_DESC,
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_VERKEHR_1_START, formatter),
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_VERKEHR_1_END, formatter),
+                InitialDataConstants.EINSATZ_VERKEHR_1_ORT,
+                null,
+                2,
+                EinsatzStatus.ERSTELLT,
+                r1));
+
+        einsatzDTODataAccess.save(new EinsatzDTO(null,
+                InitialDataConstants.EINSATZ_VERKEHR_2_NAME,
+                InitialDataConstants.EINSATZ_VERKEHR_2_DESC,
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_VERKEHR_2_START, formatter),
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_VERKEHR_2_END, formatter),
+                InitialDataConstants.EINSATZ_VERKEHR_2_ORT,
+                null,
+                4,
+                EinsatzStatus.ERSTELLT,
+                r1));
+
+        einsatzDTODataAccess.save(new EinsatzDTO(null,
+                InitialDataConstants.EINSATZ_RENNLEITUNG_1_NAME,
+                InitialDataConstants.EINSATZ_RENNLEITUNG_1_DESC,
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_RENNLEITUNG_1_START, formatter),
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_RENNLEITUNG_1_END, formatter),
+                InitialDataConstants.EINSATZ_RENNLEITUNG_1_ORT,
+                "Zeitmessanlage",
+                3,
+                EinsatzStatus.OFFEN,
+                r2));
+
+        einsatzDTODataAccess.save(new EinsatzDTO(null,
+                InitialDataConstants.EINSATZ_RENNLEITUNG_2_NAME,
+                InitialDataConstants.EINSATZ_RENNLEITUNG_2_DESC,
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_RENNLEITUNG_2_START, formatter),
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_RENNLEITUNG_2_END, formatter),
+                InitialDataConstants.EINSATZ_RENNLEITUNG_2_ORT,
+                "Zeitmessanlage",
+                3,
+                EinsatzStatus.ERSTELLT,
+                r2));
+
+        einsatzDTODataAccess.save(new EinsatzDTO(null,
+                InitialDataConstants.EINSATZ_FESTWIRTSCHAFT_1_NAME,
+                InitialDataConstants.EINSATZ_FESTWIRTSCHAFT_1_DESC,
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_FESTWIRTSCHAFT_1_START, formatter),
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_FESTWIRTSCHAFT_1_END, formatter),
+                InitialDataConstants.EINSATZ_FESTWIRTSCHAFT_1_ORT,
+                "Grill, Fritteuse",
+                5,
+                EinsatzStatus.OFFEN,
+                r3));
+
+        einsatzDTODataAccess.save(new EinsatzDTO(null,
+                InitialDataConstants.EINSATZ_FESTWIRTSCHAFT_2_NAME,
+                InitialDataConstants.EINSATZ_FESTWIRTSCHAFT_2_DESC,
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_FESTWIRTSCHAFT_2_START, formatter),
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_FESTWIRTSCHAFT_2_END, formatter),
+                InitialDataConstants.EINSATZ_FESTWIRTSCHAFT_2_ORT,
+                "Grill, Zapfanlage",
+                8,
+                EinsatzStatus.ERSTELLT,
+                r3));
+
+        einsatzDTODataAccess.save(new EinsatzDTO(null,
+                InitialDataConstants.EINSATZ_BAU_1_NAME,
+                InitialDataConstants.EINSATZ_BAU_1_DESC,
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_BAU_1_START, formatter),
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_BAU_1_END, formatter),
+                InitialDataConstants.EINSATZ_BAU_1_ORT,
+                "Werkzeugkiste",
+                2,
+                EinsatzStatus.ABGESCHLOSSEN,
+                r4));
+
+        einsatzDTODataAccess.save(new EinsatzDTO(null,
+                InitialDataConstants.EINSATZ_BAU_2_NAME,
+                InitialDataConstants.EINSATZ_BAU_2_DESC,
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_BAU_2_START, formatter),
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_BAU_2_END, formatter),
+                InitialDataConstants.EINSATZ_BAU_2_ORT,
+                "Funkgerät",
+                1,
+                EinsatzStatus.OFFEN,
+                r4));
+
+        einsatzDTODataAccess.save(new EinsatzDTO(null,
+                InitialDataConstants.EINSATZ_FINANZEN_1_NAME,
+                InitialDataConstants.EINSATZ_FINANZEN_1_DESC,
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_FINANZEN_1_START, formatter),
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_FINANZEN_1_END, formatter),
+                InitialDataConstants.EINSATZ_FINANZEN_1_ORT,
+                "Kasse",
+                2,
+                EinsatzStatus.OFFEN,
+                r5));
+
+        einsatzDTODataAccess.save(new EinsatzDTO(null,
+                InitialDataConstants.EINSATZ_FINANZEN_2_NAME,
+                InitialDataConstants.EINSATZ_FINANZEN_2_DESC,
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_FINANZEN_2_START, formatter),
+                LocalDateTime.parse(InitialDataConstants.EINSATZ_DATE + " " + InitialDataConstants.EINSATZ_FINANZEN_2_END, formatter),
+                InitialDataConstants.EINSATZ_FINANZEN_2_ORT,
+                "Kasse",
+                2,
+                EinsatzStatus.ERSTELLT,
+                r5));
     }
 }
