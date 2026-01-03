@@ -3,32 +3,30 @@ package ch.flossrennen.managementsystem.view;
 import ch.flossrennen.managementsystem.dataaccess.dto.DTOProperty;
 import ch.flossrennen.managementsystem.service.DTOService;
 import ch.flossrennen.managementsystem.util.CheckResult;
-import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
+import ch.flossrennen.managementsystem.view.components.FlossrennenGrid;
 import ch.flossrennen.managementsystem.view.editor.AbstractEditorView;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.SortDirection;
 import org.jspecify.annotations.NonNull;
 
-import java.util.Set;
+import java.time.format.DateTimeFormatter;
 import java.util.function.Supplier;
 
 public abstract class AbstractContentBaseView<DTO, PROPERTY extends DTOProperty<DTO>> extends VerticalLayout {
 
     protected final DTOService<DTO> dtoService;
-    protected final Grid<DTO> grid;
-    protected final TextField fieldFilter;
+    protected final FlossrennenGrid<DTO> grid;
     protected final AbstractEditorView<DTO> editor;
     protected final Class<DTO> dtoClass;
     protected final PROPERTY[] allProperties;
     protected final Supplier<DTO> emptyDTOSupplier;
+    protected final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public AbstractContentBaseView(DTOService<DTO> dtoService,
                                    Class<DTO> dtoClass,
@@ -49,12 +47,6 @@ public abstract class AbstractContentBaseView<DTO, PROPERTY extends DTOProperty<
         titel.addClassName(ViewStyles.APP_TITEL);
         add(titel);
 
-        fieldFilter = new TextField();
-        fieldFilter.addClassName(ViewStyles.FIELD_FILTER);
-        fieldFilter.setPlaceholder(getTranslation(TranslationConstants.FILTER));
-        fieldFilter.setPrefixComponent(VaadinIcon.SEARCH.create());
-        fieldFilter.setClearButtonVisible(true);
-
         editor = createEditor();
         editor.addClassName(ViewStyles.EDITOR_VIEW);
         editor.setVisible(false);
@@ -63,10 +55,9 @@ public abstract class AbstractContentBaseView<DTO, PROPERTY extends DTOProperty<
         editor.setDeleteListener(this::deleteDTO);
 
         Button newButton = new Button(getTranslation(newButtonLabelKey), VaadinIcon.PLUS.create());
-        newButton.addClickListener(e -> editDTO(emptyDTOSupplier.get()));
+        newButton.addClickListener(event -> editDTO(emptyDTOSupplier.get()));
 
-        HorizontalLayout actionBar = new HorizontalLayout(newButton, fieldFilter);
-        add(actionBar, editor);
+        add(newButton, editor);
 
         grid = createGrid();
         grid.addClassName(ViewStyles.DATA_GRID);
@@ -76,40 +67,40 @@ public abstract class AbstractContentBaseView<DTO, PROPERTY extends DTOProperty<
 
     protected abstract @NonNull AbstractEditorView<DTO> createEditor();
 
-    private @NonNull Grid<DTO> createGrid() {
-        Grid<DTO> grid = new Grid<>(dtoClass, false);
+    private @NonNull FlossrennenGrid<DTO> createGrid() {
+        FlossrennenGrid<DTO> grid = new FlossrennenGrid<>(dtoClass);
 
+        Grid.Column<DTO> firstColumn = null;
         for (PROPERTY property : allProperties) {
-            grid.addColumn(dto -> getPropertyValue(dto, property))
-                    .setHeader(getTranslation(property.getTranslationKey()))
-                    .setKey(property.getSchemaKey())
-                    .setSortable(true)
-                    .setAutoWidth(true)
-                    .setFlexGrow(0)
-                    .setResizable(true);
+            Grid.Column<DTO> column = grid.addFilterableColumn(getTranslation(property.getTranslationKey()),
+                    dto -> getDisplayValue(dto, property),
+                    property.getSchemaKey(),
+                    dto -> String.valueOf(getDisplayValue(dto, property)));
+
+            column.setSortable(property.isSortable());
+
+            if (firstColumn == null) {
+                firstColumn = column;
+            }
+        }
+        if (firstColumn != null) {
+            grid.setDefaultSort(firstColumn, SortDirection.ASCENDING);
         }
         grid.asSingleSelect().addValueChangeListener(event -> editDTO(event.getValue()));
 
-        CheckboxGroup<PROPERTY> checkboxGroup = new CheckboxGroup<>();
-        checkboxGroup.setItems(allProperties);
-        checkboxGroup.setItemLabelGenerator(property -> getTranslation(property.getTranslationKey()));
-        checkboxGroup.addValueChangeListener(event -> {
-            Set<PROPERTY> selectedProperties = event.getValue();
-            for (PROPERTY property : allProperties) {
-                boolean visible = selectedProperties.contains(property);
-                grid.getColumnByKey(property.getSchemaKey()).setVisible(visible);
-            }
-        });
-
         return grid;
+    }
+
+    protected void updateGrid() {
+        grid.setFilterableItems(dtoService.findAll());
     }
 
     protected Object getPropertyValue(DTO dto, PROPERTY property) {
         return property.getGetter().apply(dto);
     }
 
-    protected void updateGrid() {
-        grid.setItems(dtoService.findAll());
+    protected Object getDisplayValue(DTO dto, PROPERTY property) {
+        return property.getFormattedValue(dto, this::getTranslation, dateTimeFormatter);
     }
 
     protected void saveDTO(DTO dto) {
