@@ -15,6 +15,7 @@ public interface TranslationConstants {
     String NAV_HELFER = "nav.helfer";
     String NAV_RESSORT = "nav.ressort";
     String NAV_BENUTZER = "nav.benutzer";
+    String NAV_EINSATZ = "nav.einsatz";
     String NAV_SYSTEMPROTOKOLL = "nav.systemprotokoll";
     //endregion
 
@@ -87,6 +88,22 @@ public interface TranslationConstants {
     String RESSORT_RESSORTLEITUNG = "ressort.ressortleitung";
     //endregion
 
+    //region Einsatz
+    String EINSATZ_ID = "einsatz.id";
+    String EINSATZ_NAME = "einsatz.name";
+    String EINSATZ_BESCHREIBUNG = "einsatz.beschreibung";
+    String EINSATZ_STARTZEIT = "einsatz.startzeit";
+    String EINSATZ_ENDZEIT = "einsatz.endzeit";
+    String EINSATZ_ORT = "einsatz.ort";
+    String EINSATZ_MITTEL = "einsatz.mittel";
+    String EINSATZ_BENOETIGTE_HELFER = "einsatz.benoetigte.helfer";
+    String EINSATZ_STATUS = "einsatz.status";
+    String EINSATZ_STATUS_ERSTELLT = "einsatz.status.erstellt";
+    String EINSATZ_STATUS_OFFEN = "einsatz.status.offen";
+    String EINSATZ_STATUS_ABGESCHLOSSEN = "einsatz.status.abgeschlossen";
+    String EINSATZ_RESSORT = "einsatz.ressort";
+    //endregion
+
     //region LogEntry
     String LOG_ID = "log.id";
     String LOG_TIMESTAMP = "log.timestamp";
@@ -115,6 +132,9 @@ public interface TranslationConstants {
     String LOG_TYPE_BENUTZER_CREATED = "log.type.benutzer.created";
     String LOG_TYPE_BENUTZER_UPDATED = "log.type.benutzer.updated";
     String LOG_TYPE_BENUTZER_DELETED = "log.type.benutzer.deleted";
+    String LOG_TYPE_EINSATZ_CREATED = "log.type.einsatz.created";
+    String LOG_TYPE_EINSATZ_UPDATED = "log.type.einsatz.updated";
+    String LOG_TYPE_EINSATZ_DELETED = "log.type.einsatz.deleted";
     String LOG_TYPE_APPERROR = "log.type.apperror";
     //endregion
 
@@ -148,6 +168,11 @@ public interface TranslationConstants {
     //region Benutzer View
     String BENUTZER_TITLE = "benutzer.title";
     String BENUTZER_NEW = "benutzer.new";
+    //endregion
+
+    //region Einsatz View
+    String EINSATZ_TITLE = "einsatz.title";
+    String EINSATZ_NEW = "einsatz.new";
     //endregion
 
     //region Systemprotokoll View
