@@ -3,7 +3,6 @@ package ch.flossrennen.managementsystem.logging;
 import ch.flossrennen.managementsystem.dataaccess.LogDTODataAccess;
 import ch.flossrennen.managementsystem.dataaccess.dto.DTOProperty;
 import ch.flossrennen.managementsystem.dataaccess.dto.LogDTO;
-import ch.flossrennen.managementsystem.dataaccess.persistence.model.EinsatzStatus;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.LogLevel;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.LogType;
 import ch.flossrennen.managementsystem.util.textprovider.StringConstants;
@@ -43,8 +42,8 @@ public class LogService {
     public <DTO, PROPERTY extends DTOProperty<DTO>> String createChangeMessage(String header, DTO oldDTO, DTO newDTO, PROPERTY[] properties) {
         StringBuilder stringBuilder = new StringBuilder(header);
         for (PROPERTY property : properties) {
-            Object oldValue = formatValue(property.getGetter().apply(oldDTO));
-            Object newValue = formatValue(property.getGetter().apply(newDTO));
+            Object oldValue = property.getFormattedValue(oldDTO, textProvider::getTranslation, null);
+            Object newValue = property.getFormattedValue(newDTO, textProvider::getTranslation, null);
 
             if (!Objects.equals(oldValue, newValue)) {
                 stringBuilder.append(StringConstants.LINE_BREAK);
@@ -58,23 +57,10 @@ public class LogService {
         return stringBuilder.toString();
     }
 
-    private Object formatValue(Object value) {
-        if (value instanceof EinsatzStatus status) {
-            return textProvider.getTranslation(status.getTranslationKey());
-        }
-        if (value instanceof LogType type) {
-            return textProvider.getTranslation(type.getTranslationKey());
-        }
-        if (value instanceof LogLevel level) {
-            return textProvider.getTranslation(level.getTranslationKey());
-        }
-        return value;
-    }
-
     public <DTO, PROPERTY extends DTOProperty<DTO>> String createMessage(String header, DTO dto, PROPERTY[] properties) {
         StringBuilder stringBuilder = new StringBuilder(header);
         for (PROPERTY property : properties) {
-            Object value = formatValue(property.getGetter().apply(dto));
+            Object value = property.getFormattedValue(dto, textProvider::getTranslation, null);
             if (value != null && !value.toString().isEmpty()) {
                 stringBuilder.append(StringConstants.LINE_BREAK);
                 stringBuilder.append(textProvider.getTranslation(property.getTranslationKey()))

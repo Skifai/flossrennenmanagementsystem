@@ -103,18 +103,18 @@ public class SystemprotokollView extends VerticalLayout {
 
         for (LogDTOProperties property : LogDTOProperties.values()) {
             Grid.Column<LogDTO> column;
-            switch (property) {
-                case TIMESTAMP -> column = grid.addColumn(new LocalDateTimeRenderer<>(LogDTO::timestamp));
-                case MESSAGE -> column = grid.addColumn(new ComponentRenderer<>(logDTO -> {
+            if (property == LogDTOProperties.TIMESTAMP) {
+                column = grid.addColumn(new LocalDateTimeRenderer<>(LogDTO::timestamp));
+            } else if (property == LogDTOProperties.MESSAGE) {
+                column = grid.addColumn(new ComponentRenderer<>(logDTO -> {
                     Span span = new Span(logDTO.message());
                     span.getStyle().set("white-space", "pre-wrap");
                     return span;
                 }));
-                case TYPE -> column = grid.addColumn(logDTO -> getTranslation(logDTO.type().getTranslationKey()));
-                case LOG_LEVEL ->
-                        column = grid.addColumn(logDTO -> getTranslation(logDTO.logLevel().getTranslationKey()));
-                default -> column = grid.addColumn(property.getGetter()::apply);
+            } else {
+                column = grid.addColumn(logDTO -> property.getFormattedValue(logDTO, this::getTranslation, null));
             }
+
             column.setHeader(getTranslation(property.getTranslationKey()))
                     .setKey(property.getSchemaKey())
                     .setResizable(true)
