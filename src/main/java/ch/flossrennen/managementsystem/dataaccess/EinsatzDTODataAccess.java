@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementierung des Datenzugriffs für Einsatz-DTOs.
+ */
 @Component
 public class EinsatzDTODataAccess implements DTODataAccess<EinsatzDTO> {
     private final EinsatzRepository einsatzRepository;
@@ -25,6 +28,14 @@ public class EinsatzDTODataAccess implements DTODataAccess<EinsatzDTO> {
     private final TextProvider textProvider;
     private final LogService logService;
 
+    /**
+     * Erstellt eine neue EinsatzDTODataAccess-Instanz.
+     *
+     * @param einsatzRepository Das Repository für Einsatz-Entitäten.
+     * @param einsatzDTOMapper  Der Mapper zwischen Einsatz-Entität und DTO.
+     * @param textProvider      Der TextProvider für Übersetzungen.
+     * @param logService        Der Service für Protokollierungen.
+     */
     public EinsatzDTODataAccess(EinsatzRepository einsatzRepository, DTOMapper<Einsatz, EinsatzDTO> einsatzDTOMapper, TextProvider textProvider, LogService logService) {
         this.einsatzRepository = einsatzRepository;
         this.einsatzDTOMapper = einsatzDTOMapper;
@@ -32,6 +43,7 @@ public class EinsatzDTODataAccess implements DTODataAccess<EinsatzDTO> {
         this.logService = logService;
     }
 
+    @Override
     @NonNull
     public List<EinsatzDTO> findAll() {
         return einsatzRepository.findAll().stream()
@@ -39,11 +51,13 @@ public class EinsatzDTODataAccess implements DTODataAccess<EinsatzDTO> {
                 .toList();
     }
 
+    @Override
     @NonNull
     public Optional<EinsatzDTO> findById(@NonNull Long id) {
         return einsatzRepository.findById(id).map(einsatzDTOMapper::toDTO);
     }
 
+    @Override
     @NonNull
     @Transactional
     public CheckResult<Void> deleteById(@NonNull Long id) {

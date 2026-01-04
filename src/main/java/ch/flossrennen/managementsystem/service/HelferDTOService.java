@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service für die Verwaltung von Helfer-DTOs.
+ */
 @Service
 public class HelferDTOService implements DTOService<HelferDTO> {
 
@@ -19,6 +22,13 @@ public class HelferDTOService implements DTOService<HelferDTO> {
     private final Validator<HelferDTO> helferValidator;
     private final TextProvider textProvider;
 
+    /**
+     * Erstellt einen neuen HelferDTOService.
+     *
+     * @param helferDTODataAccess Der Datenzugriff für Helfer-DTOs.
+     * @param helferValidator     Der Validator für Helfer-DTOs.
+     * @param textProvider        Der TextProvider für Übersetzungen.
+     */
     public HelferDTOService(DTODataAccess<HelferDTO> helferDTODataAccess,
                             Validator<HelferDTO> helferValidator,
                             TextProvider textProvider) {
@@ -43,7 +53,6 @@ public class HelferDTOService implements DTOService<HelferDTO> {
         return helferDTODataAccess.findById(id);
     }
 
-    // TODO: Implement Filtering for HelferDTOs
     @Override
     @NonNull
     public List<HelferDTO> findAll() {

@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementierung des Datenzugriffs für Ressort-DTOs.
+ */
 @Component
 public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
     private final RessortRepository ressortRepository;
@@ -25,6 +28,14 @@ public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
     private final TextProvider textProvider;
     private final LogService logService;
 
+    /**
+     * Erstellt eine neue RessortDTODataAccess-Instanz.
+     *
+     * @param ressortRepository Das Repository für Ressort-Entitäten.
+     * @param ressortDTOMapper  Der Mapper zwischen Ressort-Entität und DTO.
+     * @param textProvider      Der TextProvider für Übersetzungen.
+     * @param logService        Der Service für Protokollierungen.
+     */
     public RessortDTODataAccess(RessortRepository ressortRepository, DTOMapper<Ressort, RessortDTO> ressortDTOMapper, TextProvider textProvider, LogService logService) {
         this.ressortRepository = ressortRepository;
         this.ressortDTOMapper = ressortDTOMapper;
@@ -32,6 +43,7 @@ public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
         this.logService = logService;
     }
 
+    @Override
     @NonNull
     public List<RessortDTO> findAll() {
         return ressortRepository.findAll().stream()
@@ -39,16 +51,13 @@ public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
                 .toList();
     }
 
+    @Override
     @NonNull
     public Optional<RessortDTO> findById(@NonNull Long id) {
         return ressortRepository.findById(id).map(ressortDTOMapper::toDTO);
     }
 
-    @NonNull
-    public Optional<RessortDTO> findByName(@NonNull String name) {
-        return ressortRepository.findByName(name).map(ressortDTOMapper::toDTO);
-    }
-
+    @Override
     @NonNull
     @Transactional
     public CheckResult<Void> deleteById(@NonNull Long id) {
@@ -69,6 +78,17 @@ public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
             logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, e.getMessage());
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
         }
+    }
+
+    /**
+     * Findet ein Ressort anhand seines Namens.
+     *
+     * @param name Der Name des Ressorts.
+     * @return Ein Optional mit dem Ressort-DTO.
+     */
+    @NonNull
+    public Optional<RessortDTO> findByName(@NonNull String name) {
+        return ressortRepository.findByName(name).map(ressortDTOMapper::toDTO);
     }
 
     @NonNull

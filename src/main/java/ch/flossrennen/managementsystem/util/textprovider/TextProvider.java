@@ -11,18 +11,31 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Provider für Internationalisierung (i18n) und Übersetzungen.
+ * Implementiert das I18NProvider-Interface von Vaadin.
+ */
 @Component
 public class TextProvider implements I18NProvider {
 
+    /**
+     * Gibt die unterstützten Locales zurück.
+     *
+     * @return Eine Liste der unterstützten Locales.
+     */
     @Override
     public List<Locale> getProvidedLocales() {
         return List.of(Locale.GERMAN);
     }
 
-    public String getTranslation(String key, Object... params) {
-        return getTranslation(key, getCurrentLocale(), params);
-    }
-
+    /**
+     * Holt die Übersetzung für den angegebenen Schlüssel und die angegebene Locale.
+     *
+     * @param key Der Übersetzungsschlüssel.
+     * @param locale Die Locale, für die die Übersetzung abgerufen werden soll.
+     * @param params Optionale Parameter für die Formatierung der Nachricht.
+     * @return Die übersetzte Nachricht.
+     */
     @Override
     public String getTranslation(String key, Locale locale, Object... params) {
         ResourceBundle bundle = ResourceBundle.getBundle(ResourceConstants.TRANSLATION_PATH, locale);
@@ -31,6 +44,17 @@ public class TextProvider implements I18NProvider {
             return String.format(value, params);
         }
         return value;
+    }
+
+    /**
+     * Holt die Übersetzung für den angegebenen Schlüssel basierend auf der aktuellen Locale.
+     *
+     * @param key    Der Übersetzungsschlüssel.
+     * @param params Optionale Parameter für die Formatierung der Nachricht.
+     * @return Die übersetzte Nachricht.
+     */
+    public String getTranslation(String key, Object... params) {
+        return getTranslation(key, getCurrentLocale(), params);
     }
 
     private Locale getCurrentLocale() {

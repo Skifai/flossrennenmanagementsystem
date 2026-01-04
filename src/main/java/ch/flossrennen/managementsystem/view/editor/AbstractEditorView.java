@@ -15,6 +15,9 @@ import com.vaadin.flow.data.binder.ValidationException;
 import lombok.Setter;
 import org.jspecify.annotations.NonNull;
 
+/**
+ * Basisklasse für Editor-Komponenten, die DTOs bearbeiten können.
+ */
 public abstract class AbstractEditorView<DTO> extends Composite<VerticalLayout> {
 
     protected final Binder<DTO> binder;
@@ -26,6 +29,11 @@ public abstract class AbstractEditorView<DTO> extends Composite<VerticalLayout> 
     @Setter
     protected DeleteListener<DTO> deleteListener;
 
+    /**
+     * Erstellt einen neuen AbstractEditorView.
+     *
+     * @param dtoClass Die Klasse des DTO-Typs.
+     */
     public AbstractEditorView(Class<DTO> dtoClass) {
         this.binder = new BeanValidationBinder<>(dtoClass);
 
@@ -38,6 +46,11 @@ public abstract class AbstractEditorView<DTO> extends Composite<VerticalLayout> 
         layout.add(buttonLayout);
     }
 
+    /**
+     * Extrahiert das DTO aus dem Binder.
+     *
+     * @return Das aktualisierte DTO oder null bei Validierungsfehlern.
+     */
     public DTO getDTO() {
         try {
             return binder.writeRecord();
@@ -50,6 +63,11 @@ public abstract class AbstractEditorView<DTO> extends Composite<VerticalLayout> 
         }
     }
 
+    /**
+     * Setzt das DTO für den Editor und liest die Werte in den Binder ein.
+     *
+     * @param dto Das zu bearbeitende DTO.
+     */
     public void setDTO(DTO dto) {
         this.dto = dto;
         binder.readBean(dto);

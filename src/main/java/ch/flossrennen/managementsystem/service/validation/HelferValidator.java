@@ -10,11 +10,20 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+/**
+ * Validator für Helfer-DTOs.
+ */
 @Component
 public class HelferValidator implements Validator<HelferDTO> {
     private final HelferDTODataAccess helferDTODataAccess;
     private final TextProvider textProvider;
 
+    /**
+     * Erstellt einen neuen HelferValidator.
+     *
+     * @param helferDTODataAccess Der Datenzugriff für Helfer-DTOs.
+     * @param textProvider        Der TextProvider für Übersetzungen.
+     */
     public HelferValidator(HelferDTODataAccess helferDTODataAccess, TextProvider textProvider) {
         this.helferDTODataAccess = helferDTODataAccess;
         this.textProvider = textProvider;

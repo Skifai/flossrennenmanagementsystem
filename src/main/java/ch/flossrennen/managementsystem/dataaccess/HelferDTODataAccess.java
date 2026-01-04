@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementierung des Datenzugriffs für Helfer-DTOs.
+ */
 @Component
 public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
     private final HelferRepository helferRepository;
@@ -25,6 +28,14 @@ public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
     private final TextProvider textProvider;
     private final LogService logService;
 
+    /**
+     * Erstellt eine neue HelferDTODataAccess-Instanz.
+     *
+     * @param helferRepository Das Repository für Helfer-Entitäten.
+     * @param helferDTOMapper  Der Mapper zwischen Helfer-Entität und DTO.
+     * @param textProvider     Der TextProvider für Übersetzungen.
+     * @param logService       Der Service für Protokollierungen.
+     */
     public HelferDTODataAccess(HelferRepository helferRepository, HelferDTOMapper helferDTOMapper, TextProvider textProvider, LogService logService) {
         this.helferRepository = helferRepository;
         this.helferDTOMapper = helferDTOMapper;
@@ -32,6 +43,7 @@ public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
         this.logService = logService;
     }
 
+    @Override
     @NonNull
     public List<HelferDTO> findAll() {
         return helferRepository.findAll().stream()
@@ -39,21 +51,13 @@ public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
                 .toList();
     }
 
+    @Override
     @NonNull
     public Optional<HelferDTO> findById(@NonNull Long id) {
         return helferRepository.findById(id).map(helferDTOMapper::toDTO);
     }
 
-    @NonNull
-    public Optional<HelferDTO> findByEmail(@NonNull String email) {
-        return helferRepository.findByEmail(email).map(helferDTOMapper::toDTO);
-    }
-
-    @NonNull
-    public Optional<HelferDTO> findByTelefonnummer(@NonNull String telefonnummer) {
-        return helferRepository.findByTelefonnummer(telefonnummer).map(helferDTOMapper::toDTO);
-    }
-
+    @Override
     @NonNull
     @Transactional
     public CheckResult<Void> deleteById(@NonNull Long id) {
@@ -74,6 +78,28 @@ public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
             logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, e.getMessage());
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_DELETE));
         }
+    }
+
+    /**
+     * Findet einen Helfer anhand seiner E-Mail-Adresse.
+     *
+     * @param email Die E-Mail-Adresse des Helfers.
+     * @return Ein Optional mit dem Helfer-DTO.
+     */
+    @NonNull
+    public Optional<HelferDTO> findByEmail(@NonNull String email) {
+        return helferRepository.findByEmail(email).map(helferDTOMapper::toDTO);
+    }
+
+    /**
+     * Findet einen Helfer anhand seiner Telefonnummer.
+     *
+     * @param telefonnummer Die Telefonnummer des Helfers.
+     * @return Ein Optional mit dem Helfer-DTO.
+     */
+    @NonNull
+    public Optional<HelferDTO> findByTelefonnummer(@NonNull String telefonnummer) {
+        return helferRepository.findByTelefonnummer(telefonnummer).map(helferDTOMapper::toDTO);
     }
 
     @NonNull

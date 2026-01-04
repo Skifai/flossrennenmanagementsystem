@@ -20,6 +20,11 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * Eine spezialisierte Grid-Komponente für das Flossrennen-Managementsystem mit integrierter Filterfunktion.
+ *
+ * @param <T> Der Typ der im Grid angezeigten Daten.
+ */
 public class FlossrennenGrid<T> extends Grid<T> {
 
     private final Map<String, String> filterValues = new HashMap<>();
@@ -27,10 +32,20 @@ public class FlossrennenGrid<T> extends Grid<T> {
     private GridListDataView<T> dataView;
     private HeaderRow filterRow;
 
+    /**
+     * Erstellt ein neues FlossrennenGrid für den angegebenen DTO-Typ.
+     *
+     * @param dtoTyp Die Klasse des DTO-Typs.
+     */
     public FlossrennenGrid(@NonNull Class<T> dtoTyp) {
         super(dtoTyp, false);
     }
 
+    /**
+     * Setzt die filterbaren Elemente für das Grid.
+     *
+     * @param items Eine Kollektion von Elementen.
+     */
     public void setFilterableItems(@NonNull Collection<T> items) {
         this.dataView = setItems(items);
         this.dataView.addFilter(this::matchesFilters);
@@ -54,6 +69,15 @@ public class FlossrennenGrid<T> extends Grid<T> {
                 });
     }
 
+    /**
+     * Fügt eine filterbare Spalte zum Grid hinzu.
+     *
+     * @param labelText       Die Beschriftung der Spalte (und Platzhalter für den Filter).
+     * @param valueProvider   Der Provider für den Spaltenwert.
+     * @param filterKey       Ein eindeutiger Schlüssel für den Filter.
+     * @param filterExtractor Eine Funktion, die den zu filternden String aus dem Element extrahiert.
+     * @return Die erstellte Spalte.
+     */
     public @NonNull Column<T> addFilterableColumn(@NonNull String labelText,
                                                   @NonNull Function<T, Object> valueProvider,
                                                   @NonNull String filterKey,
@@ -98,6 +122,13 @@ public class FlossrennenGrid<T> extends Grid<T> {
         return textField;
     }
 
+    /**
+     * Fügt eine statische Spalte (ohne Filterfunktion) zum Grid hinzu.
+     *
+     * @param labelText Die Beschriftung der Spalte.
+     * @param valueProvider Der Provider für den Spaltenwert.
+     * @return Die erstellte Spalte.
+     */
     public @NonNull Column<T> addStaticColumn(@NonNull String labelText,
                                               @NonNull Function<T, ?> valueProvider) {
         Column<T> column = addColumn(valueProvider::apply)
@@ -127,10 +158,21 @@ public class FlossrennenGrid<T> extends Grid<T> {
         return textField;
     }
 
+    /**
+     * Gibt die DataView des Grids zurück.
+     *
+     * @return Die GridListDataView oder null.
+     */
     public @Nullable GridListDataView<T> getDataView() {
         return dataView;
     }
 
+    /**
+     * Setzt die Standardsortierung für eine Spalte.
+     *
+     * @param column Die Spalte, nach der sortiert werden soll.
+     * @param direction Die Sortierrichtung.
+     */
     public void setDefaultSort(@NonNull Column<T> column, @NonNull SortDirection direction) {
         sort(List.of(new GridSortOrder<>(column, direction)));
     }

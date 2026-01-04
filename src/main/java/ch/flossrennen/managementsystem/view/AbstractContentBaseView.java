@@ -18,6 +18,9 @@ import org.jspecify.annotations.NonNull;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Supplier;
 
+/**
+ * Basisklasse für Inhaltsansichten (Views), die DTOs in einem Grid anzeigen und einen Editor bereitstellen.
+ */
 public abstract class AbstractContentBaseView<DTO, PROPERTY extends DTOProperty<DTO>> extends VerticalLayout {
 
     protected final DTOService<DTO> dtoService;
@@ -28,6 +31,16 @@ public abstract class AbstractContentBaseView<DTO, PROPERTY extends DTOProperty<
     protected final Supplier<DTO> emptyDTOSupplier;
     protected final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
+    /**
+     * Erstellt eine neue AbstractContentBaseView.
+     *
+     * @param dtoService        Der Service für den Datenzugriff.
+     * @param dtoClass          Die Klasse des DTOs.
+     * @param allProperties     Alle Eigenschaften des DTOs.
+     * @param titleKey          Der Übersetzungsschlüssel für den Titel.
+     * @param newButtonLabelKey Der Übersetzungsschlüssel für die "Neu"-Schaltfläche.
+     * @param emptyDTOSupplier  Ein Supplier für ein neues, leeres DTO.
+     */
     public AbstractContentBaseView(DTOService<DTO> dtoService,
                                    Class<DTO> dtoClass,
                                    PROPERTY[] allProperties,

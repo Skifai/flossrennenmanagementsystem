@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service für die Verwaltung von Ressort-DTOs.
+ */
 @Service
 public class RessortDTOService implements DTOService<RessortDTO> {
 
@@ -19,6 +22,13 @@ public class RessortDTOService implements DTOService<RessortDTO> {
     private final Validator<RessortDTO> ressortValidator;
     private final TextProvider textProvider;
 
+    /**
+     * Erstellt einen neuen RessortDTOService.
+     *
+     * @param ressortDTODataAccess Der Datenzugriff für Ressort-DTOs.
+     * @param ressortValidator     Der Validator für Ressort-DTOs.
+     * @param textProvider         Der TextProvider für Übersetzungen.
+     */
     public RessortDTOService(DTODataAccess<RessortDTO> ressortDTODataAccess,
                              Validator<RessortDTO> ressortValidator,
                              TextProvider textProvider) {

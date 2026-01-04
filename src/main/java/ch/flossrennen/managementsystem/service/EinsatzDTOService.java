@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service für die Verwaltung von Einsatz-DTOs.
+ */
 @Service
 public class EinsatzDTOService implements DTOService<EinsatzDTO> {
 
@@ -19,6 +22,13 @@ public class EinsatzDTOService implements DTOService<EinsatzDTO> {
     private final Validator<EinsatzDTO> einsatzValidator;
     private final TextProvider textProvider;
 
+    /**
+     * Erstellt einen neuen EinsatzDTOService.
+     *
+     * @param einsatzDTODataAccess Der Datenzugriff für Einsatz-DTOs.
+     * @param einsatzValidator     Der Validator für Einsatz-DTOs.
+     * @param textProvider         Der TextProvider für Übersetzungen.
+     */
     public EinsatzDTOService(DTODataAccess<EinsatzDTO> einsatzDTODataAccess,
                              Validator<EinsatzDTO> einsatzValidator,
                              TextProvider textProvider) {

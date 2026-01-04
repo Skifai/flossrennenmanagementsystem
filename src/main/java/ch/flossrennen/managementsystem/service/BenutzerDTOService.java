@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service für die Verwaltung von Benutzer-DTOs.
+ */
 @Service
 public class BenutzerDTOService implements DTOService<BenutzerDTO> {
 
@@ -19,6 +22,13 @@ public class BenutzerDTOService implements DTOService<BenutzerDTO> {
     private final Validator<BenutzerDTO> benutzerValidator;
     private final TextProvider textProvider;
 
+    /**
+     * Erstellt einen neuen BenutzerDTOService.
+     *
+     * @param benutzerDTODataAccess Der Datenzugriff für Benutzer-DTOs.
+     * @param benutzerValidator     Der Validator für Benutzer-DTOs.
+     * @param textProvider          Der TextProvider für Übersetzungen.
+     */
     public BenutzerDTOService(DTODataAccess<BenutzerDTO> benutzerDTODataAccess,
                               Validator<BenutzerDTO> benutzerValidator,
                               TextProvider textProvider) {

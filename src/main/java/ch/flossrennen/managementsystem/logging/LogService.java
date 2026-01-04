@@ -14,17 +14,33 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Service für die Protokollierung von Systemereignissen und Benutzeraktionen.
+ */
 @Service
 public class LogService {
 
     private final LogDTODataAccess logDTODataAccess;
     private final TextProvider textProvider;
 
+    /**
+     * Erstellt einen neuen LogService.
+     *
+     * @param logDTODataAccess Der Datenzugriff für Logs.
+     * @param textProvider     Der TextProvider für Übersetzungen.
+     */
     public LogService(LogDTODataAccess logDTODataAccess, TextProvider textProvider) {
         this.logDTODataAccess = logDTODataAccess;
         this.textProvider = textProvider;
     }
 
+    /**
+     * Erstellt einen Log-Eintrag.
+     *
+     * @param type Der Typ des Logs.
+     * @param logLevel Die Log-Ebene.
+     * @param message Die Log-Nachricht.
+     */
     public void log(LogType type, LogLevel logLevel, String message) {
         String benutzer = getCurrentUser();
         LogDTO logDTO = new LogDTO(null, LocalDateTime.now(), type, logLevel, benutzer, message);
@@ -39,6 +55,17 @@ public class LogService {
         return StringConstants.SYSTEM;
     }
 
+    /**
+     * Erstellt eine Nachricht, die die Änderungen zwischen zwei DTOs beschreibt.
+     *
+     * @param header Der Kopf der Nachricht.
+     * @param oldDTO Das ursprüngliche DTO.
+     * @param newDTO Das aktualisierte DTO.
+     * @param properties Die zu vergleichenden Eigenschaften.
+     * @param <DTO> Der DTO-Typ.
+     * @param <PROPERTY> Der Property-Typ.
+     * @return Eine formatierte Nachricht mit den Änderungen.
+     */
     public <DTO, PROPERTY extends DTOProperty<DTO>> String createChangeMessage(String header, DTO oldDTO, DTO newDTO, PROPERTY[] properties) {
         StringBuilder stringBuilder = new StringBuilder(header);
         for (PROPERTY property : properties) {
@@ -57,6 +84,16 @@ public class LogService {
         return stringBuilder.toString();
     }
 
+    /**
+     * Erstellt eine Nachricht, die alle relevanten Eigenschaften eines DTOs auflistet.
+     *
+     * @param header Der Kopf der Nachricht.
+     * @param dto Das DTO.
+     * @param properties Die aufzulistenden Eigenschaften.
+     * @param <DTO> Der DTO-Typ.
+     * @param <PROPERTY> Der Property-Typ.
+     * @return Eine formatierte Nachricht mit den DTO-Details.
+     */
     public <DTO, PROPERTY extends DTOProperty<DTO>> String createMessage(String header, DTO dto, PROPERTY[] properties) {
         StringBuilder stringBuilder = new StringBuilder(header);
         for (PROPERTY property : properties) {

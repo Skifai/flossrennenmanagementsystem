@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
+/**
+ * Validator für Einsatz-DTOs.
+ */
 @Component
 @RequiredArgsConstructor
 public class EinsatzValidator implements Validator<EinsatzDTO> {

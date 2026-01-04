@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementierung des Datenzugriffs für Benutzer-DTOs.
+ */
 @Component
 public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
     private final BenutzerRepository benutzerRepository;
@@ -25,6 +28,14 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
     private final TextProvider textProvider;
     private final LogService logService;
 
+    /**
+     * Erstellt eine neue BenutzerDTODataAccess-Instanz.
+     *
+     * @param benutzerRepository Das Repository für Benutzer-Entitäten.
+     * @param benutzerDTOMapper  Der Mapper zwischen Benutzer-Entität und DTO.
+     * @param textProvider       Der TextProvider für Übersetzungen.
+     * @param logService         Der Service für Protokollierungen.
+     */
     public BenutzerDTODataAccess(BenutzerRepository benutzerRepository,
                                  DTOMapper<Benutzer, BenutzerDTO> benutzerDTOMapper,
                                  TextProvider textProvider,
@@ -35,6 +46,7 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
         this.logService = logService;
     }
 
+    @Override
     @NonNull
     public List<BenutzerDTO> findAll() {
         return benutzerRepository.findAll().stream()
@@ -42,6 +54,7 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
                 .toList();
     }
 
+    @Override
     @NonNull
     public Optional<BenutzerDTO> findById(@NonNull Long id) {
         return benutzerRepository.findById(id).map(benutzerDTOMapper::toDTO);
@@ -57,6 +70,7 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
         return benutzerRepository.findByTelefonnummer(telefonnummer).map(benutzerDTOMapper::toDTO);
     }
 
+    @Override
     @NonNull
     @Transactional
     public CheckResult<Void> deleteById(@NonNull Long id) {

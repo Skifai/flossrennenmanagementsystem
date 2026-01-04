@@ -10,12 +10,21 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+/**
+ * Validator für Ressort-DTOs.
+ */
 @Component
 public class RessortValidator implements Validator<RessortDTO> {
 
     private final RessortDTODataAccess ressortDTODataAccess;
     private final TextProvider textProvider;
 
+    /**
+     * Erstellt einen neuen RessortValidator.
+     *
+     * @param ressortDTODataAccess Der Datenzugriff für Ressort-DTOs.
+     * @param textProvider         Der TextProvider für Übersetzungen.
+     */
     public RessortValidator(RessortDTODataAccess ressortDTODataAccess, TextProvider textProvider) {
         this.ressortDTODataAccess = ressortDTODataAccess;
         this.textProvider = textProvider;

@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Service für die Verwaltung von Einsatz-Zuweisungen.
+ */
 @Service
 @RequiredArgsConstructor
 public class EinsatzZuweisungDTOService {
@@ -36,12 +39,24 @@ public class EinsatzZuweisungDTOService {
     private final DTOService<HelferDTO> helferDTOService;
     private final TextProvider textProvider;
 
+    /**
+     * Findet alle Einsätze, die für eine Zuweisung zur Verfügung stehen (Status nicht ERSTELLT).
+     *
+     * @return Eine Liste von Einsatz-DTOs.
+     */
     public List<EinsatzDTO> findAllEinsatzForZuweisung() {
         return einsatzDTOService.findAll().stream()
                 .filter(einsatzDTO -> einsatzDTO.status() != EinsatzStatus.ERSTELLT)
                 .toList();
     }
 
+    /**
+     * Gibt die Helfer-Selektion für einen bestimmten Einsatz zurück.
+     * Teilt Helfer in bereits zugewiesene und verfügbare (nicht überlappende) Helfer auf.
+     *
+     * @param einsatz Das Einsatz-DTO, für das die Helfer-Selektion abgerufen werden soll.
+     * @return Ein HelferSelectionDTO mit zugewiesenen und verfügbaren Helfern.
+     */
     public HelferSelectionDTO getHelferSelection(EinsatzDTO einsatz) {
         if (einsatz == null) {
             return new HelferSelectionDTO(List.of(), List.of());
@@ -67,16 +82,73 @@ public class EinsatzZuweisungDTOService {
         return new HelferSelectionDTO(zugewieseneHelfer, verfuegbareHelfer);
     }
 
+    /**
+     * Findet alle Zuweisungen für einen bestimmten Einsatz.
+     *
+     * @param einsatzId Die ID des Einsatzes.
+     * @return Eine Liste von EinsatzZuweisung-DTOs.
+     */
     public List<EinsatzZuweisungDTO> findByEinsatzId(Long einsatzId) {
         return dataAccess.findByEinsatzId(einsatzId);
     }
 
+    /**
+     * Findet alle Helfer-IDs, die bereits Zuweisungen haben, die mit dem angegebenen Zeitraum überlappen.
+     *
+     * @param currentEinsatzId Die ID des aktuellen Einsatzes (wird ignoriert).
+     * @param start Die Startzeit des Zeitraums.
+     * @param end Die Endzeit des Zeitraums.
+     * @return Eine Liste von Helfer-IDs mit überlappenden Zuweisungen.
+     */
+    public List<Long> findAllHelferIdsWithOverlappingAssignments(Long currentEinsatzId, LocalDateTime start, LocalDateTime end) {
+        return repository.findAll().stream()
+                .filter(zuweisung -> !zuweisung.getEinsatz().getId().equals(currentEinsatzId))
+                .filter(zuweisung ->
+                        !(zuweisung.getEinsatz().getEndzeit().isBefore(start) ||
+                                zuweisung.getEinsatz().getEndzeit().isEqual(start) ||
+                                zuweisung.getEinsatz().getStartzeit().isAfter(end) ||
+                                zuweisung.getEinsatz().getStartzeit().isEqual(end)))
+                .map(zuweisung -> zuweisung.getHelfer().getId())
+                .distinct()
+                .toList();
+    }
+
+    /**
+     * Berechnet die Anzahl der noch fehlenden Helfer für einen Einsatz.
+     *
+     * @param einsatz Das Einsatz-DTO.
+     * @return Die Anzahl der fehlenden Helfer.
+     */
     public int getMissingHelferCount(EinsatzDTO einsatz) {
         if (einsatz == null) return 0;
         int assignedCount = findByEinsatzId(einsatz.id()).size();
         return einsatz.benoetigte_helfer() - assignedCount;
     }
 
+    private void updateEinsatzStatusIfFull(Long einsatzId) {
+        Einsatz einsatz = einsatzRepository.findById(einsatzId).orElseThrow();
+        long currentHelferCount = repository.findByEinsatzId(einsatzId).size();
+
+        if (currentHelferCount >= einsatz.getBenoetigte_helfer()) {
+            if (einsatz.getStatus() != EinsatzStatus.ABGESCHLOSSEN) {
+                einsatz.setStatus(EinsatzStatus.ABGESCHLOSSEN);
+                einsatzRepository.save(einsatz);
+            }
+        } else {
+            if (einsatz.getStatus() == EinsatzStatus.ABGESCHLOSSEN) {
+                einsatz.setStatus(EinsatzStatus.OFFEN);
+                einsatzRepository.save(einsatz);
+            }
+        }
+    }
+
+    /**
+     * Speichert eine Einsatz-Zuweisung.
+     * Prüft auf Überlappungen und aktualisiert den Einsatzstatus.
+     *
+     * @param dto Das zu speichernde EinsatzZuweisung-DTO.
+     * @return Ein CheckResult mit dem Ergebnis der Operation.
+     */
     @Transactional
     public CheckResult<EinsatzZuweisungDTO> save(EinsatzZuweisungDTO dto) {
         Einsatz einsatz = einsatzRepository.findById(dto.einsatzId()).orElseThrow();
@@ -109,39 +181,16 @@ public class EinsatzZuweisungDTOService {
         return result;
     }
 
-    private void updateEinsatzStatusIfFull(Long einsatzId) {
-        Einsatz einsatz = einsatzRepository.findById(einsatzId).orElseThrow();
-        long currentHelferCount = repository.findByEinsatzId(einsatzId).size();
-
-        if (currentHelferCount >= einsatz.getBenoetigte_helfer()) {
-            if (einsatz.getStatus() != EinsatzStatus.ABGESCHLOSSEN) {
-                einsatz.setStatus(EinsatzStatus.ABGESCHLOSSEN);
-                einsatzRepository.save(einsatz);
-            }
-        } else {
-            if (einsatz.getStatus() == EinsatzStatus.ABGESCHLOSSEN) {
-                einsatz.setStatus(EinsatzStatus.OFFEN);
-                einsatzRepository.save(einsatz);
-            }
-        }
-    }
-
+    /**
+     * Löscht eine Einsatz-Zuweisung anhand der Einsatz-ID und Helfer-ID.
+     * Aktualisiert anschliessend den Einsatzstatus.
+     *
+     * @param einsatzId Die ID des Einsatzes.
+     * @param helferId  Die ID des Helfers.
+     */
     @Transactional
     public void deleteByEinsatzIdAndHelferId(Long einsatzId, Long helferId) {
         dataAccess.deleteByEinsatzIdAndHelferId(einsatzId, helferId);
         updateEinsatzStatusIfFull(einsatzId);
-    }
-
-    public List<Long> findAllHelferIdsWithOverlappingAssignments(Long currentEinsatzId, LocalDateTime start, LocalDateTime end) {
-        return repository.findAll().stream()
-                .filter(zuweisung -> !zuweisung.getEinsatz().getId().equals(currentEinsatzId))
-                .filter(zuweisung ->
-                        !(zuweisung.getEinsatz().getEndzeit().isBefore(start) ||
-                                zuweisung.getEinsatz().getEndzeit().isEqual(start) ||
-                                zuweisung.getEinsatz().getStartzeit().isAfter(end) ||
-                                zuweisung.getEinsatz().getStartzeit().isEqual(end)))
-                .map(zuweisung -> zuweisung.getHelfer().getId())
-                .distinct()
-                .toList();
     }
 }

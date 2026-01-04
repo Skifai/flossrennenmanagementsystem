@@ -21,12 +21,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementierung des Datenzugriffs für Log-DTOs.
+ */
 @Component
 public class LogDTODataAccess implements DTODataAccess<LogDTO> {
     private final LogRepository logRepository;
     private final LogDTOMapper logDTOMapper;
     private final TextProvider textProvider;
 
+    /**
+     * Erstellt eine neue LogDTODataAccess-Instanz.
+     *
+     * @param logRepository Das Repository für Log-Entitäten.
+     * @param logDTOMapper  Der Mapper zwischen Log-Entität und DTO.
+     * @param textProvider  Der TextProvider für Übersetzungen.
+     */
     public LogDTODataAccess(LogRepository logRepository, LogDTOMapper logDTOMapper, TextProvider textProvider) {
         this.logRepository = logRepository;
         this.logDTOMapper = logDTOMapper;
@@ -73,6 +83,17 @@ public class LogDTODataAccess implements DTODataAccess<LogDTO> {
         }
     }
 
+    /**
+     * Findet Log-DTOs basierend auf verschiedenen Filterkriterien.
+     *
+     * @param type Der Log-Typ.
+     * @param logLevel Die Log-Ebene.
+     * @param benutzer Der Benutzername.
+     * @param from Startzeitpunkt.
+     * @param to Endzeitpunkt.
+     * @param types Eine Liste von Log-Typen.
+     * @return Eine gefilterte Liste von Log-DTOs.
+     */
     @NonNull
     public List<LogDTO> findAllFiltered(LogType type, LogLevel logLevel, String benutzer, LocalDateTime from, LocalDateTime to, List<LogType> types) {
         Specification<LogEntry> spec = (root, query, cb) -> {
@@ -105,6 +126,11 @@ public class LogDTODataAccess implements DTODataAccess<LogDTO> {
                 .toList();
     }
 
+    /**
+     * Findet alle eindeutigen Log-Typen in der Datenbank.
+     *
+     * @return Eine Liste eindeutiger Log-Typen.
+     */
     @NonNull
     public List<LogType> findUniqueTypes() {
         return logRepository.findAll().stream()
@@ -113,6 +139,11 @@ public class LogDTODataAccess implements DTODataAccess<LogDTO> {
                 .toList();
     }
 
+    /**
+     * Findet alle eindeutigen Log-Ebenen in der Datenbank.
+     *
+     * @return Eine Liste eindeutiger Log-Ebenen.
+     */
     @NonNull
     public List<LogLevel> findUniqueLogLevels() {
         return logRepository.findAll().stream()
@@ -121,6 +152,11 @@ public class LogDTODataAccess implements DTODataAccess<LogDTO> {
                 .toList();
     }
 
+    /**
+     * Findet alle eindeutigen Benutzernamen in der Datenbank.
+     *
+     * @return Eine Liste eindeutiger Benutzernamen.
+     */
     @NonNull
     public List<String> findUniqueUsers() {
         return logRepository.findAll().stream()

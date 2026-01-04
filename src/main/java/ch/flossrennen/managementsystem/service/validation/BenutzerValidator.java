@@ -10,11 +10,20 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+/**
+ * Validator für Benutzer-DTOs.
+ */
 @Component
 public class BenutzerValidator implements Validator<BenutzerDTO> {
     private final BenutzerDTODataAccess benutzerDTODataAccess;
     private final TextProvider textProvider;
 
+    /**
+     * Erstellt einen neuen BenutzerValidator.
+     *
+     * @param benutzerDTODataAccess Der Datenzugriff für Benutzer-DTOs.
+     * @param textProvider          Der TextProvider für Übersetzungen.
+     */
     public BenutzerValidator(BenutzerDTODataAccess benutzerDTODataAccess, TextProvider textProvider) {
         this.benutzerDTODataAccess = benutzerDTODataAccess;
         this.textProvider = textProvider;
