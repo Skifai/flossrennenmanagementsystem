@@ -151,6 +151,7 @@ public interface TranslationConstants {
     String USERNAME = "username";
     String PASSWORD = "password";
     String LOGIN_BUTTON = "loginbutton";
+    String LOGOUT_BUTTON = "logoutbutton";
     String LOGIN_ERROR_TITLE = "loginerrortitel";
     String LOGIN_ERROR_MESSAGE = "loginerrormessage";
     //endregion

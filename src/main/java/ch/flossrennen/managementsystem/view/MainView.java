@@ -1,9 +1,11 @@
 package ch.flossrennen.managementsystem.view;
 
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
+import ch.flossrennen.managementsystem.security.SecurityService;
 import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -22,7 +24,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @PermitAll
 public class MainView extends AppLayout {
 
-    public MainView() {
+    private final SecurityService securityService;
+
+    public MainView(SecurityService securityService) {
+        this.securityService = securityService;
 
         HorizontalLayout navbarLayout = createNavbarLayout();
 
@@ -67,14 +72,20 @@ public class MainView extends AppLayout {
         HorizontalLayout navbarLayout = new HorizontalLayout();
         navbarLayout.addClassName(ViewStyles.APP_NAVBAR_LAYOUT);
         navbarLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        navbarLayout.setWidthFull();
 
         DrawerToggle toggle = new DrawerToggle();
         toggle.addClassName(ViewStyles.APP_DRAWER_TOGGLE);
-        navbarLayout.add(toggle);
 
         H1 titel = new H1(getTranslation(TranslationConstants.TITEL));
         titel.addClassName(ViewStyles.APP_TITEL);
-        navbarLayout.add(titel);
+
+        Button logout = new Button(getTranslation(TranslationConstants.LOGOUT_BUTTON), click -> securityService.logout());
+        logout.addClassName(ViewStyles.BUTTON);
+
+        navbarLayout.add(toggle, titel, logout);
+        navbarLayout.setFlexGrow(1, titel);
+
         return navbarLayout;
     }
 }
