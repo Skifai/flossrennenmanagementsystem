@@ -61,6 +61,7 @@ public class EinsatzZuweisungView extends VerticalLayout {
         einsatzGrid.addClassName(ViewStyles.DATA_GRID);
 
         Grid.Column<EinsatzDTO> idColumn = addEinsatzColumn(EinsatzDTOProperties.ID);
+        addEinsatzColumn(EinsatzDTOProperties.RESSORT);
         addEinsatzColumn(EinsatzDTOProperties.NAME);
 
         einsatzGrid.addStaticColumn(getTranslation(EinsatzDTOProperties.STARTZEIT.getTranslationKey()),
@@ -154,6 +155,7 @@ public class EinsatzZuweisungView extends VerticalLayout {
         verfuegbareHelferGrid.addClassName(ViewStyles.DATA_GRID);
 
         Grid.Column<HelferDTO> verfuegbareIdColumn = addHelferColumn(verfuegbareHelferGrid, HelferDTOProperties.ID);
+        addHelferColumn(verfuegbareHelferGrid, HelferDTOProperties.RESSORT);
 
         addHelferColumn(verfuegbareHelferGrid, HelferDTOProperties.VORNAME);
         addHelferColumn(verfuegbareHelferGrid, HelferDTOProperties.NACHNAME);
@@ -186,6 +188,7 @@ public class EinsatzZuweisungView extends VerticalLayout {
         zugewieseneHelferGrid.addClassName(ViewStyles.DATA_GRID);
 
         Grid.Column<HelferDTO> zugewieseneIdColumn = addHelferColumn(zugewieseneHelferGrid, HelferDTOProperties.ID);
+        addHelferColumn(zugewieseneHelferGrid, HelferDTOProperties.RESSORT);
 
         addHelferColumn(zugewieseneHelferGrid, HelferDTOProperties.VORNAME);
         addHelferColumn(zugewieseneHelferGrid, HelferDTOProperties.NACHNAME);
