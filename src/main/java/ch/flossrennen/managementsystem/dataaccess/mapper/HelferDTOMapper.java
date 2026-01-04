@@ -1,27 +1,36 @@
 package ch.flossrennen.managementsystem.dataaccess.mapper;
 
 import ch.flossrennen.managementsystem.dataaccess.dto.HelferDTO;
+import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Helfer;
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.Ressort;
 import org.jspecify.annotations.NonNull;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring",
         uses = {RessortDTOMapper.class},
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface HelferDTOMapper extends DTOMapper<Helfer, HelferDTO> {
+public abstract class HelferDTOMapper implements DTOMapper<Helfer, HelferDTO> {
+
+    @Autowired
+    protected RessortDTOMapper ressortDTOMapper;
 
     @Override
     @NonNull
-    HelferDTO toDTO(@NonNull Helfer entity);
+    public abstract HelferDTO toDTO(@NonNull Helfer entity);
 
     @Override
     @NonNull
-    Helfer toEntity(@NonNull HelferDTO dto);
+    public abstract Helfer toEntity(@NonNull HelferDTO dto);
 
     @Override
-    void updateEntity(@NonNull HelferDTO dto, @MappingTarget @NonNull Helfer entity);
+    @Mapping(target = "ressort", source = "ressort", qualifiedByName = "replaceRessort")
+    public abstract void updateEntity(@NonNull HelferDTO dto, @MappingTarget @NonNull Helfer entity);
+
+    @Named("replaceRessort")
+    protected Ressort replaceRessort(RessortDTO dto) {
+        return ressortDTOMapper.toEntity(dto);
+    }
 }

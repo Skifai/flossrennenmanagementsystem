@@ -81,38 +81,42 @@ public class EinsatzDTODataAccess implements DTODataAccess<EinsatzDTO> {
     }
 
     @NonNull
-    @Transactional
     public CheckResult<EinsatzDTO> save(@NonNull EinsatzDTO einsatzDTO) {
         try {
-            Einsatz entity;
-            LogType operationType;
-            String message;
-            if (einsatzDTO.id() != null) {
-                Einsatz existing = einsatzRepository.findById(einsatzDTO.id())
-                        .orElseThrow(() -> new IllegalArgumentException(textProvider.getTranslation(TranslationConstants.EXCEPTION_NOT_FOUND, "Einsatz")));
-                EinsatzDTO oldDTO = einsatzDTOMapper.toDTO(existing);
-                einsatzDTOMapper.updateEntity(einsatzDTO, existing);
-                entity = existing;
-                operationType = LogType.EINSATZ_UPDATED;
-                String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_UPDATED, "Einsatz", einsatzDTO.id());
-                message = logService.createChangeMessage(header, oldDTO, einsatzDTO, EinsatzDTOProperties.values());
-            } else {
-                entity = einsatzDTOMapper.toEntity(einsatzDTO);
-                operationType = LogType.EINSATZ_CREATED;
-                String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_CREATED, "Einsatz");
-                message = logService.createMessage(header, einsatzDTO, EinsatzDTOProperties.values());
-            }
-
-            Einsatz savedEntity = einsatzRepository.saveAndFlush(entity);
-            CheckResult<EinsatzDTO> result = CheckResult.success(einsatzDTOMapper.toDTO(savedEntity),
-                    textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
-
-            logService.log(operationType, LogLevel.INFO, message);
-
-            return result;
+            return saveInternal(einsatzDTO);
         } catch (Exception e) {
             logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, e.getMessage());
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
         }
+    }
+
+    @Transactional
+    protected CheckResult<EinsatzDTO> saveInternal(@NonNull EinsatzDTO einsatzDTO) {
+        Einsatz entity;
+        LogType operationType;
+        String message;
+        if (einsatzDTO.id() != null) {
+            Einsatz existing = einsatzRepository.findById(einsatzDTO.id())
+                    .orElseThrow(() -> new IllegalArgumentException(textProvider.getTranslation(TranslationConstants.EXCEPTION_NOT_FOUND, "Einsatz")));
+            EinsatzDTO oldDTO = einsatzDTOMapper.toDTO(existing);
+            einsatzDTOMapper.updateEntity(einsatzDTO, existing);
+            entity = existing;
+            operationType = LogType.EINSATZ_UPDATED;
+            String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_UPDATED, "Einsatz", einsatzDTO.id());
+            message = logService.createChangeMessage(header, oldDTO, einsatzDTO, EinsatzDTOProperties.values());
+        } else {
+            entity = einsatzDTOMapper.toEntity(einsatzDTO);
+            operationType = LogType.EINSATZ_CREATED;
+            String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_CREATED, "Einsatz");
+            message = logService.createMessage(header, einsatzDTO, EinsatzDTOProperties.values());
+        }
+
+        Einsatz savedEntity = einsatzRepository.saveAndFlush(entity);
+        CheckResult<EinsatzDTO> result = CheckResult.success(einsatzDTOMapper.toDTO(savedEntity),
+                textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
+
+        logService.log(operationType, LogLevel.INFO, message);
+
+        return result;
     }
 }

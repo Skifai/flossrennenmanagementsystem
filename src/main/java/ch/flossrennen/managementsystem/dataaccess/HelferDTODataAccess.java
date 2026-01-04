@@ -103,41 +103,45 @@ public class HelferDTODataAccess implements DTODataAccess<HelferDTO> {
     }
 
     @NonNull
-    @Transactional
     public CheckResult<HelferDTO> save(@NonNull HelferDTO helferDTO) {
         try {
-            validateRessortExists(helferDTO);
-
-            Helfer entity;
-            LogType operationType;
-            String message = null;
-            if (helferDTO.id() != null) {
-                Helfer existing = helferRepository.findById(helferDTO.id())
-                        .orElseThrow(() -> new IllegalArgumentException(textProvider.getTranslation(TranslationConstants.EXCEPTION_NOT_FOUND, "Helfer")));
-                HelferDTO oldDTO = helferDTOMapper.toDTO(existing);
-                helferDTOMapper.updateEntity(helferDTO, existing);
-                entity = existing;
-                operationType = LogType.HELFER_UPDATED;
-                String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_UPDATED, "Helfer", helferDTO.id());
-                message = logService.createChangeMessage(header, oldDTO, helferDTO, HelferDTOProperties.values());
-            } else {
-                entity = helferDTOMapper.toEntity(helferDTO);
-                operationType = LogType.HELFER_CREATED;
-                String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_CREATED, "Helfer");
-                message = logService.createMessage(header, helferDTO, HelferDTOProperties.values());
-            }
-
-            Helfer savedHelfer = helferRepository.saveAndFlush(entity);
-            CheckResult<HelferDTO> result = CheckResult.success(helferDTOMapper.toDTO(savedHelfer),
-                    textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
-
-            logService.log(operationType, LogLevel.INFO, message);
-
-            return result;
+            return saveInternal(helferDTO);
         } catch (Exception e) {
             logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, e.getMessage());
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
         }
+    }
+
+    @Transactional
+    protected CheckResult<HelferDTO> saveInternal(@NonNull HelferDTO helferDTO) {
+        validateRessortExists(helferDTO);
+
+        Helfer entity;
+        LogType operationType;
+        String message = null;
+        if (helferDTO.id() != null) {
+            Helfer existing = helferRepository.findById(helferDTO.id())
+                    .orElseThrow(() -> new IllegalArgumentException(textProvider.getTranslation(TranslationConstants.EXCEPTION_NOT_FOUND, "Helfer")));
+            HelferDTO oldDTO = helferDTOMapper.toDTO(existing);
+            helferDTOMapper.updateEntity(helferDTO, existing);
+            entity = existing;
+            operationType = LogType.HELFER_UPDATED;
+            String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_UPDATED, "Helfer", helferDTO.id());
+            message = logService.createChangeMessage(header, oldDTO, helferDTO, HelferDTOProperties.values());
+        } else {
+            entity = helferDTOMapper.toEntity(helferDTO);
+            operationType = LogType.HELFER_CREATED;
+            String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_CREATED, "Helfer");
+            message = logService.createMessage(header, helferDTO, HelferDTOProperties.values());
+        }
+
+        Helfer savedHelfer = helferRepository.saveAndFlush(entity);
+        CheckResult<HelferDTO> result = CheckResult.success(helferDTOMapper.toDTO(savedHelfer),
+                textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
+
+        logService.log(operationType, LogLevel.INFO, message);
+
+        return result;
     }
 
     private void validateRessortExists(HelferDTO helferDTO) {

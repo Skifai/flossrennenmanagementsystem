@@ -94,44 +94,48 @@ public class BenutzerDTODataAccess implements DTODataAccess<BenutzerDTO> {
     }
 
     @NonNull
-    @Transactional
     public CheckResult<BenutzerDTO> save(@NonNull BenutzerDTO benutzerDTO) {
         try {
-            Benutzer entity;
-            LogType operationType;
-            String message;
-            if (benutzerDTO.id() != null) {
-                Benutzer existing = benutzerRepository.findById(benutzerDTO.id())
-                        .orElseThrow(() -> new IllegalArgumentException(textProvider.getTranslation(TranslationConstants.EXCEPTION_NOT_FOUND, "Benutzer")));
-                BenutzerDTO oldDTO = benutzerDTOMapper.toDTO(existing);
-                benutzerDTOMapper.updateEntity(benutzerDTO, existing);
-                entity = existing;
-                operationType = LogType.BENUTZER_UPDATED;
-                String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_UPDATED, "Benutzer", benutzerDTO.id());
-                message = logService.createChangeMessage(header, oldDTO, benutzerDTO, BenutzerDTOProperties.values());
-            } else {
-                entity = benutzerDTOMapper.toEntity(benutzerDTO);
-                operationType = LogType.BENUTZER_CREATED;
-                String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_CREATED, "Benutzer");
-                message = logService.createMessage(header, benutzerDTO, BenutzerDTOProperties.values());
-            }
-
-            if (entity.getPasswordhash() == null) {
-                String errorMsg = textProvider.getTranslation(TranslationConstants.ERROR_NOPASSWORD);
-                String identifier = benutzerDTO.id() != null ? "ID " + benutzerDTO.id() : textProvider.getTranslation(TranslationConstants.LOG_NEW);
-                logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, textProvider.getTranslation(TranslationConstants.LOG_SAVE_NO_PASSWORD, identifier));
-                return CheckResult.failure(errorMsg);
-            }
-
-            Benutzer savedEntity = benutzerRepository.saveAndFlush(entity);
-            CheckResult<BenutzerDTO> result = CheckResult.success(benutzerDTOMapper.toDTO(savedEntity),
-                    textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
-
-            logService.log(operationType, LogLevel.INFO, message);
-            return result;
+            return saveInternal(benutzerDTO);
         } catch (Exception e) {
             logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, e.getMessage());
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
         }
+    }
+
+    @Transactional
+    protected CheckResult<BenutzerDTO> saveInternal(@NonNull BenutzerDTO benutzerDTO) {
+        Benutzer entity;
+        LogType operationType;
+        String message;
+        if (benutzerDTO.id() != null) {
+            Benutzer existing = benutzerRepository.findById(benutzerDTO.id())
+                    .orElseThrow(() -> new IllegalArgumentException(textProvider.getTranslation(TranslationConstants.EXCEPTION_NOT_FOUND, "Benutzer")));
+            BenutzerDTO oldDTO = benutzerDTOMapper.toDTO(existing);
+            benutzerDTOMapper.updateEntity(benutzerDTO, existing);
+            entity = existing;
+            operationType = LogType.BENUTZER_UPDATED;
+            String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_UPDATED, "Benutzer", benutzerDTO.id());
+            message = logService.createChangeMessage(header, oldDTO, benutzerDTO, BenutzerDTOProperties.values());
+        } else {
+            entity = benutzerDTOMapper.toEntity(benutzerDTO);
+            operationType = LogType.BENUTZER_CREATED;
+            String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_CREATED, "Benutzer");
+            message = logService.createMessage(header, benutzerDTO, BenutzerDTOProperties.values());
+        }
+
+        if (entity.getPasswordhash() == null) {
+            String errorMsg = textProvider.getTranslation(TranslationConstants.ERROR_NOPASSWORD);
+            String identifier = benutzerDTO.id() != null ? "ID " + benutzerDTO.id() : textProvider.getTranslation(TranslationConstants.LOG_NEW);
+            logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, textProvider.getTranslation(TranslationConstants.LOG_SAVE_NO_PASSWORD, identifier));
+            return CheckResult.failure(errorMsg);
+        }
+
+        Benutzer savedEntity = benutzerRepository.saveAndFlush(entity);
+        CheckResult<BenutzerDTO> result = CheckResult.success(benutzerDTOMapper.toDTO(savedEntity),
+                textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
+
+        logService.log(operationType, LogLevel.INFO, message);
+        return result;
     }
 }

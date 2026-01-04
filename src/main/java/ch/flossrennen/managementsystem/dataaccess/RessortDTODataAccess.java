@@ -92,38 +92,42 @@ public class RessortDTODataAccess implements DTODataAccess<RessortDTO> {
     }
 
     @NonNull
-    @Transactional
     public CheckResult<RessortDTO> save(@NonNull RessortDTO ressortDTO) {
         try {
-            Ressort entity;
-            LogType operationType;
-            String message = null;
-            if (ressortDTO.id() != null) {
-                Ressort existing = ressortRepository.findById(ressortDTO.id())
-                        .orElseThrow(() -> new IllegalArgumentException(textProvider.getTranslation(TranslationConstants.EXCEPTION_NOT_FOUND, "Ressort")));
-                RessortDTO oldDTO = ressortDTOMapper.toDTO(existing);
-                ressortDTOMapper.updateEntity(ressortDTO, existing);
-                entity = existing;
-                operationType = LogType.RESSORT_UPDATED;
-                String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_UPDATED, "Ressort", ressortDTO.id());
-                message = logService.createChangeMessage(header, oldDTO, ressortDTO, RessortDTOProperties.values());
-            } else {
-                entity = ressortDTOMapper.toEntity(ressortDTO);
-                operationType = LogType.RESSORT_CREATED;
-                String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_CREATED, "Ressort");
-                message = logService.createMessage(header, ressortDTO, RessortDTOProperties.values());
-            }
-
-            Ressort savedEntity = ressortRepository.saveAndFlush(entity);
-            CheckResult<RessortDTO> result = CheckResult.success(ressortDTOMapper.toDTO(savedEntity),
-                    textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
-
-            logService.log(operationType, LogLevel.INFO, message);
-
-            return result;
+            return saveInternal(ressortDTO);
         } catch (Exception e) {
             logService.log(LogType.APPLICATION_ERROR, LogLevel.ERROR, e.getMessage());
             return CheckResult.failure(textProvider.getTranslation(TranslationConstants.ERROR_SAVE));
         }
+    }
+
+    @Transactional
+    protected CheckResult<RessortDTO> saveInternal(@NonNull RessortDTO ressortDTO) {
+        Ressort entity;
+        LogType operationType;
+        String message = null;
+        if (ressortDTO.id() != null) {
+            Ressort existing = ressortRepository.findById(ressortDTO.id())
+                    .orElseThrow(() -> new IllegalArgumentException(textProvider.getTranslation(TranslationConstants.EXCEPTION_NOT_FOUND, "Ressort")));
+            RessortDTO oldDTO = ressortDTOMapper.toDTO(existing);
+            ressortDTOMapper.updateEntity(ressortDTO, existing);
+            entity = existing;
+            operationType = LogType.RESSORT_UPDATED;
+            String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_UPDATED, "Ressort", ressortDTO.id());
+            message = logService.createChangeMessage(header, oldDTO, ressortDTO, RessortDTOProperties.values());
+        } else {
+            entity = ressortDTOMapper.toEntity(ressortDTO);
+            operationType = LogType.RESSORT_CREATED;
+            String header = textProvider.getTranslation(TranslationConstants.LOG_HEADER_CREATED, "Ressort");
+            message = logService.createMessage(header, ressortDTO, RessortDTOProperties.values());
+        }
+
+        Ressort savedEntity = ressortRepository.saveAndFlush(entity);
+        CheckResult<RessortDTO> result = CheckResult.success(ressortDTOMapper.toDTO(savedEntity),
+                textProvider.getTranslation(TranslationConstants.SUCCESS_SAVE));
+
+        logService.log(operationType, LogLevel.INFO, message);
+
+        return result;
     }
 }
