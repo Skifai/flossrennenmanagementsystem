@@ -5,29 +5,19 @@ import ch.flossrennen.managementsystem.dataaccess.dto.RessortDTO;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Ressort;
 import ch.flossrennen.managementsystem.initialisation.constants.InitialDataConstants;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
+@SpringBootTest
+@ActiveProfiles("test")
 class RessortDTOMapperTest {
 
-    private BenutzerDTOMapper benutzerDTOMapper;
+    @Autowired
     private RessortDTOMapper mapper;
-
-    @BeforeEach
-    void setUp() {
-        benutzerDTOMapper = Mappers.getMapper(BenutzerDTOMapper.class);
-        benutzerDTOMapper.passwordEncoder = mock(PasswordEncoder.class);
-
-        mapper = Mappers.getMapper(RessortDTOMapper.class);
-        // MapStruct uses the mapper instance, we need to make sure it's injected if not using Spring context
-        ReflectionTestUtils.setField(mapper, "benutzerDTOMapper", benutzerDTOMapper);
-    }
 
     @Test
     void toDTO() {

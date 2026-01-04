@@ -7,35 +7,23 @@ import ch.flossrennen.managementsystem.dataaccess.persistence.model.Einsatz;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.EinsatzStatus;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Ressort;
 import ch.flossrennen.managementsystem.initialisation.constants.InitialDataConstants;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
+@SpringBootTest
+@ActiveProfiles("test")
 class EinsatzDTOMapperTest {
 
-    private RessortDTOMapper ressortDTOMapper;
+    @Autowired
     private EinsatzDTOMapper mapper;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-    @BeforeEach
-    void setUp() {
-        BenutzerDTOMapper benutzerDTOMapper = Mappers.getMapper(BenutzerDTOMapper.class);
-        benutzerDTOMapper.passwordEncoder = mock(PasswordEncoder.class);
-
-        ressortDTOMapper = Mappers.getMapper(RessortDTOMapper.class);
-        ReflectionTestUtils.setField(ressortDTOMapper, "benutzerDTOMapper", benutzerDTOMapper);
-
-        mapper = Mappers.getMapper(EinsatzDTOMapper.class);
-        ReflectionTestUtils.setField(mapper, "ressortDTOMapper", ressortDTOMapper);
-    }
 
     @Test
     void toDTO() {

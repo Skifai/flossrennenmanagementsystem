@@ -3,28 +3,22 @@ package ch.flossrennen.managementsystem.dataaccess.mapper;
 import ch.flossrennen.managementsystem.dataaccess.dto.BenutzerDTO;
 import ch.flossrennen.managementsystem.dataaccess.persistence.model.Benutzer;
 import ch.flossrennen.managementsystem.initialisation.constants.InitialDataConstants;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
+@ActiveProfiles("test")
 class BenutzerDTOMapperTest {
 
+    @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
     private BenutzerDTOMapper mapper;
-
-    @BeforeEach
-    void setUp() {
-        passwordEncoder = mock(PasswordEncoder.class);
-        when(passwordEncoder.encode(anyString())).thenAnswer(invocation -> "hashed_" + invocation.getArgument(0));
-        mapper = Mappers.getMapper(BenutzerDTOMapper.class);
-        mapper.passwordEncoder = passwordEncoder;
-    }
 
     @Test
     void toDTO() {
@@ -50,7 +44,9 @@ class BenutzerDTOMapperTest {
         assertEquals(dto.nachname(), benutzer.getNachname());
         assertEquals(dto.telefonnummer(), benutzer.getTelefonnummer());
         assertEquals(dto.email(), benutzer.getEmail());
-        assertEquals("hashed_password123", benutzer.getPasswordhash());
+
+        assertNotNull(benutzer.getPasswordhash());
+        assertNotEquals("password123", benutzer.getPasswordhash());
         assertEquals(dto.rolle(), benutzer.getRolle());
     }
 }
