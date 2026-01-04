@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install Node.js, npm, and other build dependencies (required for Vaadin production build)
 # The community image is based on Oracle Linux
-RUN microdnf install -y nodejs npm findutils
+RUN microdnf install -y nodejs npm findutils ca-certificates
 
 # Copy the maven wrapper and pom.xml
 COPY mvnw .
