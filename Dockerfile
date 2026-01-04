@@ -2,6 +2,10 @@
 FROM ghcr.io/graalvm/native-image-community:21 AS build
 WORKDIR /app
 
+# Install Node.js, npm, and other build dependencies (required for Vaadin production build)
+# The community image is based on Oracle Linux
+RUN microdnf install -y nodejs npm findutils
+
 # Copy the maven wrapper and pom.xml
 COPY mvnw .
 COPY .mvn .mvn
