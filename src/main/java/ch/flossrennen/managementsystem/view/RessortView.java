@@ -8,10 +8,10 @@ import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import ch.flossrennen.managementsystem.view.editor.AbstractEditorView;
 import ch.flossrennen.managementsystem.view.editor.RessortEditor;
 import com.vaadin.flow.router.Route;
-import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import org.jspecify.annotations.NonNull;
 
-@PermitAll
+@RolesAllowed("ADMINISTRATOR")
 @Route(value = ViewRoutes.RESSORT, layout = MainView.class)
 public class RessortView extends AbstractContentBaseView<RessortDTO, RessortDTOProperties> {
 

@@ -1,5 +1,6 @@
 package ch.flossrennen.managementsystem.view;
 
+import ch.flossrennen.managementsystem.dataaccess.persistence.model.BenutzerRolle;
 import ch.flossrennen.managementsystem.util.textprovider.TranslationConstants;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -11,7 +12,13 @@ import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+/**
+ * Das Haupt-Layout der Anwendung, das die Navigationsleiste und den Drawer enthält.
+ * Alle Ansichten, die innerhalb der Anwendung (nach dem Login) angezeigt werden, verwenden dieses Layout.
+ */
 @PermitAll
 public class MainView extends AppLayout {
 
@@ -35,10 +42,18 @@ public class MainView extends AppLayout {
         sideNav.addItem(home);
         SideNavItem helferModul = new SideNavItem(getTranslation(TranslationConstants.NAV_HELFER), ViewRoutes.HELFER);
         sideNav.addItem(helferModul);
-        SideNavItem ressortModul = new SideNavItem(getTranslation(TranslationConstants.NAV_RESSORT), ViewRoutes.RESSORT);
-        sideNav.addItem(ressortModul);
-        SideNavItem benutzerModul = new SideNavItem(getTranslation(TranslationConstants.NAV_BENUTZER), ViewRoutes.BENUTZER);
-        sideNav.addItem(benutzerModul);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_" + BenutzerRolle.ADMINISTRATOR.name()));
+
+        if (isAdmin) {
+            SideNavItem ressortModul = new SideNavItem(getTranslation(TranslationConstants.NAV_RESSORT), ViewRoutes.RESSORT);
+            sideNav.addItem(ressortModul);
+            SideNavItem benutzerModul = new SideNavItem(getTranslation(TranslationConstants.NAV_BENUTZER), ViewRoutes.BENUTZER);
+            sideNav.addItem(benutzerModul);
+        }
+
         SideNavItem einsatzModul = new SideNavItem(getTranslation(TranslationConstants.NAV_EINSATZ), ViewRoutes.EINSATZ);
         sideNav.addItem(einsatzModul);
         SideNavItem einsatzZuweisungModul = new SideNavItem(getTranslation(TranslationConstants.NAV_EINSATZ_ZUWEISUNG), ViewRoutes.EINSATZZUWEISUNG);
